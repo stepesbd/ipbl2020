@@ -1,5 +1,5 @@
 Hello World !
 
 ** Edição para pull
-
+** Edição para merge
 By: Vinicius R. G. Queiroz
