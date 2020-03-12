@@ -1,2 +1,3 @@
 My first Commit
 Merge Example
+Creating a merge conflict
