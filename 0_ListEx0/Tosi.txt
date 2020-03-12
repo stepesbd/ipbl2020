@@ -1,1 +1,3 @@
 Efetuando o primeiro commit no repositório para a ListEx0.
+
+Aterar o arquivo na branch local tosi.
