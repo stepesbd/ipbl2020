@@ -1,5 +1,4 @@
 Hello World !
+Resolução do conflito
 
-** Edição para p
-** Edição para merge
 By: Vinicius R. G. Queiroz
