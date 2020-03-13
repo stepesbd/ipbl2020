@@ -1,5 +1,4 @@
 Hello World !
-
-** Edição para pu
+Resolução do conflito
 
 By: Vinicius R. G. Queiroz
