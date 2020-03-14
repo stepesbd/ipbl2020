@@ -1,2 +1,3 @@
 BEM VINDO A TODOS !
 Editei na branch
+exemplo de conflito
