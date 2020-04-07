@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %} Estoque - Lista{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-8">
+      <h1>Lista de Estoque: </h1>
+    </div>
+    <div class="col-md-4">
+      <a href="{% url 'fornecedor:criar_estoque' %}" class="btn btn-default" role="button">Novo</a>
+    </div>
+  </div>
+  <div class="row">
+    <table class="table">
+      <thead>
+        <td>Descrição</td>
+        <td>Quantidade</td>
+        <td>Ações</td>
+      </thead>
+      <tbody>
+        {% for estoque in estoques %}
+          <tr>
+            <td>
+              {{ estoque.descricao }}
+            </td>
+            <td>
+              {{ estoque.quantidade }}
+            </td>
+            <td>
+              <a href="{% url 'fornecedor:editar_estoque' pk=estoque.id %}">Editar</a>
+              <a href="{% url 'fornecedor:deletar_estoque' pk=estoque.id %}">Excluir</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+
+
+
+{% endblock %}
