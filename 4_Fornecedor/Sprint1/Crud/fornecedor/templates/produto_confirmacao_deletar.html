@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %} Produto - Deletar{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-12">
+        <h1>Produto - Deletar produto {{ produto.descricao }}</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <form method="post">{% csrf_token %}
+          <p>Você tem certeza que quer deletar o produto com a descrição: "{{ produto.descricao }}"?</p>
+          <input type="submit" value="Confirmar" />
+      </form>
+    </div>
+  </div>
+{% endblock %}

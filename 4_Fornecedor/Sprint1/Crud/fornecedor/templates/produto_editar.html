@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %} Produtos - Editar{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-12">
+        <h1>Produto - Editar produto {{ produto.descricao }}</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <form method="post">{% csrf_token %}
+          {{ form.as_p }}
+          <input type="submit" value="Salvar" />
+      </form>
+    </div>
+  </div>
+{% endblock %}

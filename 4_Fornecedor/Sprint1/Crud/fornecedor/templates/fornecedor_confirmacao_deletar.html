@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %} Fornecedor - Deletar{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-12">
+        <h1>Fornecedor - Deletar fornecedor {{ fornecedor.nome }}</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <form method="post">{% csrf_token %}
+          <p>Você tem certeza que quer deletar o usuario com cnpj: "{{ fornecedor.cnpj }}"?</p>
+          <input type="submit" value="Confirmar" />
+      </form>
+    </div>
+  </div>
+{% endblock %}
