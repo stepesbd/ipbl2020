@@ -1,9 +1,9 @@
 
 exports.up = function (knex) {
     return knex.schema.createTable('physician_specialties', function (table) {
-        table.increment('id').primary()
-        table.integer('physicianId').unsigned().notNullable()
-        table.integer('specialtiesId').unsigned().notNullable()
+        table.increments('id').primary()
+        table.integer('physicianId').notNullable()
+        table.integer('specialtiesId').notNullable()
         table.foreign('physicianId').references('id').inTable('physicians')
         table.foreign('specialtiesId').references('id').inTable('specialties')
     })
