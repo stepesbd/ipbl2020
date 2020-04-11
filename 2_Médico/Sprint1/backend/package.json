@@ -4,7 +4,8 @@
   "description": "Backend#1-Médicos",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src"
+    "start": "nodemon src",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +17,11 @@
     "mysql": "^2.18.1"
   },
   "devDependencies": {
-    "nodemon": "^2.0.2"
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "jest": "^25.3.0",
+    "nodemon": "^2.0.2",
+    "superagent": "^5.2.2",
+    "supertest": "^4.0.2"
   }
 }
