@@ -1,7 +1,7 @@
 
 exports.up = function (knex) {
     return knex.schema.createTable('specialties', function (table) {
-        table.increment('id').primary()
+        table.increments('id').primary()
         table.string('name').notNullable()
     })
 };
