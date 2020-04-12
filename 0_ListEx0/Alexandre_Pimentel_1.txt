@@ -1,2 +1,6 @@
 Teste de commit.
+<<<<<<< HEAD
 Teste2
+=======
+Teste de merge
+>>>>>>> Teste_Alexandre

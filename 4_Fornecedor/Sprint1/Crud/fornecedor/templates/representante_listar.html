@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %} Representantes - Lista{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-8">
+      <h1>Lista de Representantes: </h1>
+    </div>
+    <div class="col-md-4">
+      <a href="{% url 'fornecedor:criar_representante' %}" class="btn btn-default" role="button">Novo</a>
+    </div>
+  </div>
+  <div class="row">
+    <table class="table">
+      <thead>
+        <td>Nome</td>
+        <td>Fornecedor</td>
+        <td>Ações</td>
+      </thead>
+      <tbody>
+        {% for representante in representantes %}
+          <tr>
+            <td>
+              {{ representante.nome }}
+            </td>
+            <td>
+              {{ representante.fornecedor }}
+            </td>
+            <td>
+              <a href="{% url 'fornecedor:editar_representante' pk=representante.id %}">Editar</a>
+              <a href="{% url 'fornecedor:deletar_representante' pk=representante.id %}">Excluir</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+
+{% endblock %}
