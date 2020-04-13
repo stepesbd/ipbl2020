@@ -1,6 +1,5 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom'
-import { Container, Avatar, Button, TextField, FormControlLabel, Checkbox, Link, Grid, Box, Typography } from '@material-ui/core'
+import { Container, Avatar, Button, TextField, FormControlLabel, Checkbox, Box, Typography } from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import styles from './styles'
 import Copyright from '../../components/layouts/Copyright'
@@ -9,8 +8,6 @@ import Copyright from '../../components/layouts/Copyright'
 
 export default function Panel() {
     const classes = styles();
-
-    const history = useHistory()
 
     return (
         <Container component="main" maxWidth="xs">

@@ -16,7 +16,22 @@ const theme = createMuiTheme({
         background: {
             default: '#fff',
         },
+        info: {
+            main: '#ff0000'
+        }
     },
 });
 
 export default theme;
+
+/*
+primary.main
+secondary.main
+error.main
+warning.main
+info.main
+success.main
+text.primary
+text.secondary
+text.disabled
+*/

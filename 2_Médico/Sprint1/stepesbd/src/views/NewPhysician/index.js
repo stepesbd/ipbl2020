@@ -5,7 +5,7 @@ import PhysicianTable from '../../components/layouts/PhysicianTable'
 
 import styles from './styles'
 
-export default function Panel() {
+export default function NewPhysician() {
     const classes = styles()
 
     return (
