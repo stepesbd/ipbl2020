@@ -3,17 +3,14 @@ const routes = express.Router();
 require('express-group-routes');
 
 //Controllers
-const PhysicianControler = require('../controllers/PhysicianController');
 const AddressController = require('../controllers/AddressController');
+const ContactController = require('../controllers/ContactController');
+const PhysicianController = require('../controllers/PhysicianController');
+const PhysicianSpecialtyController = require('../controllers/PhysicianSpecialtyController');
+const ProfileController = require('../controllers/ProfileController');
+const SpecialtyController = require('../controllers/SpecialtyController');
 
 routes.group("/api", (router) => {
-
-    //Physicians's routes
-    router.get("/physicians", PhysicianControler.index)
-    router.get("/physicians/:id", PhysicianControler.show)
-    router.post("/physicians", PhysicianControler.store)
-    router.put("/physicians/:id", PhysicianControler.update)
-    router.delete("/physicians/:id", PhysicianControler.destroy)
 
     //Addresses's routes
     router.get("/addresses", AddressController.index)
@@ -21,6 +18,41 @@ routes.group("/api", (router) => {
     router.post("/addresses", AddressController.store)
     router.put("/addresses/:id", AddressController.update)
     router.delete("/addresses/:id", AddressController.destroy)
+
+    //Contacts's routes
+    router.get("/contacts", ContactController.index)
+    router.get("/contacts/:id", ContactController.show)
+    router.post("/contacts", ContactController.store)
+    router.put("/contacts/:id", ContactController.update)
+    router.delete("/contacts/:id", ContactController.destroy)
+
+    //Physicians's routes
+    router.get("/physicians", PhysicianController.index)
+    router.get("/physicians/:id", PhysicianController.show)
+    router.post("/physicians", PhysicianController.store)
+    router.put("/physicians/:id", PhysicianController.update)
+    router.delete("/physicians/:id", PhysicianController.destroy)
+
+    //PhysicianSpecialty's routes
+    router.get("/physicianspecialties", PhysicianSpecialtyController.index)
+    router.get("/physicianspecialties/:id", PhysicianSpecialtyController.show)
+    router.post("/physicianspecialties", PhysicianSpecialtyController.store)
+    router.put("/physicianspecialties/:id", PhysicianSpecialtyController.update)
+    router.delete("/physicianspecialties/:id", PhysicianSpecialtyController.destroy)
+
+    //Profiles's routes
+    router.get("/profiles", ProfileController.index)
+    router.get("/profiles/:id", ProfileController.show)
+    router.post("/profiles", ProfileController.store)
+    router.put("/profiles/:id", ProfileController.update)
+    router.delete("/profiles/:id", ProfileController.destroy)
+
+    //Specialties's routes
+    router.get("/specialties", SpecialtyController.index)
+    router.get("/specialties/:id", SpecialtyController.show)
+    router.post("/specialties", SpecialtyController.store)
+    router.put("/specialties/:id", SpecialtyController.update)
+    router.delete("/specialties/:id", SpecialtyController.destroy)
 
 });
 
