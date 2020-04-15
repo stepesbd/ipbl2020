@@ -2,21 +2,21 @@ const connection = require('../database')
 
 module.exports = {
     async index(request, response) {
-        const physicians = await connection('physicians').select('*')
+        const addresses = await connection('addresses').select('*')
 
-        return response.json({ msg: physicians });
+        return response.json({ msg: addresses });
     },
     async show(request, response) {
         const { id } = request.params
 
-        const [physician] = await connection('physicians').where('id', id).select()
+        const [address] = await connection('addresses').where('id', id).select()
 
-        return response.status(200).json({ msg: physician })
+        return response.status(200).json({ msg: address })
     },
     async store(request, response) {
         const { name, crm, cpf } = request.body;
 
-        const [id] = await connection('physicians').insert({
+        const [id] = await connection('addresses').insert({
             name,
             crm,
             cpf
@@ -29,7 +29,7 @@ module.exports = {
 
         const { name, crm, cpf } = request.body;
 
-        const physician = await connection('physicians')
+        const address = await connection('addresses')
             .where('id', id)
             .update({
                 name,
@@ -37,8 +37,8 @@ module.exports = {
                 cpf
             })
 
-        if (physician === 0) {
-            return response.status(406).json({ error: 'Physician not updated!' })
+        if (address === 0) {
+            return response.status(406).json({ error: 'address not updated!' })
         }
 
         return response.status(200).json({ msg: { id, name, crm, cpf } })
@@ -46,10 +46,10 @@ module.exports = {
     async destroy(request, response) {
         const { id } = request.params
 
-        const physician = await connection('physicians').where('id', id).delete()
+        const address = await connection('addresses').where('id', id).delete()
 
-        if (physician === 0) {
-            return response.status(406).json({ error: 'Physician not found!' })
+        if (address === 0) {
+            return response.status(406).json({ error: 'address not found!' })
         }
 
         return response.status(204).send()

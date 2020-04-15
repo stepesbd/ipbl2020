@@ -2,21 +2,21 @@ const connection = require('../database')
 
 module.exports = {
     async index(request, response) {
-        const physicians = await connection('physicians').select('*')
+        const contacts = await connection('contacts').select('*')
 
-        return response.json({ msg: physicians });
+        return response.json({ msg: contacts });
     },
     async show(request, response) {
         const { id } = request.params
 
-        const [physician] = await connection('physicians').where('id', id).select()
+        const [contact] = await connection('contacts').where('id', id).select()
 
-        return response.status(200).json({ msg: physician })
+        return response.status(200).json({ msg: contact })
     },
     async store(request, response) {
         const { name, crm, cpf } = request.body;
 
-        const [id] = await connection('physicians').insert({
+        const [id] = await connection('contacts').insert({
             name,
             crm,
             cpf
@@ -29,7 +29,7 @@ module.exports = {
 
         const { name, crm, cpf } = request.body;
 
-        const physician = await connection('physicians')
+        const contact = await connection('contacts')
             .where('id', id)
             .update({
                 name,
@@ -37,8 +37,8 @@ module.exports = {
                 cpf
             })
 
-        if (physician === 0) {
-            return response.status(406).json({ error: 'Physician not updated!' })
+        if (contact === 0) {
+            return response.status(406).json({ error: 'contact not updated!' })
         }
 
         return response.status(200).json({ msg: { id, name, crm, cpf } })
@@ -46,10 +46,10 @@ module.exports = {
     async destroy(request, response) {
         const { id } = request.params
 
-        const physician = await connection('physicians').where('id', id).delete()
+        const contact = await connection('contacts').where('id', id).delete()
 
-        if (physician === 0) {
-            return response.status(406).json({ error: 'Physician not found!' })
+        if (contact === 0) {
+            return response.status(406).json({ error: 'contact not found!' })
         }
 
         return response.status(204).send()

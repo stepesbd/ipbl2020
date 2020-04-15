@@ -2,21 +2,21 @@ const connection = require('../database')
 
 module.exports = {
     async index(request, response) {
-        const physicians = await connection('physicians').select('*')
+        const physicianSpecialties = await connection('physician_specialties').select('*')
 
-        return response.json({ msg: physicians });
+        return response.json({ msg: physicianSpecialties });
     },
     async show(request, response) {
         const { id } = request.params
 
-        const [physician] = await connection('physicians').where('id', id).select()
+        const [physician_specialty] = await connection('physician_specialties').where('id', id).select()
 
-        return response.status(200).json({ msg: physician })
+        return response.status(200).json({ msg: physicianSpecialty })
     },
     async store(request, response) {
         const { name, crm, cpf } = request.body;
 
-        const [id] = await connection('physicians').insert({
+        const [id] = await connection('physician_specialties').insert({
             name,
             crm,
             cpf
@@ -29,7 +29,7 @@ module.exports = {
 
         const { name, crm, cpf } = request.body;
 
-        const physician = await connection('physicians')
+        const physicianSpecialty = await connection('physician_specialties')
             .where('id', id)
             .update({
                 name,
@@ -37,8 +37,8 @@ module.exports = {
                 cpf
             })
 
-        if (physician === 0) {
-            return response.status(406).json({ error: 'Physician not updated!' })
+        if (physician_specialty === 0) {
+            return response.status(406).json({ error: 'physician_specialty not updated!' })
         }
 
         return response.status(200).json({ msg: { id, name, crm, cpf } })
@@ -46,10 +46,10 @@ module.exports = {
     async destroy(request, response) {
         const { id } = request.params
 
-        const physician = await connection('physicians').where('id', id).delete()
+        const physicianSpecialty = await connection('physician_specialties').where('id', id).delete()
 
-        if (physician === 0) {
-            return response.status(406).json({ error: 'Physician not found!' })
+        if (physician_specialty === 0) {
+            return response.status(406).json({ error: 'physician_specialty not found!' })
         }
 
         return response.status(204).send()

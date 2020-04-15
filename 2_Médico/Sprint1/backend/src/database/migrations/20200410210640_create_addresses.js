@@ -8,7 +8,7 @@ exports.up = function (knex) {
         table.string('state', 2).notNullable()
         table.string('city').notNullable()
         table.string('district').notNullable()
-        table.string('street'), notNullable()
+        table.string('street').notNullable()
         table.string('number').notNullable()
         table.foreign('physicianId').references('id').inTable('physicians')
     })

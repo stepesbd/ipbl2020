@@ -2174,7 +2174,14 @@ expect@^25.3.0:
     jest-message-util "^25.3.0"
     jest-regex-util "^25.2.6"
 
-express@^4.17.1:
+express-group-routes@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/express-group-routes/-/express-group-routes-1.1.0.tgz#de933080079c027fed70be0967cb55acd8bc9387"
+  integrity sha1-3pMwgAecAn/tcL4JZ8tVrNi8k4c=
+  dependencies:
+    express "^4.13.4"
+
+express@^4.13.4, express@^4.17.1:
   version "4.17.1"
   resolved "https://registry.yarnpkg.com/express/-/express-4.17.1.tgz#4491fc38605cf51f8629d39c2b5d026f98a4c134"
   integrity sha512-mHJ9O79RqluphRrcw2X/GTh3k9tVv8YcoyY4Kkh4WDMUYKRZUq0h1o0w2rrrxBqM7VoeUVqgb27xlEMXTnYt4g==
