@@ -14,41 +14,39 @@ module.exports = {
         return response.status(200).json({ msg: physicianSpecialty })
     },
     async store(request, response) {
-        const { name, crm, cpf } = request.body;
+        const { physicianId, specialtiesId } = request.body;
 
         const [id] = await connection('physician_specialties').insert({
-            name,
-            crm,
-            cpf
+            physicianId,
+            specialtiesId
         })
 
-        return response.status(201).json({ msg: { id, name, crm, cpf } })
+        return response.status(201).json({ msg: { id, physicianId, specialtiesId } })
     },
     async update(request, response) {
         const { id } = request.params
 
-        const { name, crm, cpf } = request.body;
+        const { physicianId, specialtiesId } = request.body;
 
         const physicianSpecialty = await connection('physician_specialties')
             .where('id', id)
             .update({
-                name,
-                crm,
-                cpf
+                physicianId,
+                specialtiesId
             })
 
         if (physician_specialty === 0) {
             return response.status(406).json({ error: 'physician_specialty not updated!' })
         }
 
-        return response.status(200).json({ msg: { id, name, crm, cpf } })
+        return response.status(200).json({ msg: { id, physicianId, specialtiesId } })
     },
     async destroy(request, response) {
         const { id } = request.params
 
         const physicianSpecialty = await connection('physician_specialties').where('id', id).delete()
 
-        if (physician_specialty === 0) {
+        if (physicianSpecialty === 0) {
             return response.status(406).json({ error: 'physician_specialty not found!' })
         }
 

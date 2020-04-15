@@ -14,41 +14,41 @@ module.exports = {
         return response.status(200).json({ msg: contact })
     },
     async store(request, response) {
-        const { name, crm, cpf } = request.body;
+        const { physicianId, type, contact } = request.body;
 
         const [id] = await connection('contacts').insert({
-            name,
-            crm,
-            cpf
+            physicianId,
+            type,
+            contact
         })
 
-        return response.status(201).json({ msg: { id, name, crm, cpf } })
+        return response.status(201).json({ msg: { id, physicianId, type, contact } })
     },
     async update(request, response) {
         const { id } = request.params
 
-        const { name, crm, cpf } = request.body;
+        const { physicianId, type, contact } = request.body;
 
-        const contact = await connection('contacts')
+        const result = await connection('contacts')
             .where('id', id)
             .update({
-                name,
-                crm,
-                cpf
+                physicianId,
+                type,
+                contact
             })
 
-        if (contact === 0) {
+        if (result === 0) {
             return response.status(406).json({ error: 'contact not updated!' })
         }
 
-        return response.status(200).json({ msg: { id, name, crm, cpf } })
+        return response.status(200).json({ msg: { id, physicianId, type, contact } })
     },
     async destroy(request, response) {
         const { id } = request.params
 
-        const contact = await connection('contacts').where('id', id).delete()
+        const result = await connection('contacts').where('id', id).delete()
 
-        if (contact === 0) {
+        if (result === 0) {
             return response.status(406).json({ error: 'contact not found!' })
         }
 

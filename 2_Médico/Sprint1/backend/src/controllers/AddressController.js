@@ -14,34 +14,44 @@ module.exports = {
         return response.status(200).json({ msg: address })
     },
     async store(request, response) {
-        const { name, crm, cpf } = request.body;
+        const { physicianId, type, zipcode, state, city, district, street, number } = request.body;
 
         const [id] = await connection('addresses').insert({
-            name,
-            crm,
-            cpf
+            physicianId,
+            type,
+            zipcode,
+            state,
+            city,
+            district,
+            street,
+            number
         })
 
-        return response.status(201).json({ msg: { id, name, crm, cpf } })
+        return response.status(201).json({ msg: { id, physicianId, type, zipcode, state, city, district, street, number } })
     },
     async update(request, response) {
         const { id } = request.params
 
-        const { name, crm, cpf } = request.body;
+        const { physicianId, type, zipcode, state, city, district, street, number } = request.body;
 
         const address = await connection('addresses')
             .where('id', id)
             .update({
-                name,
-                crm,
-                cpf
+                physicianId,
+                type,
+                zipcode,
+                state,
+                city,
+                district,
+                street,
+                number
             })
 
         if (address === 0) {
             return response.status(406).json({ error: 'address not updated!' })
         }
 
-        return response.status(200).json({ msg: { id, name, crm, cpf } })
+        return response.status(200).json({ msg: { id, physicianId, type, zipcode, state, city, district, street, number } })
     },
     async destroy(request, response) {
         const { id } = request.params
