@@ -1,5 +1,6 @@
 from django.test import TestCase
 from fornecedor.models import Fornecedor
+from fornecedor.models import Representante
 from django.test import Client
 
 class FornecedorModelTest(TestCase):
@@ -55,4 +56,58 @@ class FornecedorModelTest(TestCase):
         obj = Fornecedor.objects.get(id=1)
         field_value = obj.endereco
         self.assertEquals(field_value, 'av')
+
+class RepresentanteModelTest(TestCase):
+    # setup dos dados de teste para classe Fornecedor
+    @classmethod
+    def setUpTestData(self):
+        self.representante = Representante.objects.create(cpf=10120230304, nome='Representante 1', contato='1112345678',
+                                                    fornecedor='Fornecedor 1')
+    # teste de nome de atributo
+    def test_cpf_label(self):
+        representante = Representante.objects.get(id=1)
+        field_label = representante._meta.get_field('cpf').verbose_name
+        self.assertEquals(field_label, 'cpf')
+
+    def test_nome_label(self):
+        representante = Representante.objects.get(id=1)
+        field_label = representante._meta.get_field('nome').verbose_name
+        self.assertEquals(field_label, 'nome')
+
+    def test_contato_label(self):
+        representante = Representante.objects.get(id=1)
+        field_label = representante._meta.get_field('contato').verbose_name
+        self.assertEquals(field_label, 'contato')
+
+    def test_fornecedor_label(self):
+        representante = Representante.objects.get(id=1)
+        field_label = representante._meta.get_field('fornecedor').verbose_name
+        self.assertEquals(field_label, 'fornecedor')
+
+    # Teste de rota
+    def test_get(self):
+        c = Client()
+        response = c.get('')
+        self.assertEqual(response.status_code, 200)
+
+    # Teste de valores
+    def test_cpf(self):
+        obj = Representante.objects.get(id=1)
+        field_value = obj.cpf
+        self.assertEquals(len(str(field_value)), 11)
+
+    def test_nome(self):
+        obj = Representante.objects.get(id=1)
+        field_value = obj.nome
+        self.assertEquals(field_value, 'Representante 1')
+
+    def test_contato(self):
+        obj = Representante.objects.get(id=1)
+        field_value = obj.contato
+        self.assertEquals(field_value, '1112345678')
+
+    def test_fornecedor(self):
+        obj = Representante.objects.get(id=1)
+        field_value = obj.fornecedor
+        self.assertEquals(field_value, 'Fornecedor 1')
 
