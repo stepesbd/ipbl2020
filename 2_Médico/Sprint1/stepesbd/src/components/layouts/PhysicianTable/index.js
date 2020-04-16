@@ -1,14 +1,11 @@
 import React from 'react';
-import Link from '@material-ui/core/Link';
-import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { IconButton, Box } from '@material-ui/core';
+import { IconButton } from '@material-ui/core';
 import Title from '../../utils/Title';
-import Pagination from '@material-ui/lab/Pagination';
 import { Edit, Delete } from '@material-ui/icons'
 
 // Generate Order Data
@@ -24,18 +21,7 @@ const rows = [
     createData(4, 'Bruce Springsteen', '1454923-SP', 'Endocrinologia'),
 ];
 
-function preventDefault(event) {
-    event.preventDefault();
-}
-
-const useStyles = makeStyles((theme) => ({
-    seeMore: {
-        marginTop: theme.spacing(3),
-    },
-}));
-
 export default function PhysicianTable() {
-    const classes = useStyles();
     return (
         <React.Fragment>
             <Title>Médicos</Title>
