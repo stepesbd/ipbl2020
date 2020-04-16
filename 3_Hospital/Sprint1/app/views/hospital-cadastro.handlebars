@@ -1,0 +1,129 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+  integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+<br />
+<h3>
+    <i class="fa fa-h-square" aria-hidden="true"></i>
+    Cadastro de novo Hospital
+</h3>
+<hr>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.js"></script>
+<form action="/hospital" method="POST">
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label for="inputNome">Nome</label>
+                <input type="text" class="form-control" name="inputNome" placeholder="" maxlength="100" min="10" max="100" required>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label for="inputCorporate">Razão Social</label>
+                <input type="text" class="form-control" name="inputCorporate" placeholder="" maxlength="100" min="10" max="100" required>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label for="inputCNPJ">CNPJ (digite apenas números)</label>
+                <input type="text" class="form-control cnpj" name="inputCNPJ" placeholder="99.999.999/9999-99" maxlength="18" min="14" max="18" required>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label for="inputCNES">Código CNES</label>
+                <input type="text" class="form-control" name="inputCNES" placeholder="9999999" maxlength="7" min="7" max="7" required>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-row">
+            <label for="adresses">Endereço</label>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <input type="text" class="form-control" name="inputStreet" placeholder="Rua" maxlength="45" min="5" max="45" required>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <input type="number" class="form-control" name="inputNumber" placeholder="Número" maxlength="5" min="0" max="99999" required>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <input type="text" class="form-control" name="inputCity" placeholder="Cidade" maxlength="50" min="1" max="50" required>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <input type="text" class="form-control" name="inputState" placeholder="Estado" maxlength="50" min="1" max="50" required>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <input type="text" class="form-control" name="inputCountry" placeholder="País" maxlength="50" min="1" max="50" required>
+            </div>
+        </div>
+    </div>    
+    
+     <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="text" class="form-control" name="inputZipCode" placeholder="Código Postal" maxlength="20" min="1" max="20" required>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    
+<hr>
+
+    <li class="list-group-item list-group-item-primary text-center">
+        <h6>Selecione os procedimentos que o Hospital realizará</h6>
+    </li>
+<table class='table'>
+    {{#each med_proc}}
+    <tr>    
+        <td>
+        <input type="checkbox" name="inputProcID[]" value="{{med_proc_id}}" class="checkme" />
+        </td>
+        <td>{{med_proc_desc}}</td>
+        <td>
+        <input type="text" name="inputValue[]" class="money text required form-control" id="med_proc_{{med_proc_id}}" placeholder="Valor" disabled>
+        </td>
+    </tr>
+    {{/each}}
+</table>
+<hr>
+
+    <br>
+
+    <div class="form-row text-center">
+        <button type="submit" class="btn btn-success mr-2">Cadastrar</button> 
+        <a class=" btn btn-danger" href="/hospital" role="button">Cancelar</a>
+    </div>
+</form>
+
+
+
+<script type="text/javascript">
+
+    [].forEach.call(document.querySelectorAll('.checkme[type="checkbox"]'), function(elem) {
+    elem.addEventListener('change', function() {
+        this.parentNode.parentNode.querySelector('.text[type="text"]').disabled = !this.checked;
+        this.parentNode.parentNode.querySelector('.text[type="text"]').value = '';
+        $('.money').mask('000.000,00', { reverse: true });
+    });
+    })
+    
+    $('.cnpj').mask('99.999.999/9999-99', {reverse: true});
+</script>

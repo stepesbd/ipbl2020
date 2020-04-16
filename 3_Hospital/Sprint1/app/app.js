@@ -3,6 +3,10 @@ const express = require('express');
 const app = express(); //cria e configura a aplicacao
 var handlebars = require("express-handlebars")
 
+
+
+
+
 var hbs = handlebars.create({
   defaultLayout: "main",
   // Specify helpers which are only registered on this instance.
@@ -42,6 +46,9 @@ var logger = require('morgan');
 
 //configuracao de Rotas
 app.use('/', require('./routes/index-route')(app));
+app.use('/hospital', require('./routes/hospital-route')(app));
+app.use('/hospital/:hosp_id/employee', require('./routes/employee-route')(app));
+app.use('/procedures', require('./routes/procedures-route')(app));
 
 app.use(logger('dev'));
 app.use(express.json());

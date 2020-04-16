@@ -1,0 +1,54 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+  integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+<br />
+<h3>
+  <i class="fa fa-h-square" aria-hidden="true"></i>
+  {{hos.hos_name}}
+</h3>
+<h5>Procedimentos Médicos</h5>
+<hr>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.js"></script>
+<form action="/hospital" method="POST">
+
+    <li class="list-group-item list-group-item-primary text-center">
+        <h6>Selecione os procedimentos que o Hospital realizará</h6>
+    </li>
+    <table class='table'>
+        {{#each med_proc}}
+        <tr>    
+            <td>
+            <input type="checkbox" id="ID" name="inputProcID" value="{{med_proc_id}}" class="checkme" />
+            </td>
+            <td>{{med_proc_desc}}</td>
+            <td>
+            <input type="text" name="inputValue" class="money text required form-control" id="{{med_proc_id}}" placeholder="Valor" value="{{med_proc_value}}" disabled>
+            </td>
+        </tr>
+        {{/each}}
+    </table>
+    <hr>
+
+    <br>
+
+    <div class="form-row text-center">
+        <button type="submit" class="btn btn-success mr-2">Cadastrar</button> 
+        <a class=" btn btn-danger" href="/hospital" role="button">Cancelar</a>
+    </div>
+</form>
+
+
+
+<script type="text/javascript">
+
+
+    [].forEach.call(document.querySelectorAll('.checkme[type="checkbox"]'), function(elem) {
+        elem.addEventListener('change', function() {
+            this.parentNode.parentNode.querySelector('.text[type="text"]').disabled = !this.checked;
+            this.parentNode.parentNode.querySelector('.text[type="text"]').value = '';
+            $('.money').mask('000.000,00', { reverse: true });
+        });
+    })
+    
+    $('.cnpj').mask('99.999.999/9999-99', {reverse: true});
+</script>

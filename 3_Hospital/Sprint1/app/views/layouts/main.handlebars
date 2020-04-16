@@ -11,21 +11,55 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">STEPES-BD Hospital (TS03)</a>
+        <a class="navbar-brand" href="/">
+        <i class="fa fa-home"></i>
+        Início
+
+        </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                <li class="nav-item">
+                <a class="nav-link" href="/Hospital">
+                <i class="fa fa-h-square"></i>
+                Hospitais</a>
             </li>
-           <!-- <li class="nav-item">
-                <a class="nav-link" href="/Hospital">Hospitais</a>
-            </li> -->
+            <li class="nav-item">
+                <a class="nav-link" href="/Procedures">
+                <i class="fa fa-list-alt" aria-hidden="true"></i>   
+                Procedementos Médicos
+                </a>
+            </li>
             </ul>
         </div>
     </nav>
-    <div class="container">{{{body}}}</div>
+    <main role="main">
+        <div class="container">
+            {{{body}}}
+        </div>
+         
+        <div class="container">
+            <div class="form-row">
+                <hr>
+            </div>
+        </div>
+    </main>
+    <div class="container">
+        <hr>
+    </div>
+    <footer class="container">
+        <label>
+            <div class="row marcador align-items-right">
+                <div class="col mx-auto text-right">
+                    <img class="img-responsive" src="https://logodownload.org/wp-content/uploads/2018/01/ita-logo-7.png" alt="Instituto Tecnolígico de Aeronáutica" title="Instituto Tecnolígico de Aeronáutica">
+                </div>
+            </div>
+        </label>
+        <label class="ml-4">
+            <p>TS #03 - Hospital</p>
+        </label>
+    </footer>
 </body>
 </html>
