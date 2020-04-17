@@ -22,14 +22,14 @@
         {% for representante in representantes %}
           <tr>
             <td>
-              {{ representante.nome }}
+              {{ representante.REP_NAME }}
             </td>
             <td>
-              {{ representante.fornecedor }}
+              {{ representante.REP_PROVIDER }}
             </td>
             <td>
-              <a href="{% url 'fornecedor:editar_representante' pk=representante.id %}">Editar</a>
-              <a href="{% url 'fornecedor:deletar_representante' pk=representante.id %}">Excluir</a>
+              <a href="{% url 'fornecedor:editar_representante' pk=representante.REP_ID %}">Editar</a>
+              <a href="{% url 'fornecedor:deletar_representante' pk=representante.REP_ID %}">Excluir</a>
             </td>
           </tr>
         {% endfor %}

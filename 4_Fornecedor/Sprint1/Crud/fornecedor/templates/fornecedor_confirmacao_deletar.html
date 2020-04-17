@@ -5,13 +5,13 @@
 {% block content %}
   <div class="row">
     <div class="col-md-12">
-        <h1>Fornecedor - Deletar fornecedor {{ fornecedor.nome }}</h1>
+        <h1>Fornecedor - Deletar fornecedor {{ fornecedor.PRO_SOCIAL_REASON }}</h1>
     </div>
   </div>
   <div class="row">
     <div class="col-md-12">
       <form method="post">{% csrf_token %}
-          <p>Você tem certeza que quer deletar o usuario com cnpj: "{{ fornecedor.cnpj }}"?</p>
+          <p>Você tem certeza que quer deletar o usuario com cnpj: "{{ fornecedor.PRO_CNPJ }}"?</p>
           <input type="submit" value="Confirmar" />
       </form>
     </div>

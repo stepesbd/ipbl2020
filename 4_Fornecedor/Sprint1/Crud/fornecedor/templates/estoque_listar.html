@@ -14,23 +14,20 @@
   <div class="row">
     <table class="table">
       <thead>
-        <td>Descrição</td>
+        <td>Produto</td>
         <td>Quantidade</td>
-        <td>Ações</td>
       </thead>
       <tbody>
         {% for estoque in estoques %}
           <tr>
             <td>
-              {{ estoque.descricao }}
+              {{ estoque.STK_PRODUCT }}
             </td>
+
             <td>
-              {{ estoque.quantidade }}
+              {{ estoque.STK_QUANTITY }}
             </td>
-            <td>
-              <a href="{% url 'fornecedor:editar_estoque' pk=estoque.id %}">Editar</a>
-              <a href="{% url 'fornecedor:deletar_estoque' pk=estoque.id %}">Excluir</a>
-            </td>
+
           </tr>
         {% endfor %}
       </tbody>
