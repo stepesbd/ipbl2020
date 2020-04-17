@@ -1,6 +1,7 @@
 from django.test import TestCase
 from fornecedor.models import Fornecedor
 from fornecedor.models import Representante
+from fornecedor.models import Estoque
 from django.test import Client
 
 class FornecedorModelTest(TestCase):
@@ -61,8 +62,8 @@ class RepresentanteModelTest(TestCase):
     # setup dos dados de teste para classe Fornecedor
     @classmethod
     def setUpTestData(self):
-    	obj = Fornecedor.objects.get(id=1)
-    	self.representante = Representante.objects.create(cpf=10120230304, nome='Representante 1', contato='1112345678',
+         obj = Fornecedor.objects.get(id=1)
+         self.representante = Representante.objects.create(cpf=10120230304, nome='Representante 1', contato='1112345678',
                                                     fornecedor=obj.razao_social)
     # teste de nome de atributo
     def test_cpf_label(self):
@@ -144,3 +145,33 @@ class EstoqueModelTest(TestCase):
         obj = Estoque.objects.get(id=1)
         field_value = obj.quantidade
         self.assertEqual(len(str(field_value)), 999999)
+        
+class ProdutoModelTest(TestCase):
+    #configurando os dados para o teste da classe produtos
+    @classmethod
+    def setUpTestData(self):
+        obj = Fornecedor.objects.get(id=1)
+        self.produto = Produto.objects.create(descricao='DescProduto', fornecedor=obj.razao_social)
+    #teste de nome de atributo
+    def test_descr_label(self):
+        produto = Produto.objects.get(id=1)
+        field_label = produto._meta.get_field('descr').verbose_name
+        self.assertEquals(field_label, 'descr')
+    def test_fornecedor_label(self):
+        produto = Produto.objects.get(id=1)
+        field_label = produto._meta.get_field('fornecedor').verbose_name
+        self.assertEquals(field_label, 'fornecedor')
+    # Teste de rota
+    def test_get(self):
+        c = Client()
+        response = c.get('')
+        self.assertEqual(response.status_code, 200)
+    #Teste de valores
+    def test_descr(self):
+        obj = Produto.objects.get(id=1)
+        field_value = obj.descricao
+        self.assertEquals(field_value, 'DescProduto')
+    def test_fornecedor(self):
+        obj = Produto.objects.get(id=1)
+        field_value = obj.fornecedor
+        self.assertEquals(field_value, '')
