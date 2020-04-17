@@ -116,9 +116,7 @@ class EstoqueModelTest(TestCase):
     # setup dos dados de teste para classe Estoque
     @classmethod
     def setUpTestData(self):
-    	obj = Fornecedor.objects.get(id=1)
-    	self.estoque = Estoque.objects.create(descricao='mascara', quantidade=100,
-                                                    fornecedor=obj.razao_social)
+    	self.estoque = Estoque.objects.create(descricao='mascara', quantidade=100)
     # teste de nome de atributo
     def test_descricao_label(self):
         estoque = Estoque.objects.get(id=1)
