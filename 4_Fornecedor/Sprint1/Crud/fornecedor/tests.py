@@ -112,3 +112,37 @@ class RepresentanteModelTest(TestCase):
         field_value = obj.fornecedor
         self.assertEquals(field_value, 'Hospital')
 
+class EstoqueModelTest(TestCase):
+    # setup dos dados de teste para classe Estoque
+    @classmethod
+    def setUpTestData(self):
+    	obj = Fornecedor.objects.get(id=1)
+    	self.estoque = Estoque.objects.create(descricao='mascara', quantidade=100
+                                                    fornecedor=obj.razao_social)
+    # teste de nome de atributo
+    def test_descricao_label(self):
+        estoque = Estoque.objects.get(id=1)
+        field_label = estoque._meta.get_field('descricao').verbose_name
+        self.assertEquals(field_label, 'descricao')
+
+    def test_quantidade_label(self):
+        estoque = Estoque.objects.get(id=1)
+        field_label = estoque._meta.get_field('quantidade').verbose_name
+        self.assertEquals(field_label, 'quantidade')
+
+    # Teste de rota
+    def test_get(self):
+        c = Client()
+        response = c.get('')
+        self.assertEqual(response.status_code, 200)
+
+    # Teste de valores
+    def test_descricao(self):
+        obj = Estoque.objects.get(id=1)
+        field_value = obj.descricao
+        self.assertEqual(field_value, 'mascara')
+
+    def test_quantidade(self):
+        obj = Estoque.objects.get(id=1)
+        field_value = obj.quantidade
+        self.assertEqual(len(str(field_value)), 999999)
