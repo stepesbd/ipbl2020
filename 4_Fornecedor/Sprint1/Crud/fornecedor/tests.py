@@ -61,8 +61,9 @@ class RepresentanteModelTest(TestCase):
     # setup dos dados de teste para classe Fornecedor
     @classmethod
     def setUpTestData(self):
-        self.representante = Representante.objects.create(cpf=10120230304, nome='Representante 1', contato='1112345678',
-                                                    fornecedor='Fornecedor 1')
+    	obj = Fornecedor.objects.get(id=1)
+    	self.representante = Representante.objects.create(cpf=10120230304, nome='Representante 1', contato='1112345678',
+                                                    fornecedor=obj.razao_social)
     # teste de nome de atributo
     def test_cpf_label(self):
         representante = Representante.objects.get(id=1)
@@ -109,5 +110,5 @@ class RepresentanteModelTest(TestCase):
     def test_fornecedor(self):
         obj = Representante.objects.get(id=1)
         field_value = obj.fornecedor
-        self.assertEquals(field_value, 'Fornecedor 1')
+        self.assertEquals(field_value, 'Hospital')
 
