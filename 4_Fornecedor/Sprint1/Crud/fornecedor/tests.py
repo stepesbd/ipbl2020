@@ -66,6 +66,8 @@ class RepresentativeModelTest(TestCase):
     # setup dos dados de teste para classe Fornecedor
     @classmethod
     def setUpTestData(self):
+    	self.fornecedor = Provider.objects.create(PRO_ID=1,PRO_CNPJ=10000010108, PRO_SOCIAL_REASON='Hospital', PRO_ADRESS='av',
+                                                    PRO_CONTACT=975555221)
         obj = Provider.objects.get(PRO_ID=1)
         self.representante = Representative.objects.create(REP_ID=1,REP_CPF=10120230304, REP_NAME='Representante 1',
                                                            REP_CONTACT='1112345678',REP_CONTACT_CEL=10212121,
@@ -124,6 +126,8 @@ class ProductModelTest(TestCase):
     # configurando os dados para o teste da classe produtos
     @classmethod
     def setUpTestData(self):
+    	self.fornecedor = Provider.objects.create(PRO_ID=1,PRO_CNPJ=10000010108, PRO_SOCIAL_REASON='Hospital', PRO_ADRESS='av',
+                                                    PRO_CONTACT=975555221)
         obj = Provider.objects.get(PRO_ID=1)
         self.produto = Product.objects.create(PRD_ID=1,PRD_NAME='DescProduto', PRD_DESCRIPTION='descricao',
                                               PRD_PROVIDER=obj.PRO_SOCIAL_REASON)
@@ -160,7 +164,6 @@ class StockModelTest(TestCase):
     # setup dos dados de teste para classe Estoque
     @classmethod
     def setUpTestData(self):
-        obj = Product.objects.get(PRD_ID=1)
         self.estoque = Stock.objects.create(STK_ID=1,STK_TYPE='E', STK_PRODUCT='produto',STK_QUANTITY=100)
 
     # teste de nome de atributo
