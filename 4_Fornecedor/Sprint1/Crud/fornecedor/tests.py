@@ -66,7 +66,7 @@ class RepresentativeModelTest(TestCase):
     # setup dos dados de teste para classe Fornecedor
     @classmethod
     def setUpTestData(self):
-        obj = Provider.objects.get()
+        obj = Provider.objects.get(PRO_ID=1)
         self.representante = Representative.objects.create(REP_ID=1,REP_CPF=10120230304, REP_NAME='Representante 1',
                                                            REP_CONTACT='1112345678',REP_CONTACT_CEL=10212121,
                                                            REP_CONTACT_EMAIL='teste@gmail.com',
