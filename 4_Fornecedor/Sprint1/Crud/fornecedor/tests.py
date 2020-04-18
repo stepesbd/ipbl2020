@@ -15,23 +15,23 @@ class ProviderModelTest(TestCase):
 
     # teste de nome de atributo
     def test_cnpj_label(self):
-        fornecedor = Provider.objects.get(PRO_ID=1)
-        field_label = fornecedor._meta.get_field('PRO_CNPJ').verbose_name
+        provider = Provider.objects.get(PRO_ID=1)
+        field_label = provider._meta.get_field('PRO_CNPJ').verbose_name
         self.assertEquals(field_label, 'Cnpj')
 
     def test_razao_social_label(self):
-        fornecedor = Provider.objects.get(PRO_ID=1)
-        field_label = fornecedor._meta.get_field('PRO_SOCIAL_REASON').verbose_name
+        provider = Provider.objects.get(PRO_ID=1)
+        field_label = provider._meta.get_field('PRO_SOCIAL_REASON').verbose_name
         self.assertEquals(field_label, 'Razão social')
 
     def test_endereco_label(self):
-        fornecedor = Provider.objects.get(PRO_ID=1)
-        field_label = fornecedor._meta.get_field('PRO_ADRESS').verbose_name
+        provider = Provider.objects.get(PRO_ID=1)
+        field_label = provider._meta.get_field('PRO_ADRESS').verbose_name
         self.assertEquals(field_label, 'Endereço')
 
     def test_contato_label(self):
-        fornecedor = Provider.objects.get(PRO_ID=1)
-        field_label = fornecedor._meta.get_field('PRO_CONTACT').verbose_name
+        provider = Provider.objects.get(PRO_ID=1)
+        field_label = provider._meta.get_field('PRO_CONTACT').verbose_name
         self.assertEquals(field_label, 'Contato')
 
     # Teste de rota

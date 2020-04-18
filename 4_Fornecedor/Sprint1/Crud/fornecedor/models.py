@@ -48,7 +48,7 @@ class Stock(models.Model):
     STK_ID =  models.AutoField(primary_key=True)
     STK_TYPE =  models.CharField(verbose_name='Tipo',max_length=1,choices=SEXO_CHOICES, blank=False, null=False)
     STK_PRODUCT = models.ForeignKey(Product, verbose_name='Produto',on_delete=models.CASCADE)
-    STK_QUANTITY = models.IntegerField('Quantidade',null=False)
+    STK_QUANTITY = models.PositiveIntegerField('Quantidade',null=False)
 
 
     def __str__(self):

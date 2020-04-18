@@ -2,7 +2,7 @@ from django.urls import reverse_lazy
 from fornecedor.models import Provider,Representative,Product,Stock
 from django.views.generic.edit import UpdateView, CreateView, DeleteView, View
 from django.views import generic
-from django.http import HttpResponse
+from django.db.models import F
 
 # Lista Provider
 
@@ -10,6 +10,7 @@ class ProviderListView(generic.ListView):
     model = Provider
     template_name = 'fornecedor_listar.html'
     context_object_name = 'fornecedores'
+    paginate_by = 5
 
 
 class ProviderUpdateView(UpdateView):
@@ -38,6 +39,7 @@ class RepresentativeListView(generic.ListView):
     model = Representative
     template_name = 'representante_listar.html'
     context_object_name = 'representantes'
+    paginate_by = 5
 
 
 class RepresentativeUpdateView(UpdateView):
@@ -65,6 +67,7 @@ class ProductListView(generic.ListView):
     model = Product
     template_name = 'produto_listar.html'
     context_object_name = 'produtos'
+    paginate_by = 5
 
 
 class ProductUpdateView(UpdateView):
@@ -92,11 +95,13 @@ class StockListView(generic.ListView):
     model = Stock
     template_name = 'estoque_listar.html'
     context_object_name = 'estoques'
+    paginate_by = 5
 
 class StockCreateView(CreateView):
     model = Stock
     template_name = 'estoque_criar.html'
     fields = '__all__'
+    #queryset = Stock.objects.filter(STK_PRODUCT="John Smith").update(STK_QUANTITY=F("STK_QUANTITY") + 10)
     success_url = reverse_lazy('fornecedor:listar_estoque')
 
 ###########################################################################################
