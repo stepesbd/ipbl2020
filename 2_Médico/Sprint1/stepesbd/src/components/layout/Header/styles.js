@@ -3,7 +3,8 @@ import { AppBar, Toolbar } from '@material-ui/core'
 
 
 export const AppBarStyled = styled(AppBar)`
-    background-color: rgb(33,150,243)
+    background-color: rgb(33,150,243);
+    margin-bottom: 5%;
 `
 
 export const ToolbarStyled = styled(Toolbar)`
