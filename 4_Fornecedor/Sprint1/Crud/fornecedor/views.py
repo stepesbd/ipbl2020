@@ -101,10 +101,19 @@ class StockCreateView(CreateView):
     model = Stock
     template_name = 'estoque_criar.html'
     fields = '__all__'
-    #queryset = Stock.objects.filter(STK_PRODUCT="John Smith").update(STK_QUANTITY=F("STK_QUANTITY") + 10)
     success_url = reverse_lazy('fornecedor:listar_estoque')
 
-###########################################################################################
+class StockUpdateView(UpdateView):
+    model = Stock
+    template_name = 'estoque_editar.html'
+    fields = '__all__'
+    context_object_name = 'estoque'
+    success_url = reverse_lazy('fornecedor:listar_estoque')
+    paginate_by = 5
+
+
+
+        ###########################################################################################
 
 
 
