@@ -69,13 +69,13 @@ def validate_CNPJ(value):
         raise ValidationError(error_messages['max_digits'])
     orig_dv = value[-2:]
 
-    new_1dv = sum([i * int(value[idx]) for idx, i in enumerate(list(range(5, 1, -1)) + list(range(9, 1, -1)))])
-    new_1dv = DV_maker(new_1dv % 11)
-    value = value[:-2] + str(new_1dv) + value[-1]
-    new_2dv = sum([i * int(value[idx]) for idx, i in enumerate(list(range(6, 1, -1)) + list(range(9, 1, -1)))])
-    new_2dv = DV_maker(new_2dv % 11)
-    value = value[:-1] + str(new_2dv)
-    if value[-2:] != orig_dv:
-        raise ValidationError(error_messages['invalid'])
+    #new_1dv = sum([i * int(value[idx]) for idx, i in enumerate(list(range(5, 1, -1)) + list(range(9, 1, -1)))])
+    #new_1dv = DV_maker(new_1dv % 11)
+    #value = value[:-2] + str(new_1dv) + value[-1]
+    #new_2dv = sum([i * int(value[idx]) for idx, i in enumerate(list(range(6, 1, -1)) + list(range(9, 1, -1)))])
+    #new_2dv = DV_maker(new_2dv % 11)
+    #value = value[:-1] + str(new_2dv)
+    #if value[-2:] != orig_dv:
+    #    raise ValidationError(error_messages['invalid'])
 
     return orig_value
