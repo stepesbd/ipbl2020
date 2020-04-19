@@ -7,7 +7,7 @@ export default function Home() {
     return (
         <React.Fragment>
             <Dashboard>
-                <h1>Physicians</h1>
+                <h1>Médicos</h1>
                 <PhysicianTable />
             </Dashboard>
         </React.Fragment>
