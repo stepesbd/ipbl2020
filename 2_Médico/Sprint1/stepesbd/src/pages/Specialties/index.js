@@ -8,43 +8,42 @@ import api from '../../services/api'
 
 export default function Specialties() {
     const [specialties, setSpecialties] = useState([])
-    const [insert, setInsert] = useState(false)
-    const [updateList, setUpdateList] = useState()
+    const [open, setOpen] = useState(false)
 
-    const handleClickOpenInsert = () => {
-        setInsert(true);
+    const handleClickOpen = () => {
+        setOpen(true);
     };
 
-    const handleCloseInsert = () => {
-        setUpdateList()
-        setInsert(false);
+    const handleClose = () => {
+        setOpen(false);
     };
-
 
     useEffect(() => {
         api.get(`specialties`)
             .then(response => {
                 setSpecialties(response.data.msg)
             })
-    }, [updateList])
+    }, [open, handleClose])
 
     return (
         <React.Fragment>
             <Dashboard>
                 <div>
                     <h1>Especialidade</h1>
-                    <IconButton onClick={handleClickOpenInsert}>
+                    <IconButton onClick={handleClickOpen}>
                         <AddCircle />
                     </IconButton>
                 </div>
                 <Grid container spacing={3}>
                     {specialties.map(specialty => (
                         <Grid key={specialty.id} item xs={3}>
-                            <SpecialtyCard name={specialty.name} />
+                            <SpecialtyCard
+                                id={specialty.id}
+                                name={specialty.name} />
                         </Grid>
                     ))}
                 </Grid>
-                <SpecialtyInsert open={insert} handleClose={handleCloseInsert} />
+                <SpecialtyInsert open={open} handleClose={handleClose} />
             </Dashboard>
         </React.Fragment>
     )

@@ -3,8 +3,8 @@ import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, T
 import api from '../../services/api'
 
 
-export default function SpecialtyInsert(props) {
-    const [name, setName] = useState('')
+export default function SpecialtyUpdate(props) {
+    const [name, setName] = useState(props.name)
 
     function handleNewSpecialty(event) {
         event.preventDefault()
@@ -14,7 +14,7 @@ export default function SpecialtyInsert(props) {
         }
 
         try {
-            api.post('specialties', data)
+            api.put(`specialties/${props.id}`, data)
                 .then(response => {
                     setName('')
                 })
@@ -27,10 +27,10 @@ export default function SpecialtyInsert(props) {
     return (
         <React.Fragment>
             <Dialog open={props.open} onClose={props.handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Nova Especialidade</DialogTitle>
+                <DialogTitle id="form-dialog-title">Atualizar Especialidade</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Digite o nome para a nova especialidade
+                        Digite o novo nome para a especialidade
           </DialogContentText>
                     <TextField
                         autoFocus
