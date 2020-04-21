@@ -22,14 +22,14 @@
         {% for fornecedor in fornecedores %}
           <tr>
             <td>
-              {{ fornecedor.razao_social }}
+              {{ fornecedor.PRO_SOCIAL_REASON }}
             </td>
             <td>
-              {{ fornecedor.cnpj }}
+              {{ fornecedor.PRO_CNPJ }}
             </td>
             <td>
-              <a href="{% url 'fornecedor:editar' pk=fornecedor.id %}">Editar</a>
-              <a href="{% url 'fornecedor:deletar' pk=fornecedor.id %}">Excluir</a>
+              <a href="{% url 'fornecedor:editar' pk=fornecedor.PRO_ID %}">Editar</a>
+              <a href="{% url 'fornecedor:deletar' pk=fornecedor.PRO_ID %}">Excluir</a>
             </td>
           </tr>
         {% endfor %}

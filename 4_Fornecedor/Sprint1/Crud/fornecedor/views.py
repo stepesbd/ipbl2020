@@ -1,117 +1,119 @@
-from django.shortcuts import render
 from django.urls import reverse_lazy
-from fornecedor.models import Fornecedor,Representante,Produto,Estoque
-from django.views.generic.edit import UpdateView, CreateView, DeleteView
+from fornecedor.models import Provider,Representative,Product,Stock
+from django.views.generic.edit import UpdateView, CreateView, DeleteView, View
 from django.views import generic
+from django.db.models import F
 
-# Lista Fornecedor
+# Lista Provider
 
-class FornecedorListView(generic.ListView):
-    model = Fornecedor
+class ProviderListView(generic.ListView):
+    model = Provider
     template_name = 'fornecedor_listar.html'
     context_object_name = 'fornecedores'
+    paginate_by = 5
 
 
-class FornecedorUpdateView(UpdateView):
-    model = Fornecedor
+class ProviderUpdateView(UpdateView):
+    model = Provider
     template_name = 'fornecedor_editar.html'
     fields = '__all__'
     context_object_name = 'fornecedor'
     success_url = reverse_lazy('fornecedor:listar')
 
 
-class FornecedorCreateView(CreateView):
-    model = Fornecedor
+class ProviderCreateView(CreateView):
+    model = Provider
     template_name = 'fornecedor_criar.html'
     fields = '__all__'
     success_url = reverse_lazy('fornecedor:listar')
 
 
-class FornecedorDeleteView(DeleteView):
-    model = Fornecedor
+class ProviderDeleteView(DeleteView):
+    model = Provider
     context_object_name = 'fornecedor'
     template_name = 'fornecedor_confirmacao_deletar.html'
     success_url = reverse_lazy('fornecedor:listar')
 
 ###########################################################################################
-class RepresentanteListView(generic.ListView):
-    model = Representante
+class RepresentativeListView(generic.ListView):
+    model = Representative
     template_name = 'representante_listar.html'
     context_object_name = 'representantes'
+    paginate_by = 5
 
 
-class RepresentanteUpdateView(UpdateView):
-    model = Representante
+class RepresentativeUpdateView(UpdateView):
+    model = Representative
     template_name = 'representante_editar.html'
     fields = '__all__'
     context_object_name = 'representante'
     success_url = reverse_lazy('fornecedor:listar_representante')
 
 
-class RepresentanteCreateView(CreateView):
-    model = Representante
+class RepresentativeCreateView(CreateView):
+    model = Representative
     template_name = 'representante_criar.html'
     fields = '__all__'
     success_url = reverse_lazy('fornecedor:listar_representante')
 
 
-class RepresentanteDeleteView(DeleteView):
-    model = Representante
+class RepresentativeDeleteView(DeleteView):
+    model = Representative
     context_object_name = 'representante'
     template_name = 'representante_confirmacao_deletar.html'
     success_url = reverse_lazy('fornecedor:listar_representante')
 ###########################################################################################
-class ProdutoListView(generic.ListView):
-    model = Produto
+class ProductListView(generic.ListView):
+    model = Product
     template_name = 'produto_listar.html'
     context_object_name = 'produtos'
+    paginate_by = 5
 
 
-class ProdutoUpdateView(UpdateView):
-    model = Produto
+class ProductUpdateView(UpdateView):
+    model = Product
     template_name = 'produto_editar.html'
     fields = '__all__'
     context_object_name = 'produto'
     success_url = reverse_lazy('fornecedor:listar_produto')
 
 
-class ProdutoCreateView(CreateView):
-    model = Produto
+class ProductCreateView(CreateView):
+    model = Product
     template_name = 'produto_criar.html'
     fields = '__all__'
     success_url = reverse_lazy('fornecedor:listar_produto')
 
 
-class ProdutoDeleteView(DeleteView):
-    model = Produto
+class ProductDeleteView(DeleteView):
+    model = Product
     context_object_name = 'produto'
     template_name = 'produto_confirmacao_deletar.html'
     success_url = reverse_lazy('fornecedor:listar_produto')
 ###########################################################################################
-class EstoqueListView(generic.ListView):
-    model = Estoque
+class StockListView(generic.ListView):
+    model = Stock
     template_name = 'estoque_listar.html'
     context_object_name = 'estoques'
+    paginate_by = 5
 
-
-class EstoqueUpdateView(UpdateView):
-    model = Estoque
-    template_name = 'estoque_editar.html'
-    fields = '__all__'
-    context_object_name = 'estoque'
-    success_url = reverse_lazy('fornecedor:listar_estoque')
-
-
-class EstoqueCreateView(CreateView):
-    model = Estoque
+class StockCreateView(CreateView):
+    model = Stock
     template_name = 'estoque_criar.html'
     fields = '__all__'
     success_url = reverse_lazy('fornecedor:listar_estoque')
 
-
-class EstoqueDeleteView(DeleteView):
-    model = Estoque
+class StockUpdateView(UpdateView):
+    model = Stock
+    template_name = 'estoque_editar.html'
+    fields = '__all__'
     context_object_name = 'estoque'
-    template_name = 'estoque_confirmacao_deletar.html'
     success_url = reverse_lazy('fornecedor:listar_estoque')
-###########################################################################################
+    paginate_by = 5
+
+
+
+        ###########################################################################################
+
+
+
