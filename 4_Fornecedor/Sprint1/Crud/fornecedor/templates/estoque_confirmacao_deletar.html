@@ -1,17 +1,17 @@
 {% extends 'base.html' %}
 
-{% block title %} Fornecedor - Deletar{% endblock %}
+{% block title %} Estoque - Deletar{% endblock %}
 
 {% block content %}
   <div class="row">
     <div class="col-md-12">
-        <h1>Fornecedor - Deletar fornecedor {{ fornecedor.nome }}</h1>
+        <h1>Estoque - Deletar estoque {{ estoque.descricao }}</h1>
     </div>
   </div>
   <div class="row">
     <div class="col-md-12">
       <form method="post">{% csrf_token %}
-          <p>Você tem certeza que quer deletar o usuario com cnpj: "{{ fornecedor.cnpj }}"?</p>
+          <p>Você tem certeza que quer deletar o estoque de: "{{ estoque.descricao }}"?</p>
           <input type="submit" value="Confirmar" />
       </form>
     </div>

@@ -16,25 +16,20 @@
       <thead>
         <td>Descrição</td>
         <td>Fornecedor</td>
-        <td>Imagem</td>
         <td>Ações</td>
       </thead>
       <tbody>
         {% for produto in produtos %}
           <tr>
             <td>
-              {{ produto.PRD_NAME }}
+              {{ produto.descricao }}
             </td>
             <td>
-              {{ produto.PRD_DESCRIPTION }}
+              {{ produto.fornecedor }}
             </td>
             <td>
-              {{ produto.PRD_PROVIDER }}
-            </td>
-
-            <td>
-              <a href="{% url 'fornecedor:editar_produto' pk=produto.PRD_ID %}">Editar</a>
-              <a href="{% url 'fornecedor:deletar_produto' pk=produto.PRD_ID %}">Excluir</a>
+              <a href="{% url 'fornecedor:editar_produto' pk=produto.id %}">Editar</a>
+              <a href="{% url 'fornecedor:deletar_produto' pk=produto.id %}">Excluir</a>
             </td>
           </tr>
         {% endfor %}
