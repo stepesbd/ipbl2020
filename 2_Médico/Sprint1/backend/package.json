@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon src",
-    "test": "jest"
+    "test": "jest --forceExit",
+    "migrate": "knex migrate:latest"
   },
   "keywords": [],
   "author": "",
