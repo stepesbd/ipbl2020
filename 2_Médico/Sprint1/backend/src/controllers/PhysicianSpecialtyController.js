@@ -9,7 +9,7 @@ module.exports = {
     async show(request, response) {
         const { id } = request.params
 
-        const [physician_specialty] = await connection('physician_specialties').where('id', id).select()
+        const [physicianSpecialty] = await connection('physician_specialties').where('id', id).select()
 
         return response.status(200).json({ msg: physicianSpecialty })
     },
