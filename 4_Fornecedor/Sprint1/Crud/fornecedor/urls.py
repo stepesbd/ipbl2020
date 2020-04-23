@@ -21,5 +21,6 @@ urlpatterns = [
 
     path('listar_estoque/', views.StockListView.as_view(), name='listar_estoque'),
     path('criar_estoque/', views.StockCreateView.as_view(), name='criar_estoque'),
+    path('<int:pk>/editar_estoque', views.StockUpdateView.as_view(), name='editar_estoque'),
 
 ]

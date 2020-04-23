@@ -33,10 +33,6 @@
             </td>
 
             <td>
-              <img src='{{ produto.PRD_IMAGE }}' class='img-fluid' />
-
-            </td>
-            <td>
               <a href="{% url 'fornecedor:editar_produto' pk=produto.PRD_ID %}">Editar</a>
               <a href="{% url 'fornecedor:deletar_produto' pk=produto.PRD_ID %}">Excluir</a>
             </td>

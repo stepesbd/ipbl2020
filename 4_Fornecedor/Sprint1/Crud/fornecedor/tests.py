@@ -15,23 +15,23 @@ class ProviderModelTest(TestCase):
 
     # teste de nome de atributo
     def test_cnpj_label(self):
-        fornecedor = Provider.objects.get(PRO_ID=1)
-        field_label = fornecedor._meta.get_field('PRO_CNPJ').verbose_name
+        provider = Provider.objects.get(PRO_ID=1)
+        field_label = provider._meta.get_field('PRO_CNPJ').verbose_name
         self.assertEquals(field_label, 'Cnpj')
 
     def test_razao_social_label(self):
-        fornecedor = Provider.objects.get(PRO_ID=1)
-        field_label = fornecedor._meta.get_field('PRO_SOCIAL_REASON').verbose_name
+        provider = Provider.objects.get(PRO_ID=1)
+        field_label = provider._meta.get_field('PRO_SOCIAL_REASON').verbose_name
         self.assertEquals(field_label, 'Razão social')
 
     def test_endereco_label(self):
-        fornecedor = Provider.objects.get(PRO_ID=1)
-        field_label = fornecedor._meta.get_field('PRO_ADRESS').verbose_name
+        provider = Provider.objects.get(PRO_ID=1)
+        field_label = provider._meta.get_field('PRO_ADRESS').verbose_name
         self.assertEquals(field_label, 'Endereço')
 
     def test_contato_label(self):
-        fornecedor = Provider.objects.get(PRO_ID=1)
-        field_label = fornecedor._meta.get_field('PRO_CONTACT').verbose_name
+        provider = Provider.objects.get(PRO_ID=1)
+        field_label = provider._meta.get_field('PRO_CONTACT').verbose_name
         self.assertEquals(field_label, 'Contato')
 
     # Teste de rota
@@ -66,34 +66,34 @@ class RepresentativeModelTest(TestCase):
     # setup dos dados de teste para classe Fornecedor
     @classmethod
     def setUpTestData(self):
-    	self.fornecedor = Provider.objects.create(PRO_ID=1,PRO_CNPJ=10000010108, PRO_SOCIAL_REASON='Hospital', PRO_ADRESS='av',
+        obj = Provider.objects.create(PRO_ID=1,PRO_CNPJ=10000010108, PRO_SOCIAL_REASON='Hospital', PRO_ADRESS='av',
                                                     PRO_CONTACT=975555221)
-        obj = Provider.objects.get(PRO_ID=1)
         self.representante = Representative.objects.create(REP_ID=1,REP_CPF=10120230304, REP_NAME='Representante 1',
                                                            REP_CONTACT='1112345678',REP_CONTACT_CEL=10212121,
                                                            REP_CONTACT_EMAIL='teste@gmail.com',
-                                                           REP_PROVIDER=obj.PRO_SOCIAL_REASON)
+                                                           REP_PROVIDER=obj)
+
 
     # teste de nome de atributo
     def test_cpf_label(self):
         representante = Representative.objects.get(REP_ID=1)
         field_label = representante._meta.get_field('REP_CPF').verbose_name
-        self.assertEquals(field_label, 'cpf')
+        self.assertEquals(field_label, 'Cpf')
 
     def test_nome_label(self):
         representante = Representative.objects.get(REP_ID=1)
         field_label = representante._meta.get_field('REP_NAME').verbose_name
-        self.assertEquals(field_label, 'nome')
+        self.assertEquals(field_label, 'Nome')
 
     def test_contato_label(self):
         representante = Representative.objects.get(REP_ID=1)
         field_label = representante._meta.get_field('REP_CONTACT').verbose_name
-        self.assertEquals(field_label, 'contato')
+        self.assertEquals(field_label, 'Telefone Fixo')
 
     def test_fornecedor_label(self):
         representante = Representative.objects.get(REP_ID=1)
         field_label = representante._meta.get_field('REP_PROVIDER').verbose_name
-        self.assertEquals(field_label, 'fornecedor')
+        self.assertEquals(field_label, 'Fornecedor')
 
     # Teste de rota
     def test_get(self):
@@ -115,33 +115,32 @@ class RepresentativeModelTest(TestCase):
     def test_contato(self):
         obj = Representative.objects.get(REP_ID=1)
         field_value = obj.REP_CONTACT
-        self.assertEquals(field_value, '1112345678')
+        self.assertEquals(field_value, 1112345678)
 
     def test_fornecedor(self):
         obj = Representative.objects.get(REP_ID=1)
         field_value = obj.REP_PROVIDER
-        self.assertEquals(field_value, 'Hospital')
+        self.assertEquals(str(field_value), 'Hospital')
 
 class ProductModelTest(TestCase):
     # configurando os dados para o teste da classe produtos
     @classmethod
     def setUpTestData(self):
-    	self.fornecedor = Provider.objects.create(PRO_ID=1,PRO_CNPJ=10000010108, PRO_SOCIAL_REASON='Hospital', PRO_ADRESS='av',
-                                                    PRO_CONTACT=975555221)
-        obj = Provider.objects.get(PRO_ID=1)
+       obj = Provider.objects.create(PRO_ID=1, PRO_CNPJ=10000010108, PRO_SOCIAL_REASON='Hospital', PRO_ADRESS='av',
+                                      PRO_CONTACT=975555221)
         self.produto = Product.objects.create(PRD_ID=1,PRD_NAME='DescProduto', PRD_DESCRIPTION='descricao',
-                                              PRD_PROVIDER=obj.PRO_SOCIAL_REASON)
+                                              PRD_PROVIDER=obj)
 
     # teste de nome de atributo
     def test_descr_label(self):
-        produto = Product.objects.get(PRO_ID=1)
+        produto = Product.objects.get(PRD_ID=1)
         field_label = produto._meta.get_field('PRD_DESCRIPTION').verbose_name
-        self.assertEquals(field_label, 'descr')
+        self.assertEquals(field_label, 'Descrição')
 
     def test_fornecedor_label(self):
-        produto = Product.objects.get(PRO_ID=1)
+        produto = Product.objects.get(PRD_ID=1)
         field_label = produto._meta.get_field('PRD_PROVIDER').verbose_name
-        self.assertEquals(field_label, 'fornecedor')
+        self.assertEquals(field_label, 'Fornecedor')
 
     # Teste de rota
     def test_get(self):
@@ -151,20 +150,25 @@ class ProductModelTest(TestCase):
 
     # Teste de valores
     def test_descr(self):
-        obj = Product.objects.get(PRO_ID=1)
-        field_value = obj.descricao
-        self.assertEquals(field_value, 'DescProduto')
+        obj = Product.objects.get(PRD_ID=1)
+        field_value = obj.PRD_DESCRIPTION
+        self.assertEquals(field_value, 'descricao')
 
     def test_fornecedor(self):
-        obj = Product.objects.get(PRO_ID=1)
-        field_value = obj.fornecedor
-        self.assertEquals(field_value, '')
+        obj = Product.objects.get(PRD_ID=1)
+        field_value = obj.PRD_PROVIDER
+        self.assertEquals(str(field_value), 'Hospital')
 
 class StockModelTest(TestCase):
     # setup dos dados de teste para classe Estoque
     @classmethod
     def setUpTestData(self):
-        self.estoque = Stock.objects.create(STK_ID=1,STK_TYPE='E', STK_PRODUCT='produto',STK_QUANTITY=100)
+        obj = Provider.objects.create(PRO_ID=1, PRO_CNPJ=10000010108, PRO_SOCIAL_REASON='Hospital', PRO_ADRESS='av',
+                                      PRO_CONTACT=975555221)
+        obj2 = Product.objects.create(PRD_ID=1, PRD_NAME='DescProduto', PRD_DESCRIPTION='descricao',
+                                              PRD_PROVIDER=obj)
+
+        self.estoque = Stock.objects.create(STK_ID=1,STK_TYPE='E', STK_PRODUCT=obj2,STK_QUANTITY=100)
 
     # teste de nome de atributo
     def test_descricao_label(self):
@@ -187,9 +191,9 @@ class StockModelTest(TestCase):
     def test_descricao(self):
         obj = Stock.objects.get(STK_ID=1)
         field_value = obj.STK_PRODUCT
-        self.assertEqual(field_value, 'mascara')
+        self.assertEqual(str(field_value), 'descricao')
 
     def test_quantidade(self):
         obj = Stock.objects.get(STK_ID=1)
-        field_value = obj.quantidade
-        self.assertEqual(len(str(field_value)), 999999)
+        field_value = obj.STK_QUANTITY
+        self.assertEqual(int(field_value), 100)

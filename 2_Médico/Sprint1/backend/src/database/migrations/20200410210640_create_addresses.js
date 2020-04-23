@@ -2,7 +2,12 @@
 exports.up = function (knex) {
     return knex.schema.createTable('addresses', function (table) {
         table.increments('id').primary()
-        table.integer('physicianId').notNullable()
+        table.integer('physicianId')
+            .unsigned()
+            .notNullable()
+            .references('id')
+            .inTable('physicians')
+            .onDelete('CASCADE');
         table.string('type').notNullable()
         table.string('zipcode').notNullable()
         table.string('state', 2).notNullable()
@@ -10,7 +15,6 @@ exports.up = function (knex) {
         table.string('district').notNullable()
         table.string('street').notNullable()
         table.string('number').notNullable()
-        table.foreign('physicianId').references('id').inTable('physicians')
     })
 };
 

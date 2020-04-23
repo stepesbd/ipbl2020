@@ -1,24 +1,25 @@
 from django.db import models
 from django.core.validators import MaxValueValidator
+from fornecedor.helper_functions import *
+
 
 class Provider(models.Model):
     PRO_ID = models.AutoField(primary_key=True)
-    PRO_CNPJ = models.IntegerField('Cnpj',validators=[MaxValueValidator(99999999999)],unique=True,null=False)
+    PRO_CNPJ = models.CharField('Cnpj',unique=True, max_length=14, validators=[validate_CNPJ])
     PRO_SOCIAL_REASON = models.CharField('Razão social',max_length=45,null=False)
     PRO_ADRESS = models.CharField('Endereço',max_length=45,null=False)
-    PRO_CONTACT = models.IntegerField('Contato',validators=[MaxValueValidator(99999999999)],null=False)
+    PRO_CONTACT = models.DecimalField('Contato',null=False,max_digits=11, decimal_places=0)
 
     # Função responsavel por pela label do objeto numa lista
     def __str__(self):
         return self.PRO_SOCIAL_REASON
 
 class Representative(models.Model):
-
     REP_ID = models.AutoField(primary_key=True)
-    REP_CPF = models.CharField('Cpf',max_length=15,unique=True)
+    REP_CPF = models.CharField('Cpf',unique=True, max_length=14, validators=[validate_CPF])
     REP_NAME = models.CharField('Nome',max_length=45,null=False)
-    REP_CONTACT = models.IntegerField('Telefone Fixo',validators=[MaxValueValidator(99999999999)],null=False)
-    REP_CONTACT_CEL = models.IntegerField('Celular', validators=[MaxValueValidator(99999999999)],null=True)
+    REP_CONTACT = models.DecimalField('Telefone Fixo',null=False,max_digits=10, decimal_places=0)
+    REP_CONTACT_CEL = models.DecimalField('Celular',null=False,max_digits=11, decimal_places=0)
     REP_CONTACT_EMAIL = models.CharField('Email', max_length=45,null=True)
     REP_PROVIDER = models.ForeignKey(Provider,verbose_name='Fornecedor', on_delete=models.CASCADE)
 
@@ -34,24 +35,20 @@ class Contact(models.Model):
 class Product(models.Model):
     PRD_ID = models.AutoField(primary_key=True)
     PRD_NAME = models.CharField('Nome do produto',max_length=45,null=False)
-    PRD_DESCRIPTION = models.CharField('Descrição',max_length=45)
+    PRD_DESCRIPTION = models.CharField('Descrição',max_length=45,null=False)
     PRD_PROVIDER = models.ForeignKey(Provider,verbose_name='Fornecedor',on_delete=models.CASCADE)
     #PRD_IMAGE = models.ImageField(upload_to='imagens/', null=True, blank=True)
     def __str__(self):
         return self.PRD_DESCRIPTION
 
 class Stock(models.Model):
-    SEXO_CHOICES = (
-        ("E", "Entrada"),
-        ("S", "Saída")
-    )
     STK_ID =  models.AutoField(primary_key=True)
-    STK_TYPE =  models.CharField(verbose_name='Tipo',max_length=1,choices=SEXO_CHOICES, blank=False, null=False)
+    STK_TYPE =  models.CharField(verbose_name='Tipo',max_length=45,blank=False, null=False)
     STK_PRODUCT = models.ForeignKey(Product, verbose_name='Produto',on_delete=models.CASCADE)
-    STK_QUANTITY = models.IntegerField('Quantidade',null=False)
-
+    STK_QUANTITY = models.PositiveIntegerField('Quantidade',null=False)
 
     def __str__(self):
         return self.STK_PRODUCT
+
 
 

@@ -61,47 +61,95 @@ yarn test
 
 ### Testes de integração
 
-O módulo `routes.js` reúne a integração de todo backend, portanto, os testes de integração se encontram codificados em `routes.test.js`.
+O módulo `app.js` reúne a integração de todo backend, portanto, os testes de integração se encontram codificados em `app.test.js`.
 
-Antes de executar os testes de integração, certifique-se de que o servidor está sendo executado em background.
-
-```bash
-yarn start
-```
-    yarn run v1.22.4
-    $ nodemon src
-    [nodemon] 2.0.2
-    [nodemon] to restart at any time, enter `rs`
-    [nodemon] watching dir(s): *.*
-    [nodemon] watching extensions: js,mjs,json
-    [nodemon] starting `node src`
-    Running server on port 3001
-
-
-Para cada rota do backend, o teste pode ser codificado conforme o exemplo:
+Antes de executar os testes de integração, certifique-se de que a há um servidor local de MySQL disponível. Para cada rota do backend, o teste pode ser codificado conforme o exemplo:
 
 ```js
-const request = require('supertest');
-const app = require('./app');
+describe('Test physicians routes', () => {
+  const newPhysician = {
+    name: "Fulano da Silva",
+    crm: "2313423-24134",
+    cpf: "85303412301",
+  }
+  let physicianId = undefined;
+  let toDeleteCounter = 4;
+  const baseEndpoint = "/api/physicians";
 
-//...
+  test('Creating a new physician', async () => {
+    const response = await request(app)
+      .post(baseEndpoint)
+      .send(newPhysician);
+    const body = response.body;
 
-describe('Test the root path', () => {
-  test('It must response the GET method', async () => {
-    const response = await request(app).get('/');
+    expect(response.statusCode).toBe(201);
+    expect(body.msg).toEqual(
+      expect.objectContaining(newPhysician)
+    );
+
+    physicianId = body.msg.id ? body.msg.id : null;
+    toDeleteCounter--;
+  });
+
+  test('Get the created physician', async () => {
+    const id = await waitForId(physicianId);
+    const response = await request(app).get(`${baseEndpoint}/${id}`);
+    const body = response.body;
     expect(response.statusCode).toBe(200);
+    expect(body.msg).toEqual(
+      expect.objectContaining(newPhysician)
+    );
+
+    toDeleteCounter--;
   });
 
-  test('The response JSON msg must be "Hello World !"', async () => {
-    const body = (await request(app).get('/')).body;
-    expect(body.msg).toBe("Hello World !");
+  test('Get the physicians', async () => {
+    response = await request(app).get(baseEndpoint);
+    expect(response.statusCode).toBe(200);
+    response.body.msg.map(item => {
+      expect(item).toEqual({
+        id: expect.any(Number),
+        name: expect.any(String),
+        crm: expect.any(String),
+        cpf: expect.any(String),
+      })
+    });
+
+    toDeleteCounter--;
   });
 
-  //...
+  test('Update the physician', async () => {
+    const id = await waitForId(physicianId);
+    const updates = {
+      name: "Fulano da Silva Brandão",
+      crm: "23134-2324134",
+      cpf: "85303412301"
+    }
+    const response = await request(app)
+      .put(`${baseEndpoint}/${id}`)
+      .send(updates);
+    const body = response.body;
+
+    expect(response.statusCode).toBe(200);
+    expect(body.msg).toEqual(
+      expect.objectContaining({...newPhysician, ...updates})
+    );
+
+    toDeleteCounter--;
+  });
+
+  test('Delete the physician', async () => {
+    const id = await waitForId(physicianId, true, toDeleteCounter);
+    const response = await request(app)
+      .delete(`${baseEndpoint}/${id}`);
+    
+    expect(response.statusCode).toBe(204);
+  });
 });
 ```
 
 #### Referências:
 - https://www.albertgao.xyz/2017/05/24/how-to-test-expressjs-with-jest-and-supertest
+- https://dev.to/nedsoft/testing-nodejs-express-api-with-jest-and-supertest-1km6
 
 ---
