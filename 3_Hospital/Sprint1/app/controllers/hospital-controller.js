@@ -6,24 +6,17 @@ const { Hospital_employee } = require('../models');
 const { Medical_procedures } = require('../models');
 const { Hosp_med_proc } = require('../models');
 
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+//#region  Criando um Hospital
 exports.post = (req, res, next) => {
     var me = req.body;
-
     Address.create({
-
         add_street: me.inputStreet.toUpperCase(),
         add_number: me.inputNumber,
         add_city: me.inputCity.toUpperCase(),
         add_state: me.inputState.toUpperCase(),
         add_country: me.inputCountry.toUpperCase(),
         add_zip_code: me.inputZipCode.toUpperCase(),
-        
     }).then(function(add) {
-
             Hospital.create({
                 hos_cnpj: me.inputCNPJ,
                 hos_cnes_code: me.inputCNES,
@@ -31,15 +24,11 @@ exports.post = (req, res, next) => {
                 hos_corporate_name: me.inputCorporate.toUpperCase(),
                 add_id: add.add_id,
             }).then(function(hos) {
-
-               
-                console.log(req.body)
-                console.log('type of req.body: %s', typeof req.body)
-                console.log('type of req.body.inputProcID: %s', typeof req.body.inputProcID)
-                console.log('is req.body.inputProcID an array?: %s', Array.isArray(req.body.inputProcID))
-                console.log('type of first array element: %s', typeof req.body.inputProcID[0])
-
-                
+                //console.log(req.body)
+                //console.log('type of req.body: %s', typeof req.body)
+                //console.log('type of req.body.inputProcID: %s', typeof req.body.inputProcID)
+                //console.log('is req.body.inputProcID an array?: %s', Array.isArray(req.body.inputProcID))
+                //console.log('type of first array element: %s', typeof req.body.inputProcID[0])
                 if( me.inputProcID.length > 1 ){
                     var arrayOfProcs = me.inputProcID
                     var arrayOfValues = me.inputValue
@@ -59,22 +48,20 @@ exports.post = (req, res, next) => {
                         }
                     })
                 }
-
                 res.redirect('/hospital');
-                
             }).catch(err => {
                 var erro = err.message;
                 res.render('erro-page', { title: 'Erro', erro: erro} );
-            }); 
+            });
         }).catch(errHospCrea => {
-            add.destroy();       
+            add.destroy();
             var erro ='Hospital não pode ser cadastrado, verifique a validade dos dados informados! ' +  errHospCrea.message;
             res.render('erro-page', { title: 'Erro', erro: erro} );
         })
 };
+//#endregion 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+//#region  Listando Hospitais
 exports.get = (req, res, next) => {
     if(!req.params.id){
         Hospital.findAll({ order: [['hos_name', 'ASC']] }).then(function (hos) {
@@ -85,7 +72,6 @@ exports.get = (req, res, next) => {
                     required: true
                 }]
             }).then(function(med_proc){
-                
                 Hosp_med_proc.findAll({
                     include:{
                         model: Hospital,
@@ -100,12 +86,8 @@ exports.get = (req, res, next) => {
 
                     res.render('hospital-lista', { title: 'Lista de Hospitais', hos: hos, med_proc: med_proc, hos_med_proc: hos_med_proc})
                 })
-
-
-                
             })
         })
-            
     }else{
         Hospital.findOne(
             { where: {hos_id: req.params.id}},
@@ -116,23 +98,21 @@ exports.get = (req, res, next) => {
         })
     }
 };
+//#endregion
 
-///////////////////////////////////////////////////////////// ////////////////////////////////////////////////////////////////////
-
+//#region  Lista  de  procedimento
 exports.new = (req, res, next) => {
-    
     Medical_procedures.findAll({ order: [['med_proc_id', 'ASC']] }).then(function(med_proc){
         res.render('hospital-cadastro', { title: 'Cadastro de Hospital', med_proc: med_proc })
     }).catch(err => {
         var erro = err.message;
         res.render('erro-page', { title: 'Erro', erro: erro} );
-    }); 
-        
+    });
 };
 
+//#endregion
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+//#region  Atualizando dados do hospital
 exports.update =  (req, res) => {
     var me = req.body;
 
@@ -165,8 +145,9 @@ exports.update =  (req, res) => {
         res.redirect('/hospital');
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//#endregion
 
+//#region  Deletando Hospital
 exports.delete = (req, res, next) => {
 
     var erro = 'Não foi possível apagar o hospital! ';
@@ -193,16 +174,15 @@ exports.delete = (req, res, next) => {
                     }).catch(err => {
                         var erro = err.message;
                         res.render('erro-page', { title: 'Erro', erro: erro} );
-                    }); 
-                    
+                    });
                 }).catch(err => {
                     var erro = err.message;
                     res.render('erro-page', { title: 'Erro', erro: erro} );
-                }); 
-                    
+                });
             }).catch(err => {
                 var erro = err.message;
                 res.render('erro-page', { title: 'Erro', erro: erro} );
-            }); 
+            });
     })
 }
+//#endregion

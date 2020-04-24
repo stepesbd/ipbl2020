@@ -50,20 +50,18 @@ exports.post = (req, res, next) => {
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+/************ LISTA DE FUNCIONÁRIOS **************/
 exports.get = (req, res, next) => {
 
     if(!req.params.employee_id){
-        /************ LISTA DE FUNCIONÁRIOS **************/
         var erro = 'Erro: Funcionários não encontrados!';
-
-        if(req.params.sts == 'active'){       
+        if(req.params.sts == 'active'){
             Hospital.findByPk(req.params.hosp_id).then(function(hosp){
                 Hospital_employee.findAll({
                     raw: true,
                     where: {
                         hos_id: req.params.hosp_id,
-                        hos_emp_demission_date: {[Op.substring]: '%0000%',}         
+                        hos_emp_demission_date: null
                     },
                     include: [{
                         model: Employee,
@@ -76,7 +74,7 @@ exports.get = (req, res, next) => {
                             model: Hospital_employee,
                             where:{ 
                                 hos_id: req.params.hosp_id,
-                                hos_emp_demission_date: {[Op.substring]: '%0000%',}         /***************  CRITÉRIO DE ATIVIDADE */
+                                hos_emp_demission_date: null         /***************  CRITÉRIO DE ATIVIDADE */
                             }
                         }],
                         order: [['emp_name', 'ASC']],
@@ -95,7 +93,7 @@ exports.get = (req, res, next) => {
                 raw: true,
                 where: {
                     hos_id: req.params.hosp_id,
-                    hos_emp_demission_date: { [Op.notLike] : '%0000%' }        /***************  CRITÉRIO DE INATIVIDADE */
+                    hos_emp_demission_date: {[Op.not]: null}        /***************  CRITÉRIO DE INATIVIDADE */
                 },
                 order: [['hos_id', 'ASC']],
             }).then(function(hos_emp){

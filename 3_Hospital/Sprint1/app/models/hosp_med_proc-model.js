@@ -5,16 +5,14 @@ module.exports = (sequelize, DataTypes) => {
         hos_med_proc_value: { type: DataTypes.STRING,
             allowNull: false,
         },
-	
 	},{
 		freezeTableName: true,
 		timestamps: false,
-	});	
-	
+	});
     Hosp_med_proc.associate = function(models){
 
 
-        Hosp_med_proc.hasOne(models.Hospital, 
+        Hosp_med_proc.hasOne(models.Hospital,
             {
                 foreignKey: 'hos_id',
                 sourceKey: 'hos_id',
@@ -22,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
                 hooks: true
             });
 
-        Hosp_med_proc.hasOne(models.Medical_procedures, 
+        Hosp_med_proc.hasOne(models.Medical_procedures,
             {
                 foreignKey: 'med_proc_id',
                 sourceKey: 'med_proc_id',

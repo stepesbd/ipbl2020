@@ -5,8 +5,6 @@ var handlebars = require("express-handlebars")
 
 
 
-
-
 var hbs = handlebars.create({
   defaultLayout: "main",
   // Specify helpers which are only registered on this instance.

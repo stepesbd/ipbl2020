@@ -16,13 +16,12 @@
     </li>
     <table class='table'>
         {{#each med_proc}}
-        <tr>    
+        <tr>
             <td>
-            <input type="checkbox" id="ID" name="inputProcID" value="{{med_proc_id}}" class="checkme" />
+                <input type="checkbox" id="ID" name="inputProcID" value="{{med_proc_id}}" class="checkme" />
             </td>
-            <td>{{med_proc_desc}}</td>
             <td>
-            <input type="text" name="inputValue" class="money text required form-control" id="{{med_proc_id}}" placeholder="Valor" value="{{med_proc_value}}" disabled>
+                {{med_proc_desc}}
             </td>
         </tr>
         {{/each}}

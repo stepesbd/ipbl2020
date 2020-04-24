@@ -42,14 +42,11 @@
           data-target="#mdUpdate{{hos_id}}">
               <i class="fa fa-list-alt" ></i>
             </button>
-        
-
             <form action="/hospital/{{hos_id}}"  method="get">
               <button id="{{hos_id}}" type="submit" class="btn btn-default" alt="Editar hospital" data-toggle="tooltip" data-placement="top" title="Editar hospital">
                 <i class="fa fa-edit"></i>
               </button>
             </form>
-
             <button id="{{hos_id}}" type="button" class="btn btn-default" data-toggle="modal" alt="Apagar hospital" data-toggle="tooltip" data-placement="top" title="Apagar hospital"
               data-target="#mdDelete{{hos_id}}">
               <i class="fa fa-trash"></i>
@@ -80,14 +77,11 @@
               {{#ifEquals hos_id ../hos_id }}
                 {{#each @root.med_proc}}
                   {{#ifEquals med_proc_id ../med_proc_id}}
-                    <tr>    
+                    <tr>
                         <td>
                         <input type="checkbox" name="inputProcID" value="{{med_proc_id}}" class="checkme" />
                         </td>
                         <td>{{med_proc_desc}}</td>
-                        <td>
-                        <input type="text" name="inputValue" class="money text required form-control" id="med_proc_{{med_proc_id}}" placeholder="Valor" disabled>
-                        </td>
                     </tr>
                   {{/ifEquals}}
                 {{/each}}
