@@ -23,23 +23,7 @@ export default function PhysicianInsert(props) {
     const [specialties, setSpecialties] = useState([])
 
     const handleInsert = async () => {
-        /*console.log({
-            name,
-            cpf,
-            crm,
-            type,
-            zipcode,
-            state,
-            city,
-            district,
-            street,
-            number,
-            residential,
-            comercial,
-            other,
-            firstSpecialty,
-            secondSpecialty
-        })*/
+
         const physician = {
             name,
             cpf,

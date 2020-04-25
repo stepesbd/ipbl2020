@@ -3,7 +3,7 @@ import { Grid, TextField, Button, Dialog, DialogActions, DialogContent, Select, 
 import api from '../../services/api'
 import { FormControlStyled } from './styles'
 
-export default function PhysicianInsert(props) {
+export default function PhysicianUpdate(props) {
     const [name, setName] = useState('')
     const [cpf, setCpf] = useState('')
     const [crm, setCrm] = useState('')
@@ -23,30 +23,14 @@ export default function PhysicianInsert(props) {
     const [specialties, setSpecialties] = useState([])
 
     const handleInsert = async () => {
-        /*console.log({
-            name,
-            cpf,
-            crm,
-            type,
-            zipcode,
-            state,
-            city,
-            district,
-            street,
-            number,
-            residential,
-            comercial,
-            other,
-            firstSpecialty,
-            secondSpecialty
-        })*/
+
         const physician = {
             name,
             cpf,
             crm
         }
 
-        const response = await api.post(`physicians`, physician)
+        const response = await api.put(`physicians/${props.physician}`, physician)
         const id = response.data.msg.id
 
 
