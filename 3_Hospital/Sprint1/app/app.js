@@ -5,6 +5,8 @@ var handlebars = require("express-handlebars")
 
 
 
+
+
 var hbs = handlebars.create({
   defaultLayout: "main",
   // Specify helpers which are only registered on this instance.
@@ -20,6 +22,17 @@ var hbs = handlebars.create({
       },
       ifEquals: function(arg1, arg2, options){
         return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
+      },
+      ifNotEquals: function(arg1, arg2, options){
+        return (arg1 != arg2) ? options.fn(this) : options.inverse(this);
+      },
+      json: function (content) {
+        return JSON.stringify(content);
+      },
+      activeEmployee: function(arg1, options){
+        if(arg1 == null){
+          return options.fn(this);
+        }
       }
   }
 });

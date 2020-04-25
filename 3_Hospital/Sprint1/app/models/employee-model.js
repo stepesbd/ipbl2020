@@ -50,6 +50,16 @@ module.exports = (sequelize, DataTypes) => {
             otherKey: 'hos_id',
         });
 
+        Employee.belongsToMany(models.Contact,
+			{
+				through: 'Employee_contact',
+				foreignKey: 'emp_id',
+	
+				onDelete: 'CASCADE', 
+				hooks: true  ,
+				otherKey: 'con_id',
+		});
+
         Employee.hasOne(models.Address,
         {
             foreignKey: 'add_id',
@@ -62,6 +72,10 @@ module.exports = (sequelize, DataTypes) => {
       Employee.hasMany(models.Hospital_employee,{
            foreignKey: 'emp_id',
       });
+
+      Employee.hasMany(models.Employee_contact,{
+        foreignKey: 'emp_id',
+       });
 
     }
 

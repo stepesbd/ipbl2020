@@ -1,11 +1,12 @@
 <br />
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
   integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.13.4/jquery.mask.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.js"></script>
-<a href="/Hospital/{{hos.hos_id}}/employee/Delete/{{emp.emp_id}}" class="float-right btn btn-danger" data-toggle="modal" data-toggle="tooltip" data-placement="top" data-target="#mdDelete" >
-  Apagar registro do Funcionário
+
+<a href="/Hospital/{{hos.hos_id}}/employee/Delete/{{emp.emp_id}}" class="float-right btn btn-danger" alt="Apagar funcionário" title="Apagar funcionário" data-toggle="modal" data-toggle="tooltip" data-placement="top" data-target="#mdDelete" >
+  <i class="fa fa-trash mr-2"></i> Remover
 </a>
 <h3>
     <i class="fa fa-user-md" aria-hidden="true"></i>
@@ -25,8 +26,8 @@
         </div>
         <div class="col">
             <div class="form-group">
-              <label for="inputCNS">Código CNS (apenas dígitos)</label>
-              <input type="text" class="form-control" name="inputCNS" placeholder="" maxlength="15" min="15" max="15" value="{{emp.emp_cns_code}}" >
+              <label for="inputCNS">Código CNS</label>
+              <input type="text" class="form-control" name="inputCNS" placeholder="" maxlength="15" min="15" max="15" value="{{emp.emp_cns_code}}" onkeypress="return /[0-9]/i.test(event.key)">
             </div>
         </div>
     </div>
@@ -39,8 +40,8 @@
         </div>
         <div class="col">
             <div class="form-group">
-              <label for="inputContato">Contato</label>
-              <input type="text" class="form-control" name="inputContato" placeholder="" maxlength="100" min="0" max="100">
+              <label for="inputSalary">Salário</label>
+              <input type="text" id="inputSalary" name="inputSalary" class="money form-control" maxlength="10" value="{{hos_emp.hos_emp_salary}}" onkeypress="return /[0-9]/i.test(event.key)"/>
             </div>
         </div>
     </div>
@@ -51,17 +52,19 @@
               <input type="date" class="form-control" name="inputAdmi" maxlength="10" min="10" max="100" onkeypress="mascaraData(this)" value="{{hos_emp.hos_emp_admission_date}}" >
             </div>
         </div>
-        <div class="col">
-            <div class="form-group">
-              <label for="inputDemiss">Demissão (opcional)</label>
-              <input type="date" class="form-control" name="inputDemiss" maxlength="10" min="10" max="100" onkeypress="mascaraData(this)" value="{{hos_emp.hos_emp_demission_date}}" >
+          <div class="col">
+            <label for="inputDemiss">Demissão (opcional)</label>
+
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <div class="input-group-text demiss">
+                  <input class="demissBtn btn btn-outline-danger" type="checkbox" id="demissButton" checked{{#activeEmployee hos_emp.hos_emp_demission_date}}not{{/activeEmployee}}>
+                </div>
+              </div>
+              <input type="date" class="form-control" id="inputDemiss" name="inputDemiss" maxlength="10" min="10" max="100" onkeypress="mascaraData(this)" 
+                    value="{{hos_emp.hos_emp_demission_date}}" {{#activeEmployee hos_emp.hos_emp_demission_date}}disabled{{/activeEmployee}}/>  
             </div>
-        </div>
-        <div class="col">
-            <div class="form-group">
-              <label for="inputSalary">Salário</label>
-              <input type="text" id="inputSalary" name="inputSalary" class="money form-control" maxlength="10" value="{{hos_emp.hos_emp_salary}}"/>
-            </div>
+
         </div>
      </div> 
 
@@ -77,9 +80,9 @@
               <input type="text" class="form-control" name="inputStreet" placeholder="Rua" maxlength="45" min="5" max="45" value="{{add.add_street}}" >
             </div>
         </div>
-        <div class="col">
+        <div class="col-sm-4">
             <div class="form-group">
-             <input type="number" class="form-control" name="inputNumber" placeholder="Número" maxlength="5" min="0" max="99999" value="{{add.add_number}}">
+                <input type="number" class="form-control" name="inputNumber" placeholder="Número" maxlength="5" min="0" max="99999"  value="{{add.add_number}}">
             </div>
         </div>
     </div>
@@ -107,8 +110,53 @@
             </div>
         </div>
     </div>
-    
 
+    <div class="form-row">
+            <label for="adresses">Contato</label>
+    </div>
+    <div class="form-row ml-2">
+     <table class="col-md-6" id="item_table">
+       {{#each con}}
+          <tr>
+            <td>
+              <select name="inputContactType" class="form-control inputContactType mb-2">
+                <option value="{{con_type}}">{{con_type}}</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" name="inputContactBox" class="form-control inputContactBox mb-2 ml-2" value="{{con_desc}}" required/>
+            </td>
+            <td>
+              <button type="button" name="remove" class="btn btn-danger  remove mb-2 ml-4">
+                <span class="fa fa-minus"></span>
+              </button>
+            </td>
+          </tr>
+        {{/each}}
+        <tr>
+          <tr>
+         <td>
+           Novos contatos:
+         </td>
+       </tr>
+            <td>
+                <select name="inputContactType" class="form-control inputContactType">
+                    <option value="Telefone">Telefone</option>
+                    <option value="E-mail">E-mail</option>
+                    <option value="Fax">Fax</option>
+                </select>
+            </td>
+            <td><input type="text" id="newContactBox" name="inputContactBox" class="form-control inputContactBox ml-2" /></td>
+            <td>
+                <button type="button" name="add" class="btn btn-success add ml-4">
+                    <span class="fa fa-plus"></span>
+                </button>
+            </td>
+        </tr>
+     </table>
+    </div>
+    <br>
+    
     <div class="form-row text-center">
         <button type="submit" class="btn btn-success mr-2">Salvar</button> 
         <a class=" btn btn-primary" href="/hospital/{{hos.hos_id}}/employee/sts/active" role="button">Voltar</a>
@@ -146,9 +194,59 @@
 
 
 <script>
-    $(document).ready(function () {
-        $('.money').mask('000.000.00', { reverse: true });
-        $('.zip_code').mask('00000-000', { reverse: true });
+    $(document).ready(function(){
+
+        var contactCount = {{{json count}}};
+
+        $(document).on('click', '.add', function(){
+            var html = '';
+            html += '<tr>';
+            html += '<td><select name="inputContactType" class="form-control inputContactType mt-2"><option value="Telefone">Telefone</option><option value="E-mail">E-mail</option><option value="Fax">Fax</option></select></td>';
+            html += '<td><input type="text" name="inputContactBox" class="form-control inputContactBox mt-2 ml-2" /></td>';
+            html += '<td><button type="button" name="remove" class="btn btn-danger  remove mt-2 ml-4"><span class="fa fa-minus"></span></button></td></tr>';
+            $('#item_table').append(html);
+            contactCount = contactCount + 1;
+        });
+        
+        $(document).on('click', '.remove', function(){
+            $(this).closest('tr').remove();
+            contactCount = contactCount - 1;
+            if(contactCount === 0){
+              document.getElementById("newContactBox").required = true;
+            }else{
+              document.getElementById("newContactBox").required = false;
+            }
+        });
     });
+
+    document.getElementById('demissButton').onclick = function() {
+      var disabled = document.getElementById("inputDemiss").disabled;
+      if (disabled) {
+        document.getElementById("inputDemiss").disabled = false;
+        document.getElementById("inputDemiss").required = true;
+      } else {
+        document.getElementById("inputDemiss").disabled = true;
+        document.getElementById("inputDemiss").required = false;
+        document.getElementById("inputDemiss").value = null;
+      }
+    }
+    var MoneyOpts = { reverse:true,
+                      maxlength: false,
+                      placeholder: 'Insira um valor',
+                      onKeyPress: function(v, ev, curField, opts) {
+                        var mask = curField.data('mask').mask;
+                            decimalSep = (/0(.)00/gi).exec(mask)[1] || ',';
+                        if (curField.data('mask-isZero') && curField.data('mask-keycode') == 8)
+                          $(curField).val('');
+                        else if (v) {
+                          // remove previously added stuff at start of string
+                          v = v.replace(new RegExp('^0*\\'+decimalSep+'?0*'), ''); //v = v.replace(/^0*,?0*/, '');
+                          v = v.length == 0 ? '0'+decimalSep+'00' : (v.length == 1 ? '0'+decimalSep+'0'+v : (v.length == 2 ? '0'+decimalSep+v : v));
+                          $(curField).val(v).data('mask-isZero', (v=='0'+decimalSep+'00'));
+                        }
+                      }
+                    };
+
+  $('.money').mask("#.##0,00", MoneyOpts);
 
 </script>

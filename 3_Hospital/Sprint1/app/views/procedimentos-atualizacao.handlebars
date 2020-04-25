@@ -1,11 +1,16 @@
 <br />
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
   integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.13.4/jquery.mask.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/fixedcolumns/3.3.0/js/dataTables.fixedColumns.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.js"></script>
-<a href="/procedures/Delete/{{med_proc.med_proc_id}}" class="float-right btn btn-danger" data-toggle="modal" data-toggle="tooltip" data-placement="top" data-target="#mdDelete" >
-  Apagar registro do Procedimento
+<a href="/procedures/Delete/{{med_proc.med_proc_id}}" class="float-right btn btn-danger" alt="Apagar procedimento" title="Apagar procedimento" data-toggle="modal" data-toggle="tooltip" data-placement="top" data-target="#mdDelete" >
+  <i class="fa fa-trash mr-2"></i> Remover
 </a>
 <h3>
     <i class="fa fa-list-alt" aria-hidden="true"></i>
@@ -14,7 +19,7 @@
 <h5>Procedimento Médico</h5>
 <hr>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.js"></script>
-<form action="/procedures" method="post">
+<form action="/procedures/Update/{{med_proc.med_proc_id}}" method="post">
 
     <div class="row">
         <div class="col">
@@ -39,22 +44,36 @@
 
 
     <ul class="list-group">
-      <li class="list-group-item list-group-item-primary text-center">Hospitais que realizam este procedimento
-          <span class="badge badge-primary badge-pill float-right">  3  </span>
+      <li class="list-group-item list-group-item-primary text-center mb-2"><h5>Hospitais que realizam este procedimento
+          <span class="badge badge-primary badge-pill float-right"> {{count}}  </span>
+          </h5>
       </li>
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-          HOSP 1
-      </li>
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-          HOSP 2
-      </li>
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-          HOSP 3
-      </li>
+      <table id="listaHospital" class="table responsive table-striped table-hover" style="width:100%">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Valor praticado</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          {{#each hos}}
+          <tr>
+            <td>{{hos_id}}</td>
+            <td>{{hos_name}}</td>
+            <td>
+              {{#each @root.hos_med_proc}}
+                {{#ifEquals hos_id ../hos_id }}
+                  R$ {{hos_med_proc_value}}
+                {{/ifEquals}}
+              {{/each}}
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
     </ul>
-
-    <br>
-
 
     <div class="form-row text-center">
         <button type="submit" class="btn btn-success mr-2">Atualizar</button> 
@@ -87,9 +106,41 @@
 
 
 <script>
+
     $(document).ready(function () {
-        $('.money').mask('000.000,00', { reverse: true });
+    $('#listaHospital').DataTable({
+            responsive: true,
+            columnDefs: [{ responsivePriority: 1, targets: 1 },
+                         { responsivePriority: 2, targets: -1 },
+                        ],
+            fixedColumns: true,
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Portuguese-Brasil.json",
+                decimal: ',',
+            }
+        });
+  });
+    $(document).ready(function () {
         $('.cbhpm').mask('0.00.00.00-0', { reverse: true });
     });
+
+    var MoneyOpts = { reverse:true,
+                      maxlength: false,
+                      placeholder: 'Insira um valor',
+                      onKeyPress: function(v, ev, curField, opts) {
+                        var mask = curField.data('mask').mask;
+                            decimalSep = (/0(.)00/gi).exec(mask)[1] || ',';
+                        if (curField.data('mask-isZero') && curField.data('mask-keycode') == 8)
+                          $(curField).val('');
+                        else if (v) {
+                          // remove previously added stuff at start of string
+                          v = v.replace(new RegExp('^0*\\'+decimalSep+'?0*'), ''); //v = v.replace(/^0*,?0*/, '');
+                          v = v.length == 0 ? '0'+decimalSep+'00' : (v.length == 1 ? '0'+decimalSep+'0'+v : (v.length == 2 ? '0'+decimalSep+v : v));
+                          $(curField).val(v).data('mask-isZero', (v=='0'+decimalSep+'00'));
+                        }
+                      }
+                    };
+
+  $('.money').mask("#.##0,00", MoneyOpts);
 </script>
 
