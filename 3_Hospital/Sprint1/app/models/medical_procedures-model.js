@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
 			allowNull: false,
 			validate: {
 				is: {
-					args: /[\x20-\xff]{7,7}/,
+					args: /[\x20-\xff]{12,12}/,
 					msg: 'Código CBHPM do Procedimento deve conter 8 caracteres alfanumericos'
 				}
 			}

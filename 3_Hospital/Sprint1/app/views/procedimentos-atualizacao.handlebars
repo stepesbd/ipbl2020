@@ -9,6 +9,7 @@
 <script src="https://cdn.datatables.net/fixedcolumns/3.3.0/js/dataTables.fixedColumns.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.js"></script>
+
 <a href="/procedures/Delete/{{med_proc.med_proc_id}}" class="float-right btn btn-danger" alt="Apagar procedimento" title="Apagar procedimento" data-toggle="modal" data-toggle="tooltip" data-placement="top" data-target="#mdDelete" >
   <i class="fa fa-trash mr-2"></i> Remover
 </a>
@@ -18,14 +19,14 @@
 </h3>
 <h5>Procedimento Médico</h5>
 <hr>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.js"></script>
+
 <form action="/procedures/Update/{{med_proc.med_proc_id}}" method="post">
 
     <div class="row">
         <div class="col">
             <div class="form-group">
                 <label for="inputCBHPM">Código CBHPM</label>
-                <input type="text" id="inputCBHPM" class="form-control cbhpm" name="inputCBHPM" placeholder="0.00.00.00-0" maxlength="12" value="{{med_proc.med_proc_cbhpm_code}}" required>
+                <input type="text" id="inputCBHPM" class="form-control cbhpm" name="inputCBHPM" placeholder="0.00.00.00-0" maxlength="12" minlength="12" value="{{med_proc.med_proc_cbhpm_code}}" required>
             </div>
         </div>
         <div class="col">
@@ -119,10 +120,10 @@
                 decimal: ',',
             }
         });
+        
+        
   });
-    $(document).ready(function () {
-        $('.cbhpm').mask('0.00.00.00-0', { reverse: true });
-    });
+
 
     var MoneyOpts = { reverse:true,
                       maxlength: false,
@@ -140,7 +141,8 @@
                         }
                       }
                     };
-
+  
+  $('.cbhpm').mask('0.00.00.00-0', { recursive:true });
   $('.money').mask("#.##0,00", MoneyOpts);
 </script>
 

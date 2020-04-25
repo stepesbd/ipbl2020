@@ -263,105 +263,105 @@ exports.delete = (req, res, next) => {
 
 exports.update = (req, res, next) => {
     var me = req.body;
-    Employee.findOne({
-        where: { emp_cns_code: me.inputCNS }
-    }).then(function(CNScheckRepeat){
-        // INVALIDAÇÃO EM CASO DE CNS REPETIDO
-        if(CNScheckRepeat == null){
-            Employee.findOne({
-                where: { emp_id: req.params.employee_id }
-            }).then(function(emp){
-                Address.update({
-                        add_street: me.inputStreet.toUpperCase(),
-                        add_number: me.inputNumber,
-                        add_city: me.inputCity.toUpperCase(),
-                        add_state: me.inputState.toUpperCase(),
-                        add_country: me.inputCountry.toUpperCase(),
-                        add_zip_code: me.inputZipCode.toUpperCase(),
-                    },{
-                    where: { add_id: emp.add_id }
-                }).then(() => {
-                    Hospital_employee.update({
-                        hos_emp_admission_date: me.inputAdmi,
-                        hos_emp_demission_date: me.inputDemiss,
-                        hos_emp_salary: me.inputSalary
-                    },{
-                        where: { emp_id: emp.emp_id }
-                    }).then(() => {
-                        Employee.update({
-                            emp_name : me.inputNome.toUpperCase(),
-                            emp_cns_code: me.inputCNS,
-                            emp_occupation : me.inputFuncao.toUpperCase(),
-                            add_id: emp.add_id
-                        },{
-                            where: { emp_id: req.params.employee_id }
-                        }).then(() => {
-                            Contact.findAll({
-                                raw: true,
-                                include: [{
-                                    model: Employee_contact,
-                                    where: { emp_id: req.params.employee_id }
-                                }]
-                            }).then(function (old_contacs) {
-                                // REMOVENDO TODAS ASSOCIAÇÕES ANTERIORES
-                                old_contacs.forEach(function(old_con){
-                                    Contact.destroy({ where: { con_id: old_con.con_id } })
-                                });
-                                // NECESSÁRIO PARA EVITAR BUG DE PROCEDIMENTO UNIÁRIO VINDO COMO STRING AO INVÉS DE ARRAY
-                                if( me.inputContactBox[0] != null ){
-                                    
-                                    var arrayOfContactTypes = []
-                                    var arrayOfContactBox = []
-                    
-                                    if(!Array.isArray(me.inputContactType)){
-                                        arrayOfContactTypes.push(me.inputContactType);
-                                    }else{
-                                        arrayOfContactTypes = me.inputContactType;
-                                    };
-                                    if(!Array.isArray(me.inputContactBox)){
-                                        arrayOfContactBox.push(me.inputContactBox);
-                                    }else{
-                                        arrayOfContactBox = me.inputContactBox;
-                                    };
 
-                                    arrayOfContactTypes.forEach(function(contactType){
-                                        if(arrayOfContactBox[0].length > 0){
-                                            Contact.create({
-                                                con_type: contactType,
-                                                con_desc: arrayOfContactBox.shift(),
-                                            }).then(function(con){
-                                                con.addEmployee(emp);
-                                            }).catch(err => {
-                                                con.destroy();
-                                                var erro = err.message;
-                                                res.render('erro-page', { title: 'Erro', erro: erro} );
-                                            });  
+            Employee.findByPk(req.params.employee_id).then(function(emp){
+                Employee.findOne({
+                    where: { emp_cns_code: me.inputCNS }
+                }).then(function(empCNScheckRepeat){
+                    // INVALIDAÇÃO EM CASO DE CNS REPETIDO
+                    if( (empCNScheckRepeat == null) || (empCNScheckRepeat.emp_cns_code.localeCompare(emp.emp_cns_code) === 0) ){
+                        Address.update({
+                                add_street: me.inputStreet.toUpperCase(),
+                                add_number: me.inputNumber,
+                                add_city: me.inputCity.toUpperCase(),
+                                add_state: me.inputState.toUpperCase(),
+                                add_country: me.inputCountry.toUpperCase(),
+                                add_zip_code: me.inputZipCode.toUpperCase(),
+                            },{
+                            where: { add_id: emp.add_id }
+                        }).then(() => {
+                            Hospital_employee.update({
+                                hos_emp_admission_date: me.inputAdmi,
+                                hos_emp_demission_date: me.inputDemiss,
+                                hos_emp_salary: me.inputSalary
+                            },{
+                                where: { emp_id: emp.emp_id }
+                            }).then(() => {
+                                Employee.update({
+                                    emp_name : me.inputNome.toUpperCase(),
+                                    emp_cns_code: me.inputCNS,
+                                    emp_occupation : me.inputFuncao.toUpperCase(),
+                                    add_id: emp.add_id
+                                },{
+                                    where: { emp_id: req.params.employee_id }
+                                }).then(() => {
+                                    Contact.findAll({
+                                        raw: true,
+                                        include: [{
+                                            model: Employee_contact,
+                                            where: { emp_id: req.params.employee_id }
+                                        }]
+                                    }).then(function (old_contacs) {
+                                        // REMOVENDO TODAS ASSOCIAÇÕES ANTERIORES
+                                        old_contacs.forEach(function(old_con){
+                                            Contact.destroy({ where: { con_id: old_con.con_id } })
+                                        });
+                                        // NECESSÁRIO PARA EVITAR BUG DE PROCEDIMENTO UNIÁRIO VINDO COMO STRING AO INVÉS DE ARRAY
+                                        if( me.inputContactBox[0] != null ){
+                                            
+                                            var arrayOfContactTypes = []
+                                            var arrayOfContactBox = []
+                            
+                                            if(!Array.isArray(me.inputContactType)){
+                                                arrayOfContactTypes.push(me.inputContactType);
+                                            }else{
+                                                arrayOfContactTypes = me.inputContactType;
+                                            };
+                                            if(!Array.isArray(me.inputContactBox)){
+                                                arrayOfContactBox.push(me.inputContactBox);
+                                            }else{
+                                                arrayOfContactBox = me.inputContactBox;
+                                            };
+
+                                            arrayOfContactTypes.forEach(function(contactType){
+                                                if(arrayOfContactBox[0].length > 0){
+                                                    Contact.create({
+                                                        con_type: contactType,
+                                                        con_desc: arrayOfContactBox.shift(),
+                                                    }).then(function(con){
+                                                        con.addEmployee(emp);
+                                                    }).catch(err => {
+                                                        con.destroy();
+                                                        var erro = err.message;
+                                                        res.render('erro-page', { title: 'Erro', erro: erro} );
+                                                    });  
+                                                }
+                                            })
                                         }
-                                    })
-                                }
-                                Hospital.findByPk(req.params.hosp_id).then(function(hos){
-                                    res.render('success-page', { title: 'Sucesso', success: 'Funcionário ATUALIZADO com sucesso! Clique no botão abaixo para ser direcionado à página do(a) ' + hos.hos_name, page: '/Hospital/' + req.params.hosp_id + '/employee/sts/active'} );
+                                        Hospital.findByPk(req.params.hosp_id).then(function(hos){
+                                            res.render('success-page', { title: 'Sucesso', success: 'Funcionário ATUALIZADO com sucesso! Clique no botão abaixo para ser direcionado à página do(a) ' + hos.hos_name, page: '/Hospital/' + req.params.hosp_id + '/employee/sts/active'} );
+                                        }).catch(err => {
+                                            var erro = err.message;
+                                            res.render('erro-page', { title: 'Erro', erro: erro} );
+                                        });
+                                    });
                                 }).catch(err => {
                                     var erro = err.message;
                                     res.render('erro-page', { title: 'Erro', erro: erro} );
-                                });
-                            });
+                                }); 
+                            }).catch(err => {
+                                var erro = err.message;
+                                res.render('erro-page', { title: 'Erro', erro: erro} );
+                            }); 
                         }).catch(err => {
                             var erro = err.message;
                             res.render('erro-page', { title: 'Erro', erro: erro} );
-                        }); 
-                    }).catch(err => {
-                        var erro = err.message;
+                        });   
+                    }else{
+                        var erro = 'CNS já cadastrado!';
                         res.render('erro-page', { title: 'Erro', erro: erro} );
-                    }); 
-                }).catch(err => {
-                    var erro = err.message;
-                    res.render('erro-page', { title: 'Erro', erro: erro} );
-                });   
+                    }
+                });
             })
-        }else{
-            var erro = 'CNS já cadastrado!';
-            res.render('erro-page', { title: 'Erro', erro: erro} );
-        }
-    });
+        
 }
