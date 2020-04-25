@@ -10,17 +10,29 @@ const { Hospital } = require('../models');
 */
 exports.post = (req, res, next) => {
     var me = req.body;
+    Medical_procedures.findOne({
+        where: { med_proc_cbhpm_code: me.inputCBHPM }
+    }).then(function(CGHPMrepeat){
+        // INVALIDAÇÃO EM CASO DE CNES REPETIDO
+        if(CGHPMrepeat == null){
+            
+            Medical_procedures.create({
+                med_proc_cbhpm_code: me.inputCBHPM,
+                med_proc_desc: me.inputDesc.toUpperCase(),
+                med_proc_uco: me.inputUCO,
+            }).then(function(med_proc){
+                res.render('success-page', { title: 'Sucesso', success: 'Procedimento CRIADO com sucesso! Clique no botão abaixo para ser direcionado à lista de procedimentos.', page: '/procedures'} );
+            }).catch(err => {
+                var erro = err.message;
+                res.render('erro-page', { title: 'Erro', erro: erro} );
+            }); 
 
-    Medical_procedures.create({
-        med_proc_cbhpm_code: me.inputCBHPM,
-        med_proc_desc: me.inputDesc.toUpperCase(),
-        med_proc_uco: me.inputUCO,
-    }).then(function(med_proc){
-        res.render('success-page', { title: 'Sucesso', success: 'Procedimento CRIADO com sucesso! Clique no botão abaixo para ser direcionado à lista de procedimentos.', page: '/procedures'} );
-    }).catch(err => {
-        var erro = err.message;
-        res.render('erro-page', { title: 'Erro', erro: erro} );
-    });   
+        }else{
+            var erro = 'CBHPM já cadastrado!';
+            res.render('erro-page', { title: 'Erro', erro: erro} );
+        }
+    })
+          
    
 };
 
@@ -93,19 +105,32 @@ exports.new = (req, res, next) => {
 */
 exports.update =  (req, res) => {
     var me = req.body;
-    Medical_procedures.update(
-        {
-            med_proc_cbhpm_code: me.inputCBHPM,
-            med_proc_desc: me.inputDesc.toUpperCase(),
-            med_proc_uco: me.inputUCO,
-        },{
-            where: { med_proc_id: req.params.proc_id }
-    }).then(()=>{
-        res.render('success-page', { title: 'Sucesso', success: 'Procedimento ATUALIZADO com sucesso! Clique no botão abaixo para ser direcionado à lista de procedimentos.', page: '/procedures'} );
-    }).catch(err => {
-        var erro = err.message;
-        res.render('erro-page', { title: 'Erro', erro: erro} );
-    });
+
+    Medical_procedures.findOne({
+        where: { med_proc_cbhpm_code: me.inputCBHPM }
+    }).then(function(CGHPMrepeat){
+        // INVALIDAÇÃO EM CASO DE CGHPM REPETIDO
+        if(CGHPMrepeat == null){
+            Medical_procedures.update(
+                {
+                    med_proc_cbhpm_code: me.inputCBHPM,
+                    med_proc_desc: me.inputDesc.toUpperCase(),
+                    med_proc_uco: me.inputUCO,
+                },{
+                    where: { med_proc_id: req.params.proc_id }
+            }).then(()=>{
+                res.render('success-page', { title: 'Sucesso', success: 'Procedimento ATUALIZADO com sucesso! Clique no botão abaixo para ser direcionado à lista de procedimentos.', page: '/procedures'} );
+            }).catch(err => {
+                var erro = err.message;
+                res.render('erro-page', { title: 'Erro', erro: erro} );
+            });
+        }else{
+            var erro = 'CBHPM já cadastrado!';
+            res.render('erro-page', { title: 'Erro', erro: erro} );
+        }
+    })
+
+            
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
