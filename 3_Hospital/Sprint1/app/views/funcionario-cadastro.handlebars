@@ -1,0 +1,122 @@
+<br />
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+  integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.13.4/jquery.mask.min.js"></script>
+
+<h3>
+    <i class="fa fa-user-md" aria-hidden="true"></i>
+    Cadastro de Funcionário
+</h3>
+<h5>{{hosp.hos_name}}</h5>
+<hr>
+
+<form action="/hospital/{{hosp.hos_id}}/employee/" method="post">
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label for="inputNome">Nome competo</label>
+                <input type="text" class="form-control" name="inputNome" placeholder="" maxlength="100" min="5" max="100" required>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label for="inputCNS">Código CNS (apenas dígitos)</label>
+                <input type="text" class="form-control" name="inputCNS" placeholder="" maxlength="15" min="15" max="15" required>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label for="inputFuncao">Função</label>
+                <input type="text" class="form-control" name="inputFuncao" placeholder="Ex.: Enfermeiro" maxlength="100" min="1" max="100" required>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label for="inputContato">Contato</label>
+                <input type="text" class="form-control" name="inputContato" placeholder="" maxlength="100" min="0" max="100">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label for="inputAdmi">Admissão</label>
+                <input type="date" class="form-control" name="inputAdmi" maxlength="10" min="10" max="100" onkeypress="mascaraData(this)" required>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label for="inputDemiss">Demissão (opcional)</label>
+                <input type="date" class="form-control" name="inputDemiss" maxlength="10" min="10" max="100" onkeypress="mascaraData(this)" >
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label for="inputSalary">Salário</label>
+                <input type="text" id="inputSalary" name="inputSalary" class="money form-control" maxlength="10" required/>
+            </div>
+        </div>
+     </div> 
+
+    <div class="row">
+        <div class="col">
+            <label for="adresses">Endereço</label>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <input type="text" class="form-control" name="inputStreet" placeholder="Rua" maxlength="45" min="5" max="45" required>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <input type="number" class="form-control" name="inputNumber" placeholder="Número" maxlength="5" min="0" max="99999" required>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <input type="text" class="form-control" name="inputCity" placeholder="Cidade" maxlength="50" min="1" max="50" required>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <input type="text" class="form-control" name="inputState" placeholder="Estado" maxlength="50" min="1" max="50" required>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <input type="text" class="form-control" name="inputCountry" placeholder="País" maxlength="50" min="1" max="50" required>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="text" class="zip_code form-control" name="inputZipCode" placeholder="Código Postal" maxlength="9"  required>
+            </div>
+        </div>
+    </div>
+    
+
+    <div class="form-row text-center">
+        <button type="submit" class="btn btn-success mr-2">Cadastrar</button> 
+        <a class=" btn btn-danger" href="/Hospital/{{hosp.hos_id}}/employee/sts/active" role="button">Cancelar</a>
+    </div>
+</form>
+
+
+<script>
+    $(document).ready(function () {
+        $('.money').mask('000.000,00', { reverse: true });
+        $('.zip_code').mask('00000-000', { reverse: true });
+    });
+
+</script>

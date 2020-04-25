@@ -1,0 +1,100 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+  integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+<br />
+<h3>
+  <i class="fa fa-h-square" aria-hidden="true"></i>
+  {{hos.hos_name}}
+</h3>
+<h5>Atualização de Cadastro</h5>
+<hr>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.js"></script>
+<form action="/hospital/update/{{hos.hos_id}}" method="post">
+
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+            <label for="inputNome">Nome</label>
+            <input type="text" class="form-control" name="inputNome" placeholder="" maxlength="100" min="10" max="100" value="{{hos.hos_name}}" required>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+            <label for="inputCorporate">Razão Social</label>
+            <input type="text" class="form-control" name="inputCorporate" placeholder="" maxlength="100" min="10" max="100" value="{{hos.hos_corporate_name}}" required>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+            <label for="inputCNPJ">CNPJ (digite apenas números)</label>
+            <input type="text" class="form-control cnpj" name="inputCNPJ" placeholder="99.999.999/9999-99" maxlength="18" min="14" max="18" value="{{hos.hos_cnpj}}" required>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+            <label for="inputCNES">Código CNES</label>
+            <input type="text" class="form-control" name="inputCNES" placeholder="9999999" maxlength="7" min="7" max="7" value="{{hos.hos_cnes_code}}" required>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="form-row">
+            <label for="adresses">Endereço</label>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+            <input type="text" class="form-control" name="inputStreet" placeholder="Rua" maxlength="45" min="5" max="45" value="{{add.add_street}}" required>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+            <input type="number" class="form-control" name="inputNumber" placeholder="Número" maxlength="5" min="0" max="99999" value="{{add.add_number}}" required>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+            <input type="text" class="form-control" name="inputCity" placeholder="Cidade" maxlength="50" min="1" max="50" value="{{add.add_city}}" required>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+            <input type="text" class="form-control" name="inputState" placeholder="Estado" maxlength="50" min="1" max="50" value="{{add.add_state}}" required>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+            <input type="text" class="form-control" name="inputCountry" placeholder="País" maxlength="50" min="1" max="50" value="{{add.add_country}}" required>
+            </div>
+        </div>
+    </div>    
+
+     <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+            <input type="text" class="form-control" name="inputZipCode" placeholder="Código Postal" maxlength="20" min="1" max="20" value="{{add.add_zip_code}}" required>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-row text-center">
+        <button type="submit" class="btn btn-success mr-2">Salvar</button> 
+        <a class=" btn btn-primary" href="/hospital/" role="button">Voltar</a>
+    </div>
+</form>
+<script>
+    $('.cnpj').mask('99.999.999/9999-99', {reverse: true});
+</script>
+
+
+<script>
+    //$('.cnpj').mask('99.999.999/9999-99', {reverse: true});
+    //$('.phone').mask('(99) 9999-9999', {reverse: false});
+</script>
