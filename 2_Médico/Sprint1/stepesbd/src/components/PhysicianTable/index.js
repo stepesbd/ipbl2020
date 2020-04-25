@@ -24,7 +24,6 @@ export default function PhysicianTable() {
                                     <TableCell>ID</TableCell>
                                     <TableCell>Nome</TableCell>
                                     <TableCell>CRM</TableCell>
-                                    <TableCell>1º Especialidade</TableCell>
                                     <TableCell />
                                 </TableRow>
                             </TableHead>
@@ -34,7 +33,6 @@ export default function PhysicianTable() {
                                         <TableCell>{physician.id}</TableCell>
                                         <TableCell>{physician.name}</TableCell>
                                         <TableCell>{physician.crm}</TableCell>
-                                        <TableCell></TableCell>
                                         <TableCell align="right">
                                             <IconButton ><Edit style={{ color: '#2196f3' }} /></IconButton >
                                             <IconButton ><Delete style={{ color: '#dc004e' }} /></IconButton >

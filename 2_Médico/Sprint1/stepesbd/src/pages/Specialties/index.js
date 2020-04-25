@@ -43,7 +43,7 @@ export default function Specialties() {
                         </Grid>
                     ))}
                 </Grid>
-                <SpecialtyInsert open={open} handleClose={handleClose} />
+                <SpecialtyInsert open={open} close={handleClose} />
             </Dashboard>
         </React.Fragment>
     )

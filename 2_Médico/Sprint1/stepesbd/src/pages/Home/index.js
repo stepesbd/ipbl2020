@@ -6,7 +6,7 @@ import PhysicianTable from '../../components/PhysicianTable'
 import PhisicianInsert from '../../components/PhysicianInsert'
 
 export default function Home() {
-    const [modalInsert, setModalInsert] = useState(true)
+    const [modalInsert, setModalInsert] = useState(false)
 
     const handleClickOpen = () => {
         setModalInsert(true)
