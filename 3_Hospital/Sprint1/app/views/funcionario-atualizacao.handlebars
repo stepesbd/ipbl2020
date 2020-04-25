@@ -1,0 +1,154 @@
+<br />
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+  integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.13.4/jquery.mask.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.js"></script>
+<a href="/Hospital/{{hos.hos_id}}/employee/Delete/{{emp.emp_id}}" class="float-right btn btn-danger" data-toggle="modal" data-toggle="tooltip" data-placement="top" data-target="#mdDelete" >
+  Apagar registro do Funcionário
+</a>
+<h3>
+    <i class="fa fa-user-md" aria-hidden="true"></i>
+    {{emp.emp_name}}
+</h3>
+<h5>Atualização de Funcionário</h5>
+<hr>
+
+<form action="/hospital/{{hos.hos_id}}/employee/Update/{{emp.emp_id}}" method="post">
+
+    <div class="row">
+        <div class="col">
+          <div class="form-group">
+            <label for="inputNome">Nome</label>
+            <input type="text" class="form-control" name="inputNome" placeholder="" maxlength="100" min="5" max="100" value="{{emp.emp_name}}" >
+          </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+              <label for="inputCNS">Código CNS (apenas dígitos)</label>
+              <input type="text" class="form-control" name="inputCNS" placeholder="" maxlength="15" min="15" max="15" value="{{emp.emp_cns_code}}" >
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+              <label for="inputFuncao">Função</label>
+              <input type="text" class="form-control" name="inputFuncao" placeholder="Ex.: Enfermeiro" maxlength="100" min="1" max="100" value="{{emp.emp_occupation}}" >
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+              <label for="inputContato">Contato</label>
+              <input type="text" class="form-control" name="inputContato" placeholder="" maxlength="100" min="0" max="100">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+              <label for="inputAdmi">Admissão</label>
+              <input type="date" class="form-control" name="inputAdmi" maxlength="10" min="10" max="100" onkeypress="mascaraData(this)" value="{{hos_emp.hos_emp_admission_date}}" >
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+              <label for="inputDemiss">Demissão (opcional)</label>
+              <input type="date" class="form-control" name="inputDemiss" maxlength="10" min="10" max="100" onkeypress="mascaraData(this)" value="{{hos_emp.hos_emp_demission_date}}" >
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+              <label for="inputSalary">Salário</label>
+              <input type="text" id="inputSalary" name="inputSalary" class="money form-control" maxlength="10" value="{{hos_emp.hos_emp_salary}}"/>
+            </div>
+        </div>
+     </div> 
+
+    <div class="row">
+       <div class="col">
+            <label for="adresses">Endereço</label>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+              <input type="text" class="form-control" name="inputStreet" placeholder="Rua" maxlength="45" min="5" max="45" value="{{add.add_street}}" >
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+             <input type="number" class="form-control" name="inputNumber" placeholder="Número" maxlength="5" min="0" max="99999" value="{{add.add_number}}">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+              <input type="text" class="form-control" name="inputCity" placeholder="Cidade" maxlength="50" min="1" max="50" value="{{add.add_city}}">
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+              <input type="text" class="form-control" name="inputState" placeholder="Estado" maxlength="50" min="1" max="50" value="{{add.add_state}}">
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+              <input type="text" class="form-control" name="inputCountry" placeholder="País" maxlength="50" min="1" max="50" value="{{add.add_country}}">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+              <input type="text" class="zip_code form-control" name="inputZipCode" placeholder="Código Postal" maxlength="9" value="{{add.add_zip_code}}">
+            </div>
+        </div>
+    </div>
+    
+
+    <div class="form-row text-center">
+        <button type="submit" class="btn btn-success mr-2">Salvar</button> 
+        <a class=" btn btn-primary" href="/hospital/{{hos.hos_id}}/employee/sts/active" role="button">Voltar</a>
+    </div>
+</form>
+
+
+
+<!-- Modal Delete-->
+<div class="modal fade bd-example-modal-lg" id="mdDelete" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Desativar</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Deseja apagar o registro de
+        <span id="info"> {{emp.emp_name}} </span>
+        ?
+      </div>
+      <div class="modal-footer">
+        <form action="/Hospital/{{hos.hos_id}}/employee/Delete/{{emp.emp_id}}" method="get">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-danger">Apagar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<script>
+    $(document).ready(function () {
+        $('.money').mask('000.000.00', { reverse: true });
+        $('.zip_code').mask('00000-000', { reverse: true });
+    });
+
+</script>

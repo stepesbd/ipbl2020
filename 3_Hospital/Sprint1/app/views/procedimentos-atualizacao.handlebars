@@ -1,0 +1,95 @@
+<br />
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+  integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.13.4/jquery.mask.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.js"></script>
+<a href="/procedures/Delete/{{med_proc.med_proc_id}}" class="float-right btn btn-danger" data-toggle="modal" data-toggle="tooltip" data-placement="top" data-target="#mdDelete" >
+  Apagar registro do Procedimento
+</a>
+<h3>
+    <i class="fa fa-list-alt" aria-hidden="true"></i>
+    Registro: {{med_proc.med_proc_id}}
+</h3>
+<h5>Procedimento Médico</h5>
+<hr>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.js"></script>
+<form action="/procedures" method="post">
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label for="inputCBHPM">Código CBHPM</label>
+                <input type="text" id="inputCBHPM" class="form-control cbhpm" name="inputCBHPM" placeholder="0.00.00.00-0" maxlength="12" value="{{med_proc.med_proc_cbhpm_code}}" required>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label for="inputUCO">Valor UCO</label>
+                <input type="text" id="inputUCO" class="money form-control" name="inputUCO" placeholder="" maxlength="10" value="{{med_proc.med_proc_uco}}" required>
+            </div>
+        </div>
+        
+    </div>
+    <div class="form-group">
+        <label for="inputDesc">Descrição</label>
+        <textarea class="form-control" id="inputDesc" name="inputDesc" placeholder="Escreva aqui a descrição do procedimento." rows="3" maxlength="100" required>{{med_proc.med_proc_desc}}</textarea>
+    </div>
+
+
+
+    <ul class="list-group">
+      <li class="list-group-item list-group-item-primary text-center">Hospitais que realizam este procedimento
+          <span class="badge badge-primary badge-pill float-right">  3  </span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+          HOSP 1
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+          HOSP 2
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+          HOSP 3
+      </li>
+    </ul>
+
+    <br>
+
+
+    <div class="form-row text-center">
+        <button type="submit" class="btn btn-success mr-2">Atualizar</button> 
+        <a class=" btn btn-primary" href="/procedures" role="button">Cancelar</a>
+    </div>
+</form>
+
+<!-- Modal Delete-->
+<div class="modal fade bd-example-modal-lg" id="mdDelete" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Desativar</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Deseja apagar o registro do procedimento?
+      </div>
+      <div class="modal-footer">
+        <form action="/procedures/Delete/{{med_proc.med_proc_id}}" method="get">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-danger">Apagar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $('.money').mask('000.000,00', { reverse: true });
+        $('.cbhpm').mask('0.00.00.00-0', { reverse: true });
+    });
+</script>
+

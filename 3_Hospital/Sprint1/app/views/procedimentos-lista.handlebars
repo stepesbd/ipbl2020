@@ -1,0 +1,49 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+  integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<link rel='stylesheet' href='https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css' />
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css"></script>
+<script src="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css"></script>
+<br>
+  
+<h3>  
+  <i class="fa fa-list-alt" aria-hidden="true"></i>      
+  Procedimentos Médicos
+  <a href="/procedures/New" class="float-right btn btn-primary ">Criar novo Procedimento</a>
+</h3>
+<br>
+<hr>
+
+<table id="listaColaborador" class="table table-striped table-bordered" style="width:100%">
+  <thead>
+    <tr>
+      <th>CBHPM</th>
+      <th>Descrição do procedimento</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each med_proc}}
+    <tr>
+      <td>{{med_proc_cbhpm_code}}</td>
+      <td>{{med_proc_desc}}</td>
+      <td class="text-center">
+          <form action="/procedures/{{med_proc_id}}"  method="get">
+            <button id="{{hos_id}}" type="submit" class="btn btn-default" alt="Editar procedimento" data-toggle="tooltip" data-placement="top" title="Editar procedimento">
+              <i class="fa fa-search"></i>
+            </button>
+          </form>
+      </td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+ <a class="btn btn-primary" href="/" role="button">Voltar</a>
+
+<script>
+  $('.cpf').mask('999.999.999-99', { reverse: true });
+  $(document).ready(function () {
+    $('#listaColaborador').DataTable();
+  });
+</script>

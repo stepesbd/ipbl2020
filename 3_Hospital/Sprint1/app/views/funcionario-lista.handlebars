@@ -1,0 +1,60 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+  integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<link rel='stylesheet' href='https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css' />
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.js"></script>
+<br>
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link {{active}}" href="/hospital/{{hosp.hos_id}}/employee/sts/active">Ativos</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link {{inactive}}" href="/Hospital/{{hosp.hos_id}}/employee/sts/inactive">Inativos</a>
+  </li>
+</ul>
+<br>
+<h3>
+  <i class="fa fa-user-md" aria-hidden="true"></i>
+  Quadro de Funcionários
+  <a href="/Hospital/{{hosp.hos_id}}/employee/New" class="float-right btn btn-primary col-md-4 mr-2 ml-2">Cadastrar novo Colaborador</a>
+</h3>
+<h5>{{hosp.hos_name}}</h5>
+<br>
+<hr>
+
+<table id="listaColaborador" class="table table-striped table-bordered" style="width:100%">
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Código CNS</th>
+      <th>Função</th>
+	    <th>Contato</th>
+	  <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each emp}}
+    <tr>
+      <td>{{emp_name}}</td>
+      <td>{{emp_cns_code}}</td>
+      <td>{{emp_occupation}}</td>
+      <td></td>
+      <td class="text-center">
+        <button id={{emp_id}} type="button" class="btn btn-default"
+          onclick="window.location.href='/hospital/{{@root.hosp.hos_id}}/employee/update/{{emp_id}}'" alt="Editar" data-toggle="tooltip" data-placement="top" title="Editar">
+          <i class="far fa-edit"></i>
+        </button>
+      </td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+ <a class="btn btn-primary" href="/Hospital" role="button">Voltar</a>
+
+
+<script>
+  $('.cpf').mask('999.999.999-99', { reverse: true });
+  $(document).ready(function () {
+    $('#listaColaborador').DataTable();
+  });
+</script>
