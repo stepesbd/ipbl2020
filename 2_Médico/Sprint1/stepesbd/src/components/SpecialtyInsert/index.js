@@ -18,7 +18,7 @@ export default function SpecialtyInsert(props) {
                 .then(response => {
                     setName('')
                 })
-            props.handleClose()
+            props.close()
         } catch (error) {
             alert('erro ao tentar inserir novo incidente')
         }
@@ -26,7 +26,7 @@ export default function SpecialtyInsert(props) {
 
     return (
         <React.Fragment>
-            <Dialog open={props.open} onClose={props.handleClose} aria-labelledby="form-dialog-title">
+            <Dialog open={props.open} onClose={props.close} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">Nova Especialidade</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
@@ -44,7 +44,7 @@ export default function SpecialtyInsert(props) {
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={props.handleClose} color="primary">
+                    <Button onClick={props.close} color="primary">
                         Cancelar
           </Button>
                     <Button onClick={handleNewSpecialty} variant="contained" color="primary">

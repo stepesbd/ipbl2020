@@ -4,6 +4,7 @@ import api from '../../services/api'
 import { FormControlStyled } from './styles'
 
 export default function PhysicianUpdate(props) {
+    const physicianId = props.id
     const [name, setName] = useState('')
     const [cpf, setCpf] = useState('')
     const [crm, setCrm] = useState('')
@@ -22,7 +23,7 @@ export default function PhysicianUpdate(props) {
 
     const [specialties, setSpecialties] = useState([])
 
-    const handleInsert = async () => {
+    const handleUpdate = async () => {
 
         const physician = {
             name,
@@ -30,12 +31,10 @@ export default function PhysicianUpdate(props) {
             crm
         }
 
-        const response = await api.put(`physicians/${props.physician}`, physician)
-        const id = response.data.msg.id
-
+        await api.put(`physicians/${physicianId}`, physician)
 
         const address = {
-            physicianId: id,
+            physicianId: physicianId,
             type,
             zipcode,
             state,
@@ -49,7 +48,7 @@ export default function PhysicianUpdate(props) {
 
         if (residential !== '') {
             await api.post(`contacts`, {
-                physicianId: id,
+                physicianId: physicianId,
                 type: 'residencial',
                 contact: residential
             })
@@ -57,14 +56,14 @@ export default function PhysicianUpdate(props) {
 
         if (comercial !== '') {
             await api.post(`contacts`, {
-                physicianId: id,
+                physicianId: physicianId,
                 type: 'comercial',
                 contact: comercial
             })
         }
         if (other !== '') {
             await api.post(`contacts`, {
-                physicianId: id,
+                physicianId: physicianId,
                 type: 'outros',
                 contact: other
             })
@@ -72,14 +71,14 @@ export default function PhysicianUpdate(props) {
 
         if (firstSpecialty !== '') {
             await api.post(`physicianspecialties`, {
-                physicianId: id,
+                physicianId: physicianId,
                 specialtiesId: firstSpecialty
             })
         }
 
         if (secondSpecialty !== '') {
             await api.post(`physicianspecialties`, {
-                physicianId: id,
+                physicianId: physicianId,
                 specialtiesId: secondSpecialty
             })
         }
@@ -87,6 +86,60 @@ export default function PhysicianUpdate(props) {
         props.close()
     }
 
+    useEffect(() => {
+        if (physicianId !== null) {
+            api.get(`profiles/${physicianId}`)
+                .then(response => {
+                    if (response.data.msg) {
+                        const [address] = response.data.msg.addresses
+                        const contacts = response.data.msg.contacts
+                        const specialties = response.data.msg.specialties
+                        setName(response.data.msg.physician.name)
+                        setCpf(response.data.msg.physician.cpf)
+                        setCrm(response.data.msg.physician.crm)
+                        setType(address.type)
+                        setZipcode(address.zipcode)
+                        setState(address.state)
+                        setCity(address.city)
+                        setDistrict(address.district)
+                        setStreet(address.street)
+                        setNumber(address.number)
+                        contacts.map(contact => {
+                            if (contact.type === 'residencial') {
+                                setResidential(contact.contact)
+                            } else if (contact.type === 'comercial') {
+                                setComercial(contact.contact)
+                            } else {
+                                setOther(contact.contact)
+                            }
+                        })
+                        if (specialties.length > 0) {
+                            setFirstSpecialty(specialties[0].specialtiesId)
+                        }
+                        if (specialties.length == 2) {
+                            setSecondSpecialty(specialties[1].specialtiesId)
+                        }
+                    }
+                }
+                )
+        } else {
+            setName('')
+            setCpf('')
+            setCrm('')
+            setType('')
+            setZipcode('')
+            setState('')
+            setCity('')
+            setDistrict('')
+            setStreet('')
+            setNumber('')
+            setResidential('')
+            setComercial('')
+            setOther('')
+            setFirstSpecialty('')
+            setSecondSpecialty('')
+        }
+    }, [physicianId])
 
     useEffect(() => {
         api.get(`specialties`)
@@ -107,7 +160,6 @@ export default function PhysicianUpdate(props) {
                     <Grid item xs={12} sm={6}>
                         <TextField
                             required
-                            id="name"
                             name="name"
                             label="Nome"
                             value={name}
@@ -119,7 +171,6 @@ export default function PhysicianUpdate(props) {
                     <Grid item xs={12} sm={3}>
                         <TextField
                             required
-                            id="cpf"
                             name="cpf"
                             label="CPF"
                             value={cpf}
@@ -131,7 +182,6 @@ export default function PhysicianUpdate(props) {
                     <Grid item xs={12} sm={3}>
                         <TextField
                             required
-                            id="crm"
                             name="crm"
                             label="CRM"
                             value={crm}
@@ -147,7 +197,6 @@ export default function PhysicianUpdate(props) {
                             <Select
                                 required
                                 labelId="demo-simple-select-label"
-                                id="demo-simple-select"
                                 value={type}
                                 onChange={e => setType(e.target.value)}
                             >
@@ -161,7 +210,6 @@ export default function PhysicianUpdate(props) {
                     <Grid item xs={12} sm={3}>
                         <TextField
                             required
-                            id="zipcode"
                             name="zipcode"
                             label="CEP"
                             fullWidth
@@ -173,7 +221,6 @@ export default function PhysicianUpdate(props) {
                     <Grid item xs={12} sm={3}>
                         <TextField
                             required
-                            id="state"
                             name="state"
                             label="Estado"
                             fullWidth
@@ -185,7 +232,6 @@ export default function PhysicianUpdate(props) {
                     <Grid item xs={12} sm={3}>
                         <TextField
                             required
-                            id="city"
                             name="city"
                             label="Cidade"
                             fullWidth
@@ -197,7 +243,6 @@ export default function PhysicianUpdate(props) {
                     <Grid item xs={12} sm={5}>
                         <TextField
                             required
-                            id="district"
                             name="district"
                             label="Bairro"
                             fullWidth
@@ -209,7 +254,6 @@ export default function PhysicianUpdate(props) {
                     <Grid item xs={12} sm={6}>
                         <TextField
                             required
-                            id="street"
                             name="street"
                             label="Rua"
                             fullWidth
@@ -221,7 +265,6 @@ export default function PhysicianUpdate(props) {
                     <Grid item xs={12} sm={1}>
                         <TextField
                             required
-                            id="number"
                             name="number"
                             label="Número"
                             fullWidth
@@ -232,7 +275,6 @@ export default function PhysicianUpdate(props) {
                     </Grid>
                     <Grid item xs={12} sm={4}>
                         <TextField
-                            id="residential"
                             name="residential"
                             label="Contato Residencial"
                             fullWidth
@@ -243,7 +285,6 @@ export default function PhysicianUpdate(props) {
                     </Grid>
                     <Grid item xs={12} sm={4}>
                         <TextField
-                            id="comercial"
                             name="comercial"
                             label="Comercial"
                             fullWidth
@@ -254,11 +295,10 @@ export default function PhysicianUpdate(props) {
                     </Grid>
                     <Grid item xs={12} sm={4}>
                         <TextField
-                            id="number"
-                            name="number"
+                            name="other"
                             label="Outros"
                             fullWidth
-                            autoComplete="number"
+                            autoComplete="other"
                             value={other}
                             onChange={e => setOther(e.target.value)}
                         />
@@ -268,7 +308,6 @@ export default function PhysicianUpdate(props) {
                             <InputLabel id="demo-simple-select-label">1º Especialidade</InputLabel>
                             <Select
                                 labelId="demo-simple-select-label"
-                                id="demo-simple-select"
                                 value={firstSpecialty}
                                 onChange={e => setFirstSpecialty(e.target.value)}
                             >
@@ -284,7 +323,6 @@ export default function PhysicianUpdate(props) {
                             <InputLabel id="demo-simple-select-label">2º Especialidade</InputLabel>
                             <Select
                                 labelId="demo-simple-select-label"
-                                id="demo-simple-select"
                                 value={secondSpecialty}
                                 onChange={e => setSecondSpecialty(e.target.value)}
                             >
@@ -298,7 +336,7 @@ export default function PhysicianUpdate(props) {
                 </Grid>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleInsert}>Salvar</Button>
+                <Button onClick={handleUpdate}>Alterar</Button>
             </DialogActions>
         </Dialog>
     )

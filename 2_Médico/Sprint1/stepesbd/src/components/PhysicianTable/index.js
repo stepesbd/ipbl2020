@@ -1,31 +1,62 @@
 import React, { useState, useEffect } from 'react'
 import { Grid, Paper, TableContainer, IconButton, Table, TableHead, TableBody, TableRow, TableCell } from '@material-ui/core'
 import { Edit, Delete } from '@material-ui/icons'
+import { AddCircle } from '@material-ui/icons'
+import PhisicianInsert from '../PhysicianInsert'
 import PhysicianUpdate from '../PhysicianUpdate'
+import PhysicianDelete from '../PhysicianDelete'
 import api from '../../services/api'
 
 export default function PhysicianTable() {
     const [physicians, setPhysicians] = useState([])
-    const [open, setOpen] = useState(false)
+    const [physicianId, setPhysicianId] = useState(null)
+    const [insert, setInsert] = useState(false)
+    const [update, setUpdate] = useState(false)
+    const [drop, setDrop] = useState(false)
+
+    const handleOpenInsert = () => {
+        setInsert(true)
+    }
+
+    const handleCloseInsert = () => {
+        setInsert(false)
+    }
+
+    const handleCloseUpdate = () => {
+        setPhysicianId(null)
+        setUpdate(false)
+    }
+
+    function handleOpenUpdate(id) {
+        setPhysicianId(id)
+        setUpdate(true)
+    }
+
+    const handleCloseDrop = () => {
+        setPhysicianId(null)
+        setDrop(false)
+    }
+
+    function handleOpenDrop(id) {
+        setPhysicianId(id)
+        setDrop(true)
+    }
 
     useEffect(() => {
         api.get(`physicians`)
             .then(response => {
                 setPhysicians(response.data.msg)
             })
-    }, [])
-
-    const handleClickOpen = (id = null) => {
-        setOpen(true)
-    }
-
-    const handleClickClose = () => {
-        setOpen(false)
-    }
-
+    }, [insert, update, drop, handleCloseDrop])
 
     return (
         <React.Fragment>
+            <div>
+                <h1>Médicos</h1>
+                <IconButton onClick={handleOpenInsert}>
+                    <AddCircle />
+                </IconButton>
+            </div>
             <Grid item xs={12}>
                 <Paper elevation={3}>
                     <TableContainer component={Paper}>
@@ -45,10 +76,9 @@ export default function PhysicianTable() {
                                         <TableCell>{physician.name}</TableCell>
                                         <TableCell>{physician.crm}</TableCell>
                                         <TableCell align="right">
-                                            <IconButton onClick={handleClickOpen}><Edit style={{ color: '#2196f3' }} /></IconButton >
-                                            <IconButton ><Delete style={{ color: '#dc004e' }} /></IconButton >
+                                            <IconButton onClick={() => handleOpenUpdate(physician.id)}><Edit style={{ color: '#2196f3' }} /></IconButton >
+                                            <IconButton onClick={() => handleOpenDrop(physician.id)}><Delete style={{ color: '#dc004e' }} /></IconButton >
                                         </TableCell>
-                                        <PhysicianUpdate open={open} close={handleClickClose} physician={physician.id} />
                                     </TableRow>
                                 ))}
                             </TableBody>
@@ -56,6 +86,9 @@ export default function PhysicianTable() {
                     </TableContainer>
                 </Paper>
             </Grid>
+            <PhysicianUpdate open={update} close={handleCloseUpdate} id={physicianId} />
+            <PhysicianDelete open={drop} close={handleCloseDrop} id={physicianId} />
+            <PhisicianInsert open={insert} close={handleCloseInsert} />
         </React.Fragment>
     )
 }
