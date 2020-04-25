@@ -1,62 +1,74 @@
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
   integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-<link rel='stylesheet' href='https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css' />
-<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/fixedcolumns/3.3.0/js/dataTables.fixedColumns.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css"></script>
-<script src="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css"></script>
+
+<style type="text/css" class="init">
+</style>
+
 <br>
-<a href="/Hospital/New" class="float-right btn btn-primary">Cadastrar novo Hospital</a>
+<a href="/Hospital/New" class="float-right btn btn-success" alt="Cadastrar novo hospital" title="Cadastrar novo hospital"><i class="fa fa-plus mr-2"></i> Adicionar</a>
 <h3>
   <i class="fa fa-h-square" aria-hidden="true"></i>
   Hospitais
 </h3>
 <br>
 <hr>
+<div class="container">
+  <table id="listaHospital" class="table responsive table-striped table-hover" style="width:100%">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>CNPJ</th>
+        <th>CNES</th>
+        <th></th>
+      </tr>
+    </thead>
 
-<table id="listaHospital" class="table table-striped table-bordered" style="width:100%">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Nome</th>
-      <th>CNPJ</th>
-      <th>CNES</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    {{#each hos}}
-    <tr>
-      <td>{{hos_id}}</td>
-      <td>{{hos_name}}</td>
-      <td>{{hos_cnpj}}</td>
-      <td>{{hos_cnes_code}}</td>
-      <td class="text-center">
-        <div class="form-row text-center float-right">
-          <button type="button" class="btn btn-default" 
-            onclick="window.location.href='/hospital/{{hos_id}}/employee/sts/active'" alt="Cadastro de Funcionários" data-toggle="tooltip" data-placement="top" title="Cadastro de Funcionários">
-            <i class="fa fa-user-md" ></i>
-            </button>
-
-            <button id="{{hsp_id}}" type="button" class="btn btn-default" data-toggle="modal" alt="Cadastro de Procedimentos" title="Procedimentos Médicos"
-          data-target="#mdUpdate{{hos_id}}">
-              <i class="fa fa-list-alt" ></i>
-            </button>
-            <form action="/hospital/{{hos_id}}"  method="get">
-              <button id="{{hos_id}}" type="submit" class="btn btn-default" alt="Editar hospital" data-toggle="tooltip" data-placement="top" title="Editar hospital">
-                <i class="fa fa-edit"></i>
-              </button>
-            </form>
-            <button id="{{hos_id}}" type="button" class="btn btn-default" data-toggle="modal" alt="Apagar hospital" data-toggle="tooltip" data-placement="top" title="Apagar hospital"
-              data-target="#mdDelete{{hos_id}}">
-              <i class="fa fa-trash"></i>
-            </button>
-</div>
+    <tbody>
+      {{#each hos}}
+      <tr>
+        <td>{{hos_id}}</td>
+        <td>{{hos_name}}</td>
+        <td>
+           <div class="form-row text-center btn-group btn-group-justified" style="width:150px">
+            {{hos_cnpj}}
+           </div>        
         </td>
-    </tr>
-    {{/each}}
-  </tbody>
-</table>
+        <td>{{hos_cnes_code}}</td>
+        <td class="text-center" data-priority="2">
+          <div class="form-row text-center btn-group btn-group-justified" style="width:120px">
+              <div>
+                <button type="button" class="btn btn-primary btn-sm rounded-2 mr-2" 
+                  onclick="window.location.href='/hospital/{{hos_id}}/employee/sts/active'" alt="Cadastro de Funcionários" data-toggle="tooltip" data-placement="top" title="Cadastro de Funcionários">
+                  <i class="fa fa-user-md" ></i>
+                </button>
+              </div>
+              <div>
+                <button id="{{hsp_id}}" type="button" class="btn btn-primary btn-sm rounded-2 mr-2" data-toggle="modal" alt="Cadastro de Procedimentos" title="Procedimentos Médicos"
+                  data-target="#mdUpdate{{hos_id}}">
+                  <i class="fa fa-list-alt" ></i>
+                </button>
+              </div> 
+              <form action="/hospital/{{hos_id}}"  method="get">
+                    <button id="{{hos_id}}" type="submit" class="btn btn-primary btn-sm rounded-2 mr-2" alt="Editar hospital" data-toggle="tooltip" data-placement="top" title="Editar hospital">
+                      <i class="fa fa-edit"></i>
+                    </button>
+              </form>
+            </div>
+          </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
 
 {{#each hos}}
 <!-- Modal Update -->
@@ -65,66 +77,52 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="updateModalLabel{{hos_id}}">Procedimentos Médicos</h5>
+        <h5 class="modal-title" id="updateModalLabel{{hos_id}}">{{hos_name}}</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
         <!-- FORM ATUALIZACAO  -->
-        <table class='table'>
-            {{#each @root.hos_med_proc}}
-              {{#ifEquals hos_id ../hos_id }}
-                {{#each @root.med_proc}}
-                  {{#ifEquals med_proc_id ../med_proc_id}}
-                    <tr>
-                        <td>
-                        <input type="checkbox" name="inputProcID" value="{{med_proc_id}}" class="checkme" />
-                        </td>
-                        <td>{{med_proc_desc}}</td>
-                    </tr>
-                  {{/ifEquals}}
-                {{/each}}
-              {{/ifEquals}}
+        <form action="/Hospital/Update/{{hos_id}}/ProcsUpdate" method="post">
+          <li class="list-group-item list-group-item-primary text-center">
+            <h6>Procedimentos Médicos</h6>
+          </li>
+          <table class='table'>
+            {{#each @root.med_proc}}
+              <tr>    
+                  <td>
+                  <input type="checkbox" name="inputProcID" value="{{med_proc_id}}" class="checkme" 
+                    {{#each @root.hos_med_proc}}
+                      {{#ifEquals hos_id ../../hos_id }}
+                        {{#ifEquals med_proc_id ../med_proc_id}}
+                          checked 
+                        {{/ifEquals}}
+                      {{/ifEquals}} 
+                    {{/each}}
+                  />
+                  </td>
+                  <td>{{med_proc_desc}}</td>
+                  <td>
+                  <!------------------ ESTE CONTEÚDO DEVE FICAR NA VESMA LINHA DEVIDO AO "DISABLED" ------------------------------->
+                  <input type="text" name="inputValue" class="money text required form-control" 
+                      disabled{{#each @root.hos_med_proc}}{{#ifEquals hos_id ../../hos_id }}{{#ifEquals med_proc_id ../med_proc_id}}not 
+                      value="{{hos_med_proc_value}}" required
+                      {{/ifEquals}}{{/ifEquals}}{{/each}}/>
+                  <!------------------ ESTE CONTEÚDO DEVE FICAR NA VESMA LINHA DEVIDO AO "DISABLED" ------------------------------->
+                  </td>
+              </tr>
             {{/each}}
-        </table>
-          <!--  FIM FORM ATUALIZACAO  --->
+          </table>
           <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
             <button type="submit" class="btn btn-success">Atualizar</button>
           </div>
         </form>
+        <!--  FIM FORM ATUALIZACAO  --->
       </div>
     </div>
   </div>
-</div>
-{{/each}}
-{{#each hos}}
-<!-- Modal Delete-->
-<div class="modal fade bd-example-modal-lg" id="mdDelete{{hos_id}}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="deleteModalLabel">Desativar</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        Deseja apagar o registro de
-        <span id="info"> {{hos_name}} </span>
-        ?
-      </div>
-      <div class="modal-footer">
-        <form action="/Hospital/delete/{{hos_id}}" method="get">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-          <button type="submit" class="btn btn-danger">Apagar</button>
-        </form>
-
-      </div>
-    </div>
-  </div>
-
 </div>
 {{/each}}
 
@@ -134,13 +132,77 @@
   </div>  
 </form>
 
+<!-- Modal Success Create Hospital -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
+
+
+
+  [].forEach.call(document.querySelectorAll('.checkme[type="checkbox"]'), function(elem) {
+    elem.addEventListener('change', function() {
+        this.parentNode.parentNode.querySelector('.text[type="text"]').disabled = !this.checked;
+        this.parentNode.parentNode.querySelector('.text[type="text"]').value = '';
+        this.parentNode.parentNode.querySelector('.text[type="text"]').required = this.checked;
+        
+    });
+  });
+  
   $(document).ready(function () {
-    $('#listaHospital').DataTable();
+    $('#listaHospital').DataTable({
+            responsive: true,
+            columnDefs: [{ responsivePriority: 1, targets: 1 },
+                         { responsivePriority: 2, targets: -1 },
+                         { responsivePriority: 3, targets: 2 },
+                         { responsivePriority: 10, targets: 0 },
+                         { width: '20%', targets: -1 },
+                        ],
+            fixedColumns: true,
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Portuguese-Brasil.json",
+                decimal: ',',
+            }
+        });
   });
 
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+  })
 
- $(function () {
-  $('[data-toggle="tooltip"]').tooltip()
-})
+  var MoneyOpts = { reverse:true,
+                      maxlength: false,
+                      placeholder: 'Insira um valor',
+                      onKeyPress: function(v, ev, curField, opts) {
+                        var mask = curField.data('mask').mask;
+                            decimalSep = (/0(.)00/gi).exec(mask)[1] || ',';
+                        if (curField.data('mask-isZero') && curField.data('mask-keycode') == 8)
+                          $(curField).val('');
+                        else if (v) {
+                          // remove previously added stuff at start of string
+                          v = v.replace(new RegExp('^0*\\'+decimalSep+'?0*'), ''); //v = v.replace(/^0*,?0*/, '');
+                          v = v.length == 0 ? '0'+decimalSep+'00' : (v.length == 1 ? '0'+decimalSep+'0'+v : (v.length == 2 ? '0'+decimalSep+v : v));
+                          $(curField).val(v).data('mask-isZero', (v=='0'+decimalSep+'00'));
+                        }
+                      }
+                    };
+
+  $('.money').mask("#.##0,00", MoneyOpts);
 </script>

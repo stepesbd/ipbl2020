@@ -16,18 +16,18 @@ module.exports = (sequelize, DataTypes) => {
 					var b = [6,5,4,3,2,9,8,7,6,5,4,3,2];
 
 					if((c = value.replace(/[^\d]/g,"")).length != 14)
-						throw new Error('CNPJ com tamanho invalido!');
+						throw new Error('Verifique o CNPJ. Item invalido!');
 
 					if(/0{14}/.test(c))
-						throw new Error('CNPJ com 14 zeros invalido!');
+						throw new Error('Verifique o CNPJ. Item invalido!');
 
 					for (var i = 0, n = 0; i < 12; n += c[i] * b[++i]);
 					if(c[12] != (((n %= 11) < 2) ? 0 : 11 - n))
-						throw new Error('CNPJ com primeiro digito verificador invalido!');
+						throw new Error('Verifique o CNPJ. Item invalido!');
 
 					for (var i = 0, n = 0; i <= 12; n += c[i] * b[i++]);
 					if(c[13] != (((n %= 11) < 2) ? 0 : 11 - n))
-						throw new Error('CNPJ com segundo digito verificador invalido!');
+						throw new Error('Verifique o CNPJ. Item invalido!');
 				},
 			}
 		},
@@ -97,12 +97,26 @@ module.exports = (sequelize, DataTypes) => {
 				otherKey: 'med_proc_id',
 		});
 
+		Hospital.belongsToMany(models.Contact,
+			{
+				through: 'Hospital_contact',
+				foreignKey: 'hos_id',
+	
+				onDelete: 'CASCADE', 
+				hooks: true  ,
+				otherKey: 'con_id',
+		});
+
 
 		Hospital.hasMany(models.Hospital_employee,{
 			foreignKey: 'hos_id',
 		});
 		   
 		Hospital.hasMany(models.Hosp_med_proc,{
+			foreignKey: 'hos_id',
+		   });
+		   
+		Hospital.hasMany(models.Hospital_contact,{
 			foreignKey: 'hos_id',
 	   	});
 

@@ -16,12 +16,13 @@
     </li>
     <table class='table'>
         {{#each med_proc}}
-        <tr>
+        <tr>    
             <td>
-                <input type="checkbox" id="ID" name="inputProcID" value="{{med_proc_id}}" class="checkme" />
+            <input type="checkbox" id="ID" name="inputProcID" value="{{med_proc_id}}" class="checkme" />
             </td>
+            <td>{{med_proc_desc}}</td>
             <td>
-                {{med_proc_desc}}
+            <input type="text" name="inputValue" class="money text required form-control" id="{{med_proc_id}}" placeholder="Valor" value="{{med_proc_value}}" disabled>
             </td>
         </tr>
         {{/each}}
@@ -39,13 +40,30 @@
 
 
 <script type="text/javascript">
+    var MoneyOpts = { reverse:true,
+                        maxlength: false,
+                        placeholder: 'Insira um valor',
+                        onKeyPress: function(v, ev, curField, opts) {
+                            var mask = curField.data('mask').mask;
+                                decimalSep = (/0(.)00/gi).exec(mask)[1] || ',';
+                            if (curField.data('mask-isZero') && curField.data('mask-keycode') == 8)
+                            $(curField).val('');
+                            else if (v) {
+                            // remove previously added stuff at start of string
+                            v = v.replace(new RegExp('^0*\\'+decimalSep+'?0*'), ''); //v = v.replace(/^0*,?0*/, '');
+                            v = v.length == 0 ? '0'+decimalSep+'00' : (v.length == 1 ? '0'+decimalSep+'0'+v : (v.length == 2 ? '0'+decimalSep+v : v));
+                            $(curField).val(v).data('mask-isZero', (v=='0'+decimalSep+'00'));
+                            }
+                        }
+                        };
+
+    $('.money').mask("#.##0,00", MoneyOpts);
 
 
     [].forEach.call(document.querySelectorAll('.checkme[type="checkbox"]'), function(elem) {
         elem.addEventListener('change', function() {
             this.parentNode.parentNode.querySelector('.text[type="text"]').disabled = !this.checked;
             this.parentNode.parentNode.querySelector('.text[type="text"]').value = '';
-            $('.money').mask('000.000,00', { reverse: true });
         });
     })
     

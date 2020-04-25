@@ -1,7 +1,8 @@
 <br />
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
   integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.13.4/jquery.mask.min.js"></script>
 
 <h3>
@@ -17,13 +18,13 @@
         <div class="col">
             <div class="form-group">
                 <label for="inputNome">Nome competo</label>
-                <input type="text" class="form-control" name="inputNome" placeholder="" maxlength="100" min="5" max="100" required>
+                <input type="text" class="form-control" name="inputNome" placeholder="" maxlength="100" minlength="5" required>
             </div>
         </div>
         <div class="col">
             <div class="form-group">
-                <label for="inputCNS">Código CNS (apenas dígitos)</label>
-                <input type="text" class="form-control" name="inputCNS" placeholder="" maxlength="15" min="15" max="15" required>
+                <label for="inputCNS">Código CNS</label>
+                <input type="text" class="form-control" name="inputCNS" placeholder="" maxlength="15" minlength="15" onkeypress="return /[0-9]/i.test(event.key)" required>
             </div>
         </div>
     </div>
@@ -31,13 +32,13 @@
         <div class="col">
             <div class="form-group">
                 <label for="inputFuncao">Função</label>
-                <input type="text" class="form-control" name="inputFuncao" placeholder="Ex.: Enfermeiro" maxlength="100" min="1" max="100" required>
+                <input type="text" class="form-control" name="inputFuncao" placeholder="Ex.: Enfermeiro" maxlength="100" required>
             </div>
         </div>
         <div class="col">
             <div class="form-group">
-                <label for="inputContato">Contato</label>
-                <input type="text" class="form-control" name="inputContato" placeholder="" maxlength="100" min="0" max="100">
+                <label for="inputSalary">Salário</label>
+                <input type="text" id="inputSalary" name="inputSalary" class="money form-control" maxlength="10" onkeypress="return /[0-9]/i.test(event.key)" required/>
             </div>
         </div>
     </div>
@@ -49,17 +50,17 @@
             </div>
         </div>
         <div class="col">
-            <div class="form-group">
-                <label for="inputDemiss">Demissão (opcional)</label>
-                <input type="date" class="form-control" name="inputDemiss" maxlength="10" min="10" max="100" onkeypress="mascaraData(this)" >
+            <label for="inputDemiss">Demissão (opcional)</label>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <div class="input-group-text demiss">
+                  <input class="demissBtn btn btn-outline-danger" type="checkbox" id="demissButton" >
+                </div>
+              </div>
+              <input type="date" class="form-control" id="inputDemiss" name="inputDemiss" maxlength="10" min="10" max="100" onkeypress="mascaraData(this)" disabled/>  
             </div>
         </div>
-        <div class="col">
-            <div class="form-group">
-                <label for="inputSalary">Salário</label>
-                <input type="text" id="inputSalary" name="inputSalary" class="money form-control" maxlength="10" required/>
-            </div>
-        </div>
+        
      </div> 
 
     <div class="row">
@@ -71,29 +72,29 @@
     <div class="row">
         <div class="col">
             <div class="form-group">
-                <input type="text" class="form-control" name="inputStreet" placeholder="Rua" maxlength="45" min="5" max="45" required>
+                <input type="text" class="form-control" name="inputStreet" placeholder="Rua" maxlength="45" minlength="5" required>
             </div>
         </div>
-        <div class="col">
+        <div class="col-sm-4">
             <div class="form-group">
-                <input type="number" class="form-control" name="inputNumber" placeholder="Número" maxlength="5" min="0" max="99999" required>
+                <input type="number" class="form-control" name="inputNumber" placeholder="Número" maxlength="5" required>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col">
             <div class="form-group">
-                <input type="text" class="form-control" name="inputCity" placeholder="Cidade" maxlength="50" min="1" max="50" required>
+                <input type="text" class="form-control" name="inputCity" placeholder="Cidade" maxlength="50" required>
             </div>
         </div>
         <div class="col">
             <div class="form-group">
-                <input type="text" class="form-control" name="inputState" placeholder="Estado" maxlength="50" min="1" max="50" required>
+                <input type="text" class="form-control" name="inputState" placeholder="Estado" maxlength="50" onkeypress="return /[a-z]/i.test(event.key)" required>
             </div>
         </div>
         <div class="col">
             <div class="form-group">
-                <input type="text" class="form-control" name="inputCountry" placeholder="País" maxlength="50" min="1" max="50" required>
+                <input type="text" class="form-control" name="inputCountry" placeholder="País" maxlength="50" onkeypress="return /[a-z]/i.test(event.key)" required>
             </div>
         </div>
     </div>
@@ -105,18 +106,87 @@
         </div>
     </div>
     
+    <div class="form-row">
+            <label for="adresses">Contato</label>
+    </div>
+    <div class="form-row ml-2">
+     <table class="col-md-6" id="item_table">
+        <tr>
+            <td>
+                <select name="inputContactType" class="form-control inputContactType">
+                    <option value="Telefone">Telefone</option>
+                    <option value="E-mail">E-mail</option>
+                    <option value="Fax">Fax</option>
+                </select>
+            </td>
+            <td><input type="text" name="inputContactBox" class="form-control inputContactBox ml-2" required/></td>
+            <td>
+                <button type="button" name="add" class="btn btn-success add ml-4">
+                    <span class="fa fa-plus"></span>
+                </button>
+            </td>
+        </tr>
+     </table>
+    </div>
 
+    <br>
     <div class="form-row text-center">
         <button type="submit" class="btn btn-success mr-2">Cadastrar</button> 
         <a class=" btn btn-danger" href="/Hospital/{{hosp.hos_id}}/employee/sts/active" role="button">Cancelar</a>
     </div>
+
+<br>
 </form>
 
-
 <script>
+    document.getElementById('demissButton').onclick = function() {
+      var disabled = document.getElementById("inputDemiss").disabled;
+      if (disabled) {
+        document.getElementById("inputDemiss").disabled = false;
+        document.getElementById("inputDemiss").required = true;
+      } else {
+        document.getElementById("inputDemiss").disabled = true;
+        document.getElementById("inputDemiss").required = false;
+        document.getElementById("inputDemiss").value = null;
+      }
+    }
+
+    $(document).ready(function(){
+        $(document).on('click', '.add', function(){
+            var html = '';
+            html += '<tr>';
+            html += '<td><select name="inputContactType" class="form-control inputContactType mt-2"><option value="Telefone">Telefone</option><option value="E-mail">E-mail</option><option value="Fax">Fax</option></select></td>';
+            html += '<td><input type="text" name="inputContactBox" class="form-control inputContactBox mt-2 ml-2" /></td>';
+            html += '<td><button type="button" name="remove" class="btn btn-danger  remove mt-2 ml-4"><span class="fa fa-minus"></span></button></td></tr>';
+            $('#item_table').append(html);
+        });
+        
+        $(document).on('click', '.remove', function(){
+                $(this).closest('tr').remove();
+        });    
+    });
+
     $(document).ready(function () {
-        $('.money').mask('000.000,00', { reverse: true });
         $('.zip_code').mask('00000-000', { reverse: true });
     });
+
+    var MoneyOpts = { reverse:true,
+                      maxlength: false,
+                      placeholder: 'Insira um valor',
+                      onKeyPress: function(v, ev, curField, opts) {
+                        var mask = curField.data('mask').mask;
+                            decimalSep = (/0(.)00/gi).exec(mask)[1] || ',';
+                        if (curField.data('mask-isZero') && curField.data('mask-keycode') == 8)
+                          $(curField).val('');
+                        else if (v) {
+                          // remove previously added stuff at start of string
+                          v = v.replace(new RegExp('^0*\\'+decimalSep+'?0*'), ''); //v = v.replace(/^0*,?0*/, '');
+                          v = v.length == 0 ? '0'+decimalSep+'00' : (v.length == 1 ? '0'+decimalSep+'0'+v : (v.length == 2 ? '0'+decimalSep+v : v));
+                          $(curField).val(v).data('mask-isZero', (v=='0'+decimalSep+'00'));
+                        }
+                      }
+                    };
+
+  $('.money').mask("#.##0,00", MoneyOpts);
 
 </script>
