@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\GIT\\ITA\\ipbl2020\\1_Paciente\\backend\\stepesdb-api\\stepesdb-api.csproj": {}
+    "C:\\GIT\\ipbl2020\\1_Paciente\\backend\\stepesbd-api\\stepesdb-api.csproj": {}
   },
   "projects": {
-    "C:\\GIT\\ITA\\ipbl2020\\1_Paciente\\backend\\stepesdb-api\\stepesdb-api.csproj": {
+    "C:\\GIT\\ipbl2020\\1_Paciente\\backend\\stepesbd-api\\stepesdb-api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\GIT\\ITA\\ipbl2020\\1_Paciente\\backend\\stepesdb-api\\stepesdb-api.csproj",
+        "projectUniqueName": "C:\\GIT\\ipbl2020\\1_Paciente\\backend\\stepesbd-api\\stepesdb-api.csproj",
         "projectName": "stepesdb-api",
-        "projectPath": "C:\\GIT\\ITA\\ipbl2020\\1_Paciente\\backend\\stepesdb-api\\stepesdb-api.csproj",
+        "projectPath": "C:\\GIT\\ipbl2020\\1_Paciente\\backend\\stepesbd-api\\stepesdb-api.csproj",
         "packagesPath": "C:\\Users\\GTAC3\\.nuget\\packages\\",
-        "outputPath": "C:\\GIT\\ITA\\ipbl2020\\1_Paciente\\backend\\stepesdb-api\\obj\\",
+        "outputPath": "C:\\GIT\\ipbl2020\\1_Paciente\\backend\\stepesbd-api\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

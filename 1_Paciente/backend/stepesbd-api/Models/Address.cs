@@ -18,7 +18,6 @@ namespace stepesdb_api
         public string AddState { get; set; }
         public string AddNeighborhood { get; set; }
         public string AddCountry { get; set; }
-        public string Addresscol { get; set; }
 
         public virtual ICollection<Person> Person { get; set; }
     }

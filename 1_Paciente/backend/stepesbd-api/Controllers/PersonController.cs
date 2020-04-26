@@ -11,33 +11,35 @@ namespace stepesdb_api.Controllers
 {    
     [ApiController]
     [Route("[controller]")]
-    public class PatientsController : ControllerBase
+    public class PersonController : ControllerBase
     {
         private readonly stepes_bdContext _context;
 
-        public PatientsController(stepes_bdContext context)
+        public PersonController(stepes_bdContext context)
         {
             _context = context;         
         }
 
-        // GET: api/Patients
+        // GET: api/Person
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Patient>>> Get()
+        public async Task<ActionResult<IEnumerable<Person>>> Get()
         {
-            List<Patient> p = await _context.Patient.ToListAsync();            
+            List<Person> p = await _context.Person
+            .OrderBy(x=>x.PerFirstName)
+            .ToListAsync();            
             return p;
         }
 
-        // PUT: api/Patients/5
+        // PUT: api/Person/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, Patient patient)
+        public async Task<IActionResult> Put(int id, Person person)
         {
-            if (id != patient.PatId)
+            if (id != person.PerId)
                 return BadRequest(new BadRequest("O id da ulr deve ser igual do objeto"));
 
             try
             {
-                _context.Entry(patient).State = EntityState.Modified;
+                _context.Entry(person).State = EntityState.Modified;
                 await _context.SaveChangesAsync();            
             }
             catch (Exception ex)
@@ -48,16 +50,16 @@ namespace stepesdb_api.Controllers
             return Ok(new Ok("Editado com sucesso"));
         }
 
-        // POST: api/Patients
+        // POST: api/Person
         [HttpPost]
-        public async Task<ActionResult<Patient>> Post(Patient patient)
+        public async Task<ActionResult<Patient>> Post(Person person)
         {
-            if (patient is null)
-                return BadRequest(new BadRequest("O objeto patient é obrigatório"));
+            if (person is null)
+                return BadRequest(new BadRequest("O objeto person é obrigatório"));
 
             try
             {
-                _context.Patient.Add(patient);
+                _context.Person.Add(person);
                 await _context.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -65,21 +67,21 @@ namespace stepesdb_api.Controllers
                 return StatusCode(500,new InternalServerError(ex.Message));
             }
 
-            return CreatedAtAction("Get", new { id = patient.PatId }, patient);
+            return CreatedAtAction("Get", new { id = person.PerId }, person);
         }
 
-        // DELETE: api/Patients/5
-        [HttpDelete("{id}/{UsuarioDeletadoId}")]
+        // DELETE: api/Person/5
+        [HttpDelete("{id}")]
         public async Task<ActionResult<Patient>> Delete(long id)
         {
-            Patient patientDel = await _context.Patient.Where(d=>d.PatId == id).FirstOrDefaultAsync();
+            Person persondel = await _context.Person.Where(d=>d.PerId == id).FirstOrDefaultAsync();
 
-            if(patientDel == null)            
+            if(persondel == null)            
                 return BadRequest(new BadRequest("O registro não foi entrado"));
 
             try
             {
-                _context.Entry(patientDel).State = EntityState.Deleted;
+                _context.Entry(persondel).State = EntityState.Deleted;
                 await _context.SaveChangesAsync();
             }
             catch (Exception ex)

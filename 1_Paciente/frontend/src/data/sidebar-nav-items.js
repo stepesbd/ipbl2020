@@ -11,17 +11,17 @@ export default function() {
       to: "/patient-form",
       htmlBefore: '<i class="material-icons">assignment_ind</i>',
       htmlAfter: ""
-    },
+    },    
     /*{
+      title: "Forms & Componentes",
+      htmlBefore: '<i class="material-icons">view_module</i>',
+      to: "/components-overview",
+    },
+    {
       title: "Dashboard",
       to: "/dashboard",
       htmlBefore: '<i class="material-icons">home</i>',
       htmlAfter: ""
-    },
-    {
-      title: "Forms & Componentes",
-      htmlBefore: '<i class="material-icons">view_module</i>',
-      to: "/components-overview",
     },
     {
       title: "Tabelas",

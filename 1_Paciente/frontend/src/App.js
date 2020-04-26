@@ -5,6 +5,7 @@ import routes from "./routes";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./assets/styles/shards-dashboards.1.1.0.min.css";
+import "./assets/styles/other.css";
 
 export default () => (
   <Router basename={process.env.REACT_APP_BASENAME || ""}>
