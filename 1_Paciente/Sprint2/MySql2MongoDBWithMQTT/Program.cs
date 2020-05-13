@@ -13,8 +13,10 @@ namespace MySql2MongoDBWithMQTT
         static void Main(string[] args)
         {
             //Mysql
+            // Insert Data on MySQl database, Patient Table
             //InsertData();
-            //PrintData();
+            // Print all Data on MySQl database, Patient Table
+            PrintData();
 
             //MongoDB          
 
@@ -52,7 +54,7 @@ namespace MySql2MongoDBWithMQTT
 
 private static void InsertData()
     {
-      using(var context = new LibraryContext())
+      using(var context = new PatientContext())
       {
         // Creates the database if not exists
         context.Database.EnsureCreated();
@@ -76,7 +78,7 @@ private static void InsertData()
     private static void PrintData()
     {
       // Gets and prints all patients in database
-      using (var context = new LibraryContext())
+      using (var context = new PatientContext())
       {
         var patients = context.patient;
         foreach(var patient in patients)

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace mysqlefcore
 {
-  public class LibraryContext : DbContext
+  public class PatientContext : DbContext
   {
     public DbSet<Patient> patient { get; set; }
 
