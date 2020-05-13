@@ -1,16 +1,51 @@
 ﻿using System;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Bson;
+using MongoDB.Driver;
 using mysqlefcore;
 
 namespace MySql2MongoDBWithMQTT
 {
     class Program
     {
+      
         static void Main(string[] args)
         {
+            //Mysql
             //InsertData();
-            PrintData();
+            //PrintData();
+
+            //MongoDB          
+
+            //Creating MongoDB Client Object
+            var client = new MongoClient("mongodb+srv://stepesbd:stepesbd@stepesbd-8e6rc.mongodb.net/test?retryWrites=true&w=majority");
+            
+            // Listing in console all databases on MongoDB Server 
+            // var dbList = client.ListDatabases().ToList();
+            // Console.WriteLine("The list of databases on this server is: ");
+            // foreach (var db in dbList)
+            // {
+            //     Console.WriteLine(db);
+            // }
+
+            // Selecting STEPESBD database
+            IMongoDatabase database = client.GetDatabase("STEPESBD");        
+
+            // Selecting ATENDIMENTOS Collection on STEPESBD database
+            IMongoCollection<AttendanceMongo> colAttendance = database.GetCollection<AttendanceMongo>("ATENDIMENTOS");
+
+            // Write on console actual estimated documents count on ATENDIMENTOS Collection
+            //Console.WriteLine("Count> " + (colAttendance.EstimatedDocumentCount().ToString()));
+
+            // Creating new Attendance Object to insert on ATENDIMENTOS Collection
+            AttendanceMongo newAttendance = new AttendanceMongo();
+            newAttendance.Name = "TESTE";
+            newAttendance.LastName = "TESTE";
+            newAttendance.Active = true;
+
+            // Inserting Attendance Object to ATENDIMENTOS Collection
+            //colAttendance.InsertOne(newAttendance);
         }
 
 
