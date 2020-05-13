@@ -110,3 +110,4 @@ C:\Users\guilh\Desktop\Projetos\ipbl2020\1_Paciente\Sprint2\MySql2MongoDBWithMQT
 C:\Users\guilh\Desktop\Projetos\ipbl2020\1_Paciente\Sprint2\MySql2MongoDBWithMQTT\obj\Debug\netcoreapp3.1\MySql2MongoDBWithMQTT.dll
 C:\Users\guilh\Desktop\Projetos\ipbl2020\1_Paciente\Sprint2\MySql2MongoDBWithMQTT\obj\Debug\netcoreapp3.1\MySql2MongoDBWithMQTT.pdb
 C:\Users\guilh\Desktop\Projetos\ipbl2020\1_Paciente\Sprint2\MySql2MongoDBWithMQTT\obj\Debug\netcoreapp3.1\MySql2MongoDBWithMQTT.genruntimeconfig.cache
+C:\Users\guilh\Desktop\Projetos\ipbl2020\1_Paciente\Sprint2\MySql2MongoDBWithMQTT\bin\Debug\netcoreapp3.1\RabbitMQ.Client.dll

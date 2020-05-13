@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\guilh\\Desktop\\Projetos\\ipbl2020\\1_Paciente\\Sprint2\\MySql2MongoDBWithMQTT\\MySql2MongoDBWithMQTT.csproj": {}
+    "c:\\Users\\guilh\\Desktop\\Projetos\\ipbl2020\\1_Paciente\\Sprint2\\MySql2MongoDBWithMQTT\\MySql2MongoDBWithMQTT.csproj": {}
   },
   "projects": {
-    "C:\\Users\\guilh\\Desktop\\Projetos\\ipbl2020\\1_Paciente\\Sprint2\\MySql2MongoDBWithMQTT\\MySql2MongoDBWithMQTT.csproj": {
+    "c:\\Users\\guilh\\Desktop\\Projetos\\ipbl2020\\1_Paciente\\Sprint2\\MySql2MongoDBWithMQTT\\MySql2MongoDBWithMQTT.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\guilh\\Desktop\\Projetos\\ipbl2020\\1_Paciente\\Sprint2\\MySql2MongoDBWithMQTT\\MySql2MongoDBWithMQTT.csproj",
+        "projectUniqueName": "c:\\Users\\guilh\\Desktop\\Projetos\\ipbl2020\\1_Paciente\\Sprint2\\MySql2MongoDBWithMQTT\\MySql2MongoDBWithMQTT.csproj",
         "projectName": "MySql2MongoDBWithMQTT",
-        "projectPath": "C:\\Users\\guilh\\Desktop\\Projetos\\ipbl2020\\1_Paciente\\Sprint2\\MySql2MongoDBWithMQTT\\MySql2MongoDBWithMQTT.csproj",
+        "projectPath": "c:\\Users\\guilh\\Desktop\\Projetos\\ipbl2020\\1_Paciente\\Sprint2\\MySql2MongoDBWithMQTT\\MySql2MongoDBWithMQTT.csproj",
         "packagesPath": "C:\\Users\\guilh\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\guilh\\Desktop\\Projetos\\ipbl2020\\1_Paciente\\Sprint2\\MySql2MongoDBWithMQTT\\obj\\",
+        "outputPath": "c:\\Users\\guilh\\Desktop\\Projetos\\ipbl2020\\1_Paciente\\Sprint2\\MySql2MongoDBWithMQTT\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\",
@@ -51,6 +51,10 @@
             "MySql.Data.EntityFrameworkCore": {
               "target": "Package",
               "version": "[8.0.20, )"
+            },
+            "RabbitMQ.Client": {
+              "target": "Package",
+              "version": "[6.0.0, )"
             }
           },
           "imports": [
