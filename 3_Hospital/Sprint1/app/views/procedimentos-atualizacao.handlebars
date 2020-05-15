@@ -10,71 +10,77 @@
 <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.js"></script>
 
-<a href="/procedures/Delete/{{med_proc.med_proc_id}}" class="float-right btn btn-danger" alt="Apagar procedimento" title="Apagar procedimento" data-toggle="modal" data-toggle="tooltip" data-placement="top" data-target="#mdDelete" >
-  <i class="fa fa-trash mr-2"></i> Remover
-</a>
-<h3>
-    <i class="fa fa-list-alt" aria-hidden="true"></i>
-    Registro: {{med_proc.med_proc_id}}
-</h3>
-<h5>Procedimento Médico</h5>
-<hr>
+<div class="mb-4">
+  <a href="/procedures/Delete/{{med_proc.med_proc_id}}" class="float-right btn btn-danger" alt="Apagar procedimento" title="Apagar procedimento" data-toggle="modal" data-toggle="tooltip" data-placement="top" data-target="#mdDelete" >
+    <i class="fa fa-trash mr-2"></i> Remover
+  </a>
+  <h3>
+      <i class="fa fa-list-alt" aria-hidden="true"></i>
+      Registro: {{med_proc.med_proc_id}}
+  </h3>
+  <h5>Procedimento Médico</h5>
+</div>
 
 <form action="/procedures/Update/{{med_proc.med_proc_id}}" method="post">
-
-    <div class="row">
-        <div class="col">
-            <div class="form-group">
-                <label for="inputCBHPM">Código CBHPM</label>
-                <input type="text" id="inputCBHPM" class="form-control cbhpm" name="inputCBHPM" placeholder="0.00.00.00-0" maxlength="12" minlength="12" value="{{med_proc.med_proc_cbhpm_code}}" required>
-            </div>
-        </div>
-        <div class="col">
-            <div class="form-group">
-                <label for="inputUCO">Valor UCO</label>
-                <input type="text" id="inputUCO" class="money form-control" name="inputUCO" placeholder="" maxlength="10" value="{{med_proc.med_proc_uco}}" required>
-            </div>
-        </div>
-        
+  <div class="card mt-4">
+    <div class="card-body">
+      <div class="row">
+          <div class="col">
+              <div class="form-group">
+                  <label for="inputCBHPM">Código CBHPM</label>
+                  <input type="text" id="inputCBHPM" class="form-control cbhpm" name="inputCBHPM" placeholder="0.00.00.00-0" maxlength="12" minlength="12" value="{{med_proc.med_proc_cbhpm_code}}" required>
+              </div>
+          </div>
+          <div class="col">
+              <div class="form-group">
+                  <label for="inputUCO">Valor UCO</label>
+                  <input type="text" id="inputUCO" class="money form-control" name="inputUCO" placeholder="" maxlength="10" value="{{med_proc.med_proc_uco}}" required>
+              </div>
+          </div>
+          
+      </div>
+      <div class="form-group">
+          <label for="inputDesc">Descrição</label>
+          <textarea class="form-control" id="inputDesc" name="inputDesc" placeholder="Escreva aqui a descrição do procedimento." rows="3" maxlength="100" required>{{med_proc.med_proc_desc}}</textarea>
+      </div>
     </div>
-    <div class="form-group">
-        <label for="inputDesc">Descrição</label>
-        <textarea class="form-control" id="inputDesc" name="inputDesc" placeholder="Escreva aqui a descrição do procedimento." rows="3" maxlength="100" required>{{med_proc.med_proc_desc}}</textarea>
+  </div>
+
+  <div class="card mt-4 mb-4">
+    <div class="card-body">
+      <ul class="list-group">
+        <li class="list-group-item list-group-item-primary text-center mb-2"><h5>Hospitais que realizam este procedimento
+            <span class="badge badge-primary badge-pill float-right"> {{count}}  </span>
+            </h5>
+        </li>
+        <table id="listaHospital" class="table responsive table-striped table-hover" style="width:100%">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nome</th>
+              <th>Valor praticado</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            {{#each hos}}
+            <tr>
+              <td>{{hos_id}}</td>
+              <td>{{hos_name}}</td>
+              <td>
+                {{#each @root.hos_med_proc}}
+                  {{#ifEquals hos_id ../hos_id }}
+                    R$ {{hos_med_proc_value}}
+                  {{/ifEquals}}
+                {{/each}}
+              </td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </ul>
     </div>
-
-
-
-    <ul class="list-group">
-      <li class="list-group-item list-group-item-primary text-center mb-2"><h5>Hospitais que realizam este procedimento
-          <span class="badge badge-primary badge-pill float-right"> {{count}}  </span>
-          </h5>
-      </li>
-      <table id="listaHospital" class="table responsive table-striped table-hover" style="width:100%">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nome</th>
-            <th>Valor praticado</th>
-
-          </tr>
-        </thead>
-        <tbody>
-          {{#each hos}}
-          <tr>
-            <td>{{hos_id}}</td>
-            <td>{{hos_name}}</td>
-            <td>
-              {{#each @root.hos_med_proc}}
-                {{#ifEquals hos_id ../hos_id }}
-                  R$ {{hos_med_proc_value}}
-                {{/ifEquals}}
-              {{/each}}
-            </td>
-          </tr>
-          {{/each}}
-        </tbody>
-      </table>
-    </ul>
+  </div>
 
     <div class="form-row text-center">
         <button type="submit" class="btn btn-success mr-2">Atualizar</button> 

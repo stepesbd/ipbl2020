@@ -1,0 +1,203 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+  integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.13.4/jquery.mask.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.js"></script>
+
+<br />
+
+<div class="mb-4">
+    <h3>
+        <i class="fa fa-h-square" aria-hidden="true"></i>
+        Cadastro de novo Hospital
+    </h3>
+</div>
+
+
+<form action="/MongoDB/hospital" method="post">
+
+{{#each erros}}
+    <div class="alert alert-danger"><i class="fa fa-times-circle mr-2" aria-hidden="true"></i>{{texto}}</div>
+{{else}}
+
+{{/each}}
+<div class="card mt-4">
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label for="inputNome">Nome</label>
+                    <input type="text" class="form-control" name="inputNome" placeholder="" maxlength="100" minlength="10" value="{{values.inputNome}}" required>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label for="inputCorporate">Razão Social</label>
+                    <input type="text" class="form-control" name="inputCorporate" placeholder="" maxlength="100" minlength="10" value="{{values.inputCorporate}}" required>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label for="inputCNPJ">CNPJ (digite apenas números)</label>
+                    <input type="text" class="form-control cnpj" name="inputCNPJ" placeholder="99.999.999/9999-99" maxlength="18" minlength="18" value="{{values.inputCNPJ}}" required>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label for="inputCNES">Código CNES</label>
+                    <input type="text" class="form-control" name="inputCNES" placeholder="9999999" maxlength="7" minlength="7" onkeypress="return /[0-9]/i.test(event.key)" value="{{values.inputCNES}}" required>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+                <label for="adresses">Endereço</label>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <input type="text" class="form-control" name="inputStreet" placeholder="Rua" maxlength="45" minlength="5" value="{{values.inputStreet}}" required>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <input type="number" class="form-control" name="inputNumber" placeholder="Número" maxlength="5" value="{{values.inputNumber}}" required>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <input type="text" class="form-control" name="inputCity" placeholder="Cidade" maxlength="50" value="{{values.inputCity}}" required>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <input type="text" class="form-control" name="inputState" placeholder="Estado" maxlength="50" onkeypress="return /[a-z]/i.test(event.key)" value="{{values.inputState}}" required>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <input type="text" class="form-control" name="inputCountry" placeholder="País" maxlength="50" onkeypress="return /[a-z]/i.test(event.key)" value="{{values.inputCountry}}" required>
+                </div>
+            </div>
+        </div>    
+        
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <input type="text" class="zip_code form-control" name="inputZipCode" placeholder="Código Postal" maxlength="20" value="{{values.inputZipCode}}" required>
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+                <label for="adresses">Contato</label>
+        </div>
+        <div class="form-row ml-2">
+        <table class="col-md-6" id="item_table">
+            <tr>
+                <td>
+                    <select name="inputContactType" class="form-control inputContactType">
+                        <option value="Telefone">Telefone</option>
+                        <option value="E-mail">E-mail</option>
+                        <option value="Fax">Fax</option>
+                    </select>
+                </td>
+                <td><input type="text" name="inputContactBox" class="form-control inputContactBox ml-2"  required/></td>
+                <td>
+                    <button type="button" name="add" class="btn btn-success add ml-4">
+                        <span class="fa fa-plus"></span>
+                    </button>
+                </td>
+            </tr>
+        </table>
+        </div>
+    </div>
+</div>
+    
+
+    
+
+<div class="card mt-4">
+    <div class="card-body">
+        <li class="list-group-item list-group-item-primary text-center">
+            <h6>Selecione os procedimentos que o Hospital realizará</h6>
+        </li>
+        <table class='table'>
+            {{#each med_proc}}
+            <tr>    
+                <td>
+                <input type="checkbox" name="inputProcID" value="{{_id}}" class="checkme" />
+                </td>
+                <td>{{med_proc_desc}}</td>
+                <td>
+                <input type="text" name="inputValue" class="money text required form-control" id="med_proc_{{_id}}" placeholder="Valor" disabled>
+                </td>
+            </tr>
+            {{/each}}
+        </table>
+    </div>
+</div>
+
+
+    <br>
+
+    <div class="form-row text-center">
+        <button type="submit" class="btn btn-success mr-2">Cadastrar</button> 
+        <a class=" btn btn-danger" href="/MongoDB/hospital" role="button">Cancelar</a>
+    </div>
+</form>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(document).on('click', '.add', function(){
+            var html = '';
+            html += '<tr>';
+            html += '<td><select name="inputContactType" class="form-control inputContactType mt-2"><option value="Telefone">Telefone</option><option value="E-mail">E-mail</option><option value="Fax">Fax</option></select></td>';
+            html += '<td><input type="text" name="inputContactBox" class="form-control inputContactBox mt-2 ml-2" /></td>';
+            html += '<td><button type="button" name="remove" class="btn btn-danger  remove mt-2 ml-4"><span class="fa fa-minus"></span></button></td></tr>';
+            $('#item_table').append(html);
+        });
+        
+        $(document).on('click', '.remove', function(){
+                $(this).closest('tr').remove();
+        });    
+    });
+
+    var MoneyOpts = { reverse:true,
+                        maxlength: false,
+                        placeholder: 'Insira um valor',
+                        onKeyPress: function(v, ev, curField, opts) {
+                            var mask = curField.data('mask').mask;
+                                decimalSep = (/0(.)00/gi).exec(mask)[1] || ',';
+                            if (curField.data('mask-isZero') && curField.data('mask-keycode') == 8)
+                            $(curField).val('');
+                            else if (v) {
+                            // remove previously added stuff at start of string
+                            v = v.replace(new RegExp('^0*\\'+decimalSep+'?0*'), ''); //v = v.replace(/^0*,?0*/, '');
+                            v = v.length == 0 ? '0'+decimalSep+'00' : (v.length == 1 ? '0'+decimalSep+'0'+v : (v.length == 2 ? '0'+decimalSep+v : v));
+                            $(curField).val(v).data('mask-isZero', (v=='0'+decimalSep+'00'));
+                            }
+                        }
+                        };
+
+    $('.money').mask("#.##0,00", MoneyOpts);
+
+    [].forEach.call(document.querySelectorAll('.checkme[type="checkbox"]'), function(elem) {
+    elem.addEventListener('change', function() {
+        this.parentNode.parentNode.querySelector('.text[type="text"]').disabled = !this.checked;
+        this.parentNode.parentNode.querySelector('.text[type="text"]').value = '';
+        this.parentNode.parentNode.querySelector('.text[type="text"]').required = this.checked;
+    });
+    })
+     $(document).ready(function () {
+        $('.cnpj').mask('99.999.999/9999-99', {reverse: true});
+        $('.zip_code').mask('00000-000', { reverse: true });
+
+    });
+    
+</script>

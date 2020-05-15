@@ -1,0 +1,72 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+  integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.js"></script>
+
+<br>
+
+<div class="mb-4">
+  <a href="/MongoDB/procedures/New" class="float-right btn btn-success" alt="Cadastrar novo procedimento" title="Cadastrar novo procedimento"><i class="fa fa-plus mr-2"></i> Adicionar</a>
+  <h3>  
+    <i class="fa fa-list-alt" aria-hidden="true"></i>      
+    Procedimentos Médicos
+  </h3>
+</div>
+
+<div class="card mt-4 mb-4">
+  <div class="card-body">
+    <table id="tabelaProc" class="table responsive table-striped table-hover" style="width:100%">
+      <thead>
+        <tr>
+          <th>Descrição do procedimento</th>
+          <th>CBHPM</th>
+          <th>UCO</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each med_proc}}
+        <tr>
+          <td>{{med_proc_desc}}</td>
+          <td>{{med_proc_cbhpm_code}}</td>
+          <td>R$ {{med_proc_uco}}</td>
+          <td class="text-center">
+              <form action="/MongoDB/procedures/{{_id}}"  method="get">
+                <div class="form-row text-center btn-group btn-group-justified" style="width:70px">
+                  <button id="{{hos_id}}" type="submit" class="btn btn-primary btn-sm rounded-2" alt="Editar procedimento" data-toggle="tooltip" data-placement="top" title="Editar procedimento">
+                    <i class="fa fa-search"></i>
+                  </button>
+                </div>
+              </form>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</div>
+ <a class="btn btn-primary" href="/" role="button">Voltar</a>
+
+<script>
+
+
+
+  $('.cpf').mask('999.999.999-99', { reverse: true });
+  $(document).ready(function () {
+    $('#tabelaProc').DataTable({
+            responsive: true,
+            columnDefs: [{ responsivePriority: 1, targets: 0 },
+                         { responsivePriority: 2, targets: -1 },
+                         { responsivePriority: 3, targets: 2 }],
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Portuguese-Brasil.json",
+                decimal: ',',
+            }
+        });
+  });
+</script>

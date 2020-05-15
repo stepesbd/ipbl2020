@@ -1,0 +1,201 @@
+<br />
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+  integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.13.4/jquery.mask.min.js"></script>
+
+<div class="mb-4">
+    <h3>
+        <i class="fa fa-user-md" aria-hidden="true"></i>
+        Cadastro de Funcionário
+    </h3>
+    <h5>{{hos.hos_name}}</h5>
+</div>
+
+<form action="/MongoDB/hospital/{{hos._id}}/employee/" method="post">
+    {{#each erros}}
+        <div class="alert alert-danger"><i class="fa fa-times-circle mr-2" aria-hidden="true"></i>{{texto}}</div>
+    {{else}}
+
+    {{/each}}
+
+    <div class="card mt-4 mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="inputNome">Nome competo</label>
+                        <input type="text" class="form-control" name="inputNome" placeholder="" maxlength="100" minlength="5" value="{{values.inputNome}}" required>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="inputCNS">Código CNS</label>
+                        <input type="text" class="form-control" name="inputCNS" placeholder="" maxlength="15" minlength="15" onkeypress="return /[0-9]/i.test(event.key)" value="{{values.inputCNS}}" required>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="inputFuncao">Função</label>
+                        <input type="text" class="form-control" name="inputFuncao" placeholder="Ex.: Enfermeiro" maxlength="100" value="{{values.inputFuncao}}" required>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="inputSalary">Salário</label>
+                        <input type="text" id="inputSalary" name="inputSalary" class="money form-control" maxlength="10" onkeypress="return /[0-9]/i.test(event.key)" value="{{values.inputSalary}}" required/>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="inputAdmi">Admissão</label>
+                        <input type="date" class="form-control" name="inputAdmi" maxlength="10" min="10" max="100" onkeypress="mascaraData(this)" value="{{values.inputAdmi}}" required>
+                    </div>
+                </div>
+                <div class="col">
+                    <label for="inputDemiss">Demissão (opcional)</label>
+                    <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text demiss">
+                        <input class="demissBtn btn btn-outline-danger" type="checkbox" id="demissButton" >
+                        </div>
+                    </div>
+                    <input type="date" class="form-control" id="inputDemiss" name="inputDemiss" maxlength="10" min="10" max="100" onkeypress="mascaraData(this)" value="{{values.inputDemiss}}" disabled/>  
+                    </div>
+                </div>
+                
+            </div> 
+
+            <div class="row">
+                <div class="col">
+                    <label for="adresses">Endereço</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="inputStreet" placeholder="Rua" maxlength="45" minlength="5" value="{{values.inputStreet}}" required>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <input type="number" class="form-control" name="inputNumber" placeholder="Número" maxlength="5" value="{{values.inputNumber}}" required>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="inputCity" placeholder="Cidade" maxlength="50" value="{{values.inputCity}}" required>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="inputState" placeholder="Estado" maxlength="50" onkeypress="return /[a-z]/i.test(event.key)" value="{{values.inputState}}" required>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="inputCountry" placeholder="País" maxlength="50" onkeypress="return /[a-z]/i.test(event.key)" value="{{values.inputCountry}}" required>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <input type="text" class="zip_code form-control" name="inputZipCode" placeholder="Código Postal" maxlength="9" value="{{values.inputZipCode}}"  required>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                    <label for="adresses">Contato</label>
+            </div>
+            <div class="form-row ml-2">
+            <table class="col-md-6" id="item_table">
+                <tr>
+                    <td>
+                        <select name="inputContactType" class="form-control inputContactType">
+                            <option value="Telefone">Telefone</option>
+                            <option value="E-mail">E-mail</option>
+                            <option value="Fax">Fax</option>
+                        </select>
+                    </td>
+                    <td><input type="text" name="inputContactBox" class="form-control inputContactBox ml-2" required/></td>
+                    <td>
+                        <button type="button" name="add" class="btn btn-success add ml-4">
+                            <span class="fa fa-plus"></span>
+                        </button>
+                    </td>
+                </tr>
+            </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-row text-center">
+        <button type="submit" class="btn btn-success mr-2">Cadastrar</button> 
+        <a class=" btn btn-danger" href="/MongoDB/Hospital/{{hos._id}}/employee/sts/active" role="button">Cancelar</a>
+    </div>
+
+<br>
+</form>
+
+<script>
+    document.getElementById('demissButton').onclick = function() {
+      var disabled = document.getElementById("inputDemiss").disabled;
+      if (disabled) {
+        document.getElementById("inputDemiss").disabled = false;
+        document.getElementById("inputDemiss").required = true;
+      } else {
+        document.getElementById("inputDemiss").disabled = true;
+        document.getElementById("inputDemiss").required = false;
+        document.getElementById("inputDemiss").value = null;
+      }
+    }
+
+    $(document).ready(function(){
+        $(document).on('click', '.add', function(){
+            var html = '';
+            html += '<tr>';
+            html += '<td><select name="inputContactType" class="form-control inputContactType mt-2"><option value="Telefone">Telefone</option><option value="E-mail">E-mail</option><option value="Fax">Fax</option></select></td>';
+            html += '<td><input type="text" name="inputContactBox" class="form-control inputContactBox mt-2 ml-2" /></td>';
+            html += '<td><button type="button" name="remove" class="btn btn-danger  remove mt-2 ml-4"><span class="fa fa-minus"></span></button></td></tr>';
+            $('#item_table').append(html);
+        });
+        
+        $(document).on('click', '.remove', function(){
+                $(this).closest('tr').remove();
+        });    
+    });
+
+    $(document).ready(function () {
+        $('.zip_code').mask('00000-000', { reverse: true });
+    });
+
+    var MoneyOpts = { reverse:true,
+                      maxlength: false,
+                      placeholder: 'Insira um valor',
+                      onKeyPress: function(v, ev, curField, opts) {
+                        var mask = curField.data('mask').mask;
+                            decimalSep = (/0(.)00/gi).exec(mask)[1] || ',';
+                        if (curField.data('mask-isZero') && curField.data('mask-keycode') == 8)
+                          $(curField).val('');
+                        else if (v) {
+                          // remove previously added stuff at start of string
+                          v = v.replace(new RegExp('^0*\\'+decimalSep+'?0*'), ''); //v = v.replace(/^0*,?0*/, '');
+                          v = v.length == 0 ? '0'+decimalSep+'00' : (v.length == 1 ? '0'+decimalSep+'0'+v : (v.length == 2 ? '0'+decimalSep+v : v));
+                          $(curField).val(v).data('mask-isZero', (v=='0'+decimalSep+'00'));
+                        }
+                      }
+                    };
+
+  $('.money').mask("#.##0,00", MoneyOpts);
+
+</script>

@@ -5,127 +5,134 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.13.4/jquery.mask.min.js"></script>
 
 <br />
-<h3>
-    <i class="fa fa-h-square" aria-hidden="true"></i>
-    Cadastro de novo Hospital
-</h3>
-<hr>
+
+<div class="mb-4">
+    <h3>
+        <i class="fa fa-h-square" aria-hidden="true"></i>
+        Cadastro de novo Hospital
+    </h3>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.js"></script>
 <form action="/hospital" method="post">
+    <div class="card mt-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="inputNome">Nome</label>
+                        <input type="text" class="form-control" name="inputNome" placeholder="" maxlength="100" minlength="10" required>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="inputCorporate">Razão Social</label>
+                        <input type="text" class="form-control" name="inputCorporate" placeholder="" maxlength="100" minlength="10" required>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="inputCNPJ">CNPJ (digite apenas números)</label>
+                        <input type="text" class="form-control cnpj" name="inputCNPJ" placeholder="99.999.999/9999-99" maxlength="18" minlength="18" required>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="inputCNES">Código CNES</label>
+                        <input type="text" class="form-control" name="inputCNES" placeholder="9999999" maxlength="7" minlength="7" onkeypress="return /[0-9]/i.test(event.key)" required>
+                    </div>
+                </div>
+            </div>
 
-    <div class="row">
-        <div class="col">
-            <div class="form-group">
-                <label for="inputNome">Nome</label>
-                <input type="text" class="form-control" name="inputNome" placeholder="" maxlength="100" minlength="10" required>
+            <div class="form-row">
+                    <label for="adresses">Endereço</label>
             </div>
-        </div>
-        <div class="col">
-            <div class="form-group">
-                <label for="inputCorporate">Razão Social</label>
-                <input type="text" class="form-control" name="inputCorporate" placeholder="" maxlength="100" minlength="10" required>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <div class="form-group">
-                <label for="inputCNPJ">CNPJ (digite apenas números)</label>
-                <input type="text" class="form-control cnpj" name="inputCNPJ" placeholder="99.999.999/9999-99" maxlength="18" minlength="18" required>
-            </div>
-        </div>
-        <div class="col">
-            <div class="form-group">
-                <label for="inputCNES">Código CNES</label>
-                <input type="text" class="form-control" name="inputCNES" placeholder="9999999" maxlength="7" minlength="7" onkeypress="return /[0-9]/i.test(event.key)" required>
-            </div>
-        </div>
-    </div>
 
-    <div class="form-row">
-            <label for="adresses">Endereço</label>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="inputStreet" placeholder="Rua" maxlength="45" minlength="5" required>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <input type="number" class="form-control" name="inputNumber" placeholder="Número" maxlength="5" required>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="inputCity" placeholder="Cidade" maxlength="50" required>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="inputState" placeholder="Estado" maxlength="50" onkeypress="return /[a-z]/i.test(event.key)" required>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="inputCountry" placeholder="País" maxlength="50" onkeypress="return /[a-z]/i.test(event.key)" required>
+                    </div>
+                </div>
+            </div>    
+            
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <input type="text" class="zip_code form-control" name="inputZipCode" placeholder="Código Postal" maxlength="20" required>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                    <label for="adresses">Contato</label>
+            </div>
+            <div class="form-row ml-2">
+            <table class="col-md-6" id="item_table">
+                <tr>
+                    <td>
+                        <select name="inputContactType" class="form-control inputContactType">
+                            <option value="Telefone">Telefone</option>
+                            <option value="E-mail">E-mail</option>
+                            <option value="Fax">Fax</option>
+                        </select>
+                    </td>
+                    <td><input type="text" name="inputContactBox" class="form-control inputContactBox ml-2" required/></td>
+                    <td>
+                        <button type="button" name="add" class="btn btn-success add ml-4">
+                            <span class="fa fa-plus"></span>
+                        </button>
+                    </td>
+                </tr>
+            </table>
+            </div>
+        </div>
     </div>
-
-    <div class="row">
-        <div class="col">
-            <div class="form-group">
-                <input type="text" class="form-control" name="inputStreet" placeholder="Rua" maxlength="45" minlength="5" required>
-            </div>
-        </div>
-        <div class="col">
-            <div class="form-group">
-                <input type="number" class="form-control" name="inputNumber" placeholder="Número" maxlength="5" required>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <div class="form-group">
-                <input type="text" class="form-control" name="inputCity" placeholder="Cidade" maxlength="50" required>
-            </div>
-        </div>
-        <div class="col">
-            <div class="form-group">
-                <input type="text" class="form-control" name="inputState" placeholder="Estado" maxlength="50" onkeypress="return /[a-z]/i.test(event.key)" required>
-            </div>
-        </div>
-        <div class="col">
-            <div class="form-group">
-                <input type="text" class="form-control" name="inputCountry" placeholder="País" maxlength="50" onkeypress="return /[a-z]/i.test(event.key)" required>
-            </div>
-        </div>
-    </div>    
     
-     <div class="row">
-        <div class="col-md-4">
-            <div class="form-group">
-                <input type="text" class="zip_code form-control" name="inputZipCode" placeholder="Código Postal" maxlength="20" required>
-            </div>
-        </div>
-    </div>
-    <div class="form-row">
-            <label for="adresses">Contato</label>
-    </div>
-    <div class="form-row ml-2">
-     <table class="col-md-6" id="item_table">
-        <tr>
-            <td>
-                <select name="inputContactType" class="form-control inputContactType">
-                    <option value="Telefone">Telefone</option>
-                    <option value="E-mail">E-mail</option>
-                    <option value="Fax">Fax</option>
-                </select>
-            </td>
-            <td><input type="text" name="inputContactBox" class="form-control inputContactBox ml-2" required/></td>
-            <td>
-                <button type="button" name="add" class="btn btn-success add ml-4">
-                    <span class="fa fa-plus"></span>
-                </button>
-            </td>
-        </tr>
-     </table>
-    </div>
 
-    
-<hr>
-
-    <li class="list-group-item list-group-item-primary text-center">
-        <h6>Selecione os procedimentos que o Hospital realizará</h6>
-    </li>
-<table class='table'>
-    {{#each med_proc}}
-    <tr>    
-        <td>
-        <input type="checkbox" name="inputProcID" value="{{med_proc_id}}" class="checkme" />
-        </td>
-        <td>{{med_proc_desc}}</td>
-        <td>
-        <input type="text" name="inputValue" class="money text required form-control" id="med_proc_{{med_proc_id}}" placeholder="Valor" disabled>
-        </td>
-    </tr>
-    {{/each}}
-</table>
-<hr>
+<div class="card mt-4">
+    <div class="card-body">
+        <li class="list-group-item list-group-item-primary text-center">
+            <h6>Selecione os procedimentos que o Hospital realizará</h6>
+        </li>
+        <table class='table'>
+            {{#each med_proc}}
+            <tr>    
+                <td>
+                <input type="checkbox" name="inputProcID" value="{{med_proc_id}}" class="checkme" />
+                </td>
+                <td>{{med_proc_desc}}</td>
+                <td>
+                <input type="text" name="inputValue" class="money text required form-control" id="med_proc_{{med_proc_id}}" placeholder="Valor" disabled>
+                </td>
+            </tr>
+            {{/each}}
+        </table>
+    </div>
+</div>
 
     <br>
 
