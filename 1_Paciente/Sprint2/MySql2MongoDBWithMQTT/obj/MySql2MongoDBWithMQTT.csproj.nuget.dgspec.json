@@ -1,0 +1,80 @@
+{
+  "format": 1,
+  "restore": {
+    "c:\\Users\\guilh\\Desktop\\Projetos\\ipbl2020\\1_Paciente\\Sprint2\\MySql2MongoDBWithMQTT\\MySql2MongoDBWithMQTT.csproj": {}
+  },
+  "projects": {
+    "c:\\Users\\guilh\\Desktop\\Projetos\\ipbl2020\\1_Paciente\\Sprint2\\MySql2MongoDBWithMQTT\\MySql2MongoDBWithMQTT.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "c:\\Users\\guilh\\Desktop\\Projetos\\ipbl2020\\1_Paciente\\Sprint2\\MySql2MongoDBWithMQTT\\MySql2MongoDBWithMQTT.csproj",
+        "projectName": "MySql2MongoDBWithMQTT",
+        "projectPath": "c:\\Users\\guilh\\Desktop\\Projetos\\ipbl2020\\1_Paciente\\Sprint2\\MySql2MongoDBWithMQTT\\MySql2MongoDBWithMQTT.csproj",
+        "packagesPath": "C:\\Users\\guilh\\.nuget\\packages\\",
+        "outputPath": "c:\\Users\\guilh\\Desktop\\Projetos\\ipbl2020\\1_Paciente\\Sprint2\\MySql2MongoDBWithMQTT\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Microsoft\\Xamarin\\NuGet\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\guilh\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Users\\guilh\\AppData\\Local\\Esri\\NuGet": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "dependencies": {
+            "MongoDB.Driver": {
+              "target": "Package",
+              "version": "[2.10.4, )"
+            },
+            "MySql.Data.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.20, )"
+            },
+            "RabbitMQ.Client": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.202\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
