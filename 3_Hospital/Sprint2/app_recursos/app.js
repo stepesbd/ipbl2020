@@ -4,8 +4,10 @@
     const bodyParser = require('body-parser')
     const app = express(); //cria e configura a aplicacao
     const path = require('path');
+    const mongoose = require('mongoose')
     const session = require('express-session')
     const flash = require('connect-flash')
+    const databaseMongoDB = require("./config/TS03/MongoDB/database")
     const BigchainDB = require( './config/dbBigchainDB' );
 
 // CONEXÃO COM BANCO DE DADOS BLOCKCHAIN
@@ -29,6 +31,17 @@ BigchainDB.connectToServer( function( err, client ) {
         // BODY-PARSER
             app.use(bodyParser.urlencoded({extended: false})) //para codificar as urls
             app.use(bodyParser.json()) //todo conteudo deve convertido para json
+        // MONGOOSE
+            mongoose.connect(databaseMongoDB.mongoURI, { 
+                useNewUrlParser: true, 
+                useUnifiedTopology: true
+            }).then(() => {
+                //console.log("MongoDB está pronto...")
+            }).catch((err) => {
+                //console.log("Falha ao conectar ao MongoDB!")
+            })
+            mongoose.set('useFindAndModify', false);
+
         // HANDLEBARS
             var hbs = handlebars.create({
                 defaultLayout: "main",

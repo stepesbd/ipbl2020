@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
-const config = require('../../config/databaseMySQL.js');
+const config = require('../../../config/TS03/MySQL/database.js');
 
 
 const db = {};
