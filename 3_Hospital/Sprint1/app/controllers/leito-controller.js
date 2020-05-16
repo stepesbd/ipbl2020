@@ -1,223 +1,67 @@
 'use strict';
 const { Address } = require('../models');
-const { Employee } = require('../models');
+const { Bed } = require('../models');
 const { Hospital } = require('../models');
-const { Hospital_employee } = require('../models');
-const { Contact } = require('../models');
-const { Employee_contact } = require('../models');
 const { Op } = require("sequelize");
 
 
-//#region  Criando controller POST 1
+//#region  Criando leitos em um hospital
 exports.post = (req, res, next) => {
-    var me = req.body;
-    Employee.findOne({
-        where: { emp_cns_code: me.inputCNS }
-    }).then(function(CNScheckRepeat){
-        // INVALIDAÇÃO EM CASO DE CNS REPETIDO
-        if(CNScheckRepeat == null){
-            Address.create({
-                add_street: me.inputStreet.toUpperCase(),
-                add_number: me.inputNumber,
-                add_city: me.inputCity.toUpperCase(),
-                add_state: me.inputState.toUpperCase(),
-                add_country: me.inputCountry.toUpperCase(),
-                add_zip_code: me.inputZipCode.toUpperCase(),
-            }).then(function(add) {
-                Employee.create({
-                    emp_name : me.inputNome.toUpperCase(),
-                    emp_cns_code: me.inputCNS,
-                    emp_occupation : me.inputFuncao.toUpperCase(),
-                    add_id: add.add_id,
-                    }).then(function(emp) {
-                        Hospital.findByPk(req.params.hosp_id).then(function(hosp){
-                            hosp.addEmployee(emp, { 
-                                through: { 
-                                    hos_emp_admission_date: me.inputAdmi,
-                                    hos_emp_demission_date: me.inputDemiss,
-                                    hos_emp_salary: me.inputSalary,
-                                } 
-                            }).then(()=>{
-                                if(me.inputContactBox[0] != null){
-                                    var arrayOfContactTypes = []
-                                    var arrayOfContactBox = []
-                    
-                                    if(!Array.isArray(me.inputContactType)){
-                                        arrayOfContactTypes.push(me.inputContactType);
-                                    }else{
-                                        arrayOfContactTypes = me.inputContactType;
-                                    };
-                                    if(!Array.isArray(me.inputContactBox)){
-                                        arrayOfContactBox.push(me.inputContactBox);
-                                    }else{
-                                        arrayOfContactBox = me.inputContactBox;
-                                    };
-                                    
-                                    arrayOfContactTypes.forEach(function(contactType){
-                                        if(arrayOfContactBox[0].length > 0){
-                                            Contact.create({
-                                                con_type: contactType,
-                                                con_desc: arrayOfContactBox.shift(),
-                                            }).then(function(con){
-                                                con.addEmployee(emp);
-                                            }).catch(err => {
-                                                con.destroy();
-                                                var erro = err.message;
-                                                res.render('erro-page', { title: 'Erro', erro: erro} );
-                                            });  
-                                        }
-                                    })
-                                }
-                                res.render('success-page', { title: 'Sucesso', success: 'Leito CRIADO com sucesso! Clique no botão abaixo para ser direcionado à página do(a) ' + hosp.hos_name, page: '/Hospital/' + req.params.hosp_id + '/leito/sts/active'} );
-                            })
-                        });
-                    }).catch(err => {
-                        add.destroy()
-                        var erro = err.message;
-                        res.render('erro-page', { title: 'Erro', erro: erro} );
-                    });  
-            }).catch(err => {
-                var erro = err.message;
-                res.render('erro-page', { title: 'Erro', erro: erro} );
-            });  
-        }else{
-            var erro = 'CNS já cadastrado!';
-            res.render('erro-page', { title: 'Erro', erro: erro} );
-        }
-    })
-            
-};
-//#endregion
-
-
-//#region  Criando controller GET
-exports.get = (req, res, next) => {
-    if(!req.params.employee_id){
-        var erro = 'Erro: Leitos não encontrados!';
-
-        if(req.params.sts == 'active'){       
-            Hospital.findByPk(req.params.hosp_id).then(function(hosp){
-                Hospital_employee.findAll({
-                    raw: true,
-                    where: {
-                        hos_id: req.params.hosp_id,
-                        hos_emp_demission_date: {[Op.is]: null}         
-                    },
-                    include: [{
-                        model: Employee,
-                        order: [['emp_name', 'ASC']],
-                    }]
-                }).then(function(hos_emp){
-                    Employee.findAll({
-                        raw: true,
-                        include:[{
-                            model: Hospital_employee,
-                            where:{ 
-                                hos_id: req.params.hosp_id,
-                                hos_emp_demission_date: {[Op.is]: null}         /***************  CRITÉRIO DE ATIVIDADE */
-                            }
-                        }],
-                        order: [['emp_name', 'ASC']],
-                    }).then(function(emp){
-                        res.render('leito-lista', { title: 'Lista de Leitos', hosp: hosp, hos_emp: hos_emp, emp: emp, active: 'active', inactive: ''} );
-                    }).catch(err => {
-                        var erro = err.message;
-                        res.render('erro-page', { title: 'Erro', erro: erro} );
-                    });  
-                }).catch(err => {
-                    var erro = err.message;
-                    res.render('erro-page', { title: 'Erro', erro: erro} );
-                });  
-            })
-        }else{
-            Hospital_employee.findAll({
-                raw: true,
-                where: {
-                    hos_id: req.params.hosp_id,
-                    hos_emp_demission_date: { [Op.not] : null }        /***************  CRITÉRIO DE INATIVIDADE */
-                },
-                order: [['hos_id', 'ASC']],
-            }).then(function(hos_emp){
-                Hospital.findByPk(req.params.hosp_id)
-                .then(function(hosp){
-                    Employee.findAll({
-                        order: [['emp_name', 'ASC']],
-                        include: [{ 
-                            model: Hospital, 
-                            through: { 
-                                model: Hospital_employee,
-                                where: { hos_emp_demission_date: {[Op.not]: null }}
-                            },
-                            where: { hos_id: req.params.hosp_id},
-                        }]
-                    }).then(function(emp){
-                        res.render('leito-lista', { title: 'Lista de Leitos', hosp: hosp, emp: emp, hos_emp: hos_emp, active: '', inactive: 'active'} );
-                    }).catch(err => {
-                        var erro = err.message;
-                        res.render('erro-page', { title: 'Erro', erro: erro} );
-                    });  
-                }).catch(err => {
-                    var erro = err.message;
-                    res.render('erro-page', { title: 'Erro', erro: erro} );
-                });   
-            }).catch(err => {
-                var erro = err.message;
-                res.render('erro-page', { title: 'Erro', erro: erro} );
-            });  
-        }
-    }else{
-        /************ ATUALIZAÇÃO DE Leito **************/
-        Hospital.findByPk(req.params.hosp_id).then(function(hos){
-            Employee.findOne(
-                { where: {emp_id: req.params.employee_id}},
-            ).then(function (emp) {
-                Address.findOne({ where: { add_id: emp.add_id } }).then(function (add) {
-                    Hospital_employee.findOne({
-                        where: { emp_id: emp.emp_id },
-                        include: [{
-                            model: Hospital,
-                            where: { hos_id: req.params.hosp_id }
-                        }]
-                    }).then(function(hos_emp){
-                        Contact.findAll({
-                            include: [{
-                                model: Employee_contact,
-                                where: { emp_id: req.params.employee_id }
-                            }]
-                        }).then(function(con){
-                            var count = 0;
-                            con.forEach(()=>{
-                                count = count + 1;
-                            })
-                            res.render('leito-atualizacao', { title: 'Hospital', emp: emp, add: add, hos: hos, hos_emp: hos_emp, con: con, count: count})
-                        }).catch(err => {
-                            var erro = err.message;
-                            res.render('erro-page', { title: 'Erro', erro: erro} );
-                        });  
-                    }).catch(err => {
-                        var erro = err.message;
-                        res.render('erro-page', { title: 'Erro', erro: erro} );
-                    });                    
-                }).catch(err => {
-                    var erro = err.message;
-                    res.render('erro-page', { title: 'Erro', erro: erro} );
-                });
+    let me = req.body; 
+    let hos_id = req.params.hosp_id;
+      Bed.findOne({
+        where: { bed_name: me.inputName}
+    }).then(function(count){  
+        if(count == null) {
+            Bed.create({
+                bed_name: me.inputName,
+                bed_created_at: Date.now(),
+                bed_usage_start: null,
+                bed_usage_end : null,
+                bed_medical_record : null,
+                bed_status: 0,
+                hos_id: hos_id,
+            }).then(function(bed){
+                res.render('success-page', { title: 'Sucesso', success: 'Leito CRIADO com sucesso! Clique no botão abaixo para ser direcionado à lista de leitos.', page: '/Hospital/' + hos_id + '/leito/sts/' +  hos_id} );
             }).catch(err => {
                 var erro = err.message;
                 res.render('erro-page', { title: 'Erro', erro: erro} );
             });
+        } else { 
+            var erro = 'Leito já cadastrado!';
+            res.render('erro-page', { title: 'Erro', erro: erro} );
+        }
+    });
+};
+//#endregion
+
+
+//#region  Buscando informações de leitos de um hospital
+exports.get = (req, res, next) => {
+    Hospital.findByPk(req.params.id).then(function(hos){
+        Bed.findAll({
+            raw: true,
+            where: {
+                hos_id: req.params.id,
+                bed_status: 0
+            }
+        }).then(function(bed){
+                res.render('leito-lista', { title: 'Lista de Leitos', hos: hos,  bed: bed,} );
+            }).catch(err => {
+                var erro = err.message;
+                res.render('erro-page', { title: 'Erro', erro: erro} );
+            });  
         }).catch(err => {
             var erro = err.message;
             res.render('erro-page', { title: 'Erro', erro: erro} );
-        });   
-    }
+        });  
 };
 //#endregion
 
 
 //#region  Cadastrando  um Leito
 exports.new = (req, res, next) => {
-    Hospital.findOne({ where: {hos_id: req.params.hosp_id } }
+    Bed.findOne({ where: {hos_id: req.params.hosp_id } }
         ).then(function (hosp) {
             res.render('leito-cadastro', { title: 'Cadastro de Leitos', hosp: hosp })}   
         ).catch(err => {

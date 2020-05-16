@@ -1,84 +1,73 @@
 
 
 module.exports = (sequelize, DataTypes) => {
-    const Employee = sequelize.define('Employee', {
-        emp_id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-        emp_cns_code: { 
-            type: DataTypes.STRING,
-            allowNull: false,
-            validate: {
-                is: {
-                    args: /[\x20-\xff]{15,15}/,
-                    msg: 'O código CNS deve conter 15 caracteres alfanumericos'
-                }
-            }
-        },
-        emp_name: {
+    const Bed = sequelize.define('Bed', {
+        bed_id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+        bed_name: {
             type: DataTypes.STRING,
             allowNull: false,
             validate: {
                 is: {
                     args: /[\x20-\xff]{5,100}/,
-                    msg: 'Nome do Funcionário deve conter entre 5 e 100 caracteres alfanumericos'
+                    msg: 'Nome do leito deve conter entre 3 e 10 caracteres'
                 }
             }
         },
-        emp_occupation: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            validate: {
-                is: {
-                    args: /[\x20-\xff]{1,100}/,
-                    msg: 'A função do funcionário deve conter entre 1 e 100 caracteres alfanumericos'
-                }
-            }
+        bed_created_at:{
+            type: DataTypes.DATE,
+            allowNull: false
         },
+        bed_usage_start:{
+            type: DataTypes.DATE,
+            allowNull: true
+        },
+        bed_usage_end:{
+            type: DataTypes.DATE,
+            allowNull: true
+        },
+        bed_medical_record:{
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
+        bed_status:{
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+        hos_id:{
+            type: DataTypes.INTEGER,
+            allowNull: false
+        }
     },{
         freezeTableName: true,
         underscored: true,
 		timestamps: false,
 	});
 
-    Employee.associate = function(models){
-        Employee.belongsToMany(models.Hospital, 
+    Bed.associate = function(models){
+        Bed.belongsToMany(models.Hospital, 
         {
-            through: 'Hospital_employee',
-            foreignKey: 'emp_id', 
+            through: 'Hospital',
+            foreignKey: 'hos_id', 
             onDelete: 'CASCADE', 
-            hooks: true  ,
+            hooks: true,
             otherKey: 'hos_id',
         });
-
-        Employee.belongsToMany(models.Contact,
-			{
-				through: 'Employee_contact',
-				foreignKey: 'emp_id',
-	
-				onDelete: 'CASCADE', 
-				hooks: true  ,
-				otherKey: 'con_id',
-		});
-
-        Employee.hasOne(models.Address,
+/*
+        Bed.hasOne(models.Address,
         {
             foreignKey: 'add_id',
             targetKey: 'add_id',
             onDelete: 'CASCADE',
             hooks: true
         });
+*/
 
-
-      Employee.hasMany(models.Hospital_employee,{
-           foreignKey: 'emp_id',
+      Bed.hasMany(models.Hospital,{
+           foreignKey: 'hos_id',
       });
-
-      Employee.hasMany(models.Employee_contact,{
-        foreignKey: 'emp_id',
-       });
 
     }
 
 
-    return Employee;
-
+    return Bed;
 };
