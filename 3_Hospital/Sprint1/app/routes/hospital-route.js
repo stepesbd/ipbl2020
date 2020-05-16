@@ -2,7 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
-const controller = require('../../controllers/MySQL/hospital-controller')
+const controller = require('../controllers/hospital-controller')
 
 module.exports = function(app) {
     router.get('/', controller.get);                            

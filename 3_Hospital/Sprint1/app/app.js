@@ -4,38 +4,11 @@
     const bodyParser = require('body-parser')
     const app = express(); //cria e configura a aplicacao
     const path = require('path');
-    const mongoose = require('mongoose')
-    const session = require('express-session')
-    const flash = require('connect-flash')
-    const databaseMongoDB = require("./config/MongoDB/database")
 
 // CONFIGURAÇÕES
-    // SESSÃO
-        app.use(session({
-            secret: "stepesbd",
-            resave: true,
-            saveUninitialized: true
-        }))
-        app.use(flash())
-    // MIDDLEWARE
-        app.use((req, res, next) => {
-            res.locals.success_msg = req.flash("success_msg")
-            res.locals.error_msg = req.flash("error_msg")
-            next();
-        })
     // BODY-PARSER
         app.use(bodyParser.urlencoded({extended: false})) //para codificar as urls
         app.use(bodyParser.json()) //todo conteudo deve convertido para json
-    // MONGOOSE
-        mongoose.connect(databaseMongoDB.mongoURI, { 
-            useNewUrlParser: true, 
-            useUnifiedTopology: true
-        }).then(() => {
-            //console.log("MongoDB está pronto...")
-        }).catch((err) => {
-            //console.log("Falha ao conectar ao MongoDB!")
-        })
-        mongoose.set('useFindAndModify', false);
     // HANDLEBARS
         var hbs = handlebars.create({
             defaultLayout: "main",
@@ -85,20 +58,14 @@
 
 // ROTAS
     app.use('/', require('./routes/index-route')(app));
-    app.use('/hospital', require('./routes/MySQL/hospital-route')(app));
-    app.use('/hospital/:hosp_id/employee', require('./routes/MySQL/employee-route')(app));
-    app.use('/procedures', require('./routes/MySQL/procedures-route')(app));
-    app.use('/MongoDB/hospital', require('./routes/MongoDB/_hospital-route')(app));
-    app.use('/MongoDB/hospital/:hosp_id/employee', require('./routes/MongoDB/_employee-route')(app));
-    app.use('/MongoDB/procedures', require('./routes/MongoDB/_procedures-route')(app));
+    app.use('/hospital', require('./routes/hospital-route')(app));
+    app.use('/hospital/:hosp_id/employee', require('./routes/employee-route')(app));
+    app.use('/procedures', require('./routes/procedures-route')(app));
 
     app.use(logger('dev'));
     app.use(express.json());
     app.use(express.urlencoded({ extended: false }));
     app.use(cookieParser());
-    
-
-
 
 // catch 404 and forward to error handler
     app.use(function(req, res, next) {

@@ -2,7 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
-const controller = require('../../controllers/MongoDB/_procedures-controller')
+const controller = require('../controllers/procedures-controller')
 
 module.exports = function(app) {
     router.get('/', controller.get);

@@ -1,12 +1,12 @@
 'use strict';
-const { Address } = require('../../models/MySQL');
-const { Hospital } = require('../../models/MySQL');
-const { Employee } = require('../../models/MySQL');
-const { Hospital_employee } = require('../../models/MySQL');
-const { Medical_procedures } = require('../../models/MySQL');
-const { Hosp_med_proc } = require('../../models/MySQL');
-const { Contact } = require('../../models/MySQL');
-const { Hospital_contact } = require('../../models/MySQL');
+const { Address } = require('../models');
+const { Hospital } = require('../models');
+const { Employee } = require('../models');
+const { Hospital_employee } = require('../models');
+const { Medical_procedures } = require('../models');
+const { Hosp_med_proc } = require('../models');
+const { Contact } = require('../models');
+const { Hospital_contact } = require('../models');
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

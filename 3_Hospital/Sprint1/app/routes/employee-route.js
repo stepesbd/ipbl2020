@@ -2,7 +2,7 @@
 
 const express = require('express');
 const router = express.Router({mergeParams: true});
-const controller = require('../../controllers/MongoDB/_employee-controller')
+const controller = require('../controllers/employee-controller')
 
 module.exports = function(app) {
     router.get('/sts/:sts', controller.get);

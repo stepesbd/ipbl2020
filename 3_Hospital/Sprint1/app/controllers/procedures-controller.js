@@ -1,7 +1,7 @@
 'use strict';
-const { Medical_procedures } = require('../../models/MySQL');
-const { Hosp_med_proc } = require('../../models/MySQL');
-const { Hospital } = require('../../models/MySQL');
+const { Medical_procedures } = require('../models');
+const { Hosp_med_proc } = require('../models');
+const { Hospital } = require('../models');
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
