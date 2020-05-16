@@ -60,6 +60,7 @@
     app.use('/', require('./routes/index-route')(app));
     app.use('/hospital', require('./routes/hospital-route')(app));
     app.use('/hospital/:hosp_id/employee', require('./routes/employee-route')(app));
+    app.use('/hospital/:hosp_id/leito', require('./routes/leito-route')(app));
     app.use('/procedures', require('./routes/procedures-route')(app));
 
     app.use(logger('dev'));

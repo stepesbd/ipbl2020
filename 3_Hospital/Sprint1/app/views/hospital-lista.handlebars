@@ -48,27 +48,33 @@
           </td>
           <td>{{hos_cnes_code}}</td>
           <td class="text-center" data-priority="2">
-            <div class="form-row text-center btn-group btn-group-justified" style="width:180px">
+            <div class="form-row text-center btn-group btn-group-justified" style="width:200px">
                 <div>
-                  <button type="button" class="btn btn-primary btn-sm rounded-2 mr-2" 
+                  <button type="button" class="btn btn-primary btn-sm rounded-2 mr-1" 
+                    onclick="window.location.href='/hospital/{{hos_id}}/leito/sts/active'" alt="Leitos" data-toggle="tooltip" data-placement="top" title="Leitos">
+                    <i class="fa fas fa-procedures"></i>
+                  </button>
+                </div>
+                <div>
+                  <button type="button" class="btn btn-primary btn-sm rounded-2 mr-1" 
                     onclick="window.location.href='https://stepesbdrecursos.herokuapp.com/hospital/{{hos_cnes_code}}/'" alt="Recursos" data-toggle="tooltip" data-placement="top" title="Recursos">
                     <i class="fa fas fa-hand-holding-medical" ></i>
                   </button>
                 </div>
                 <div>
-                  <button type="button" class="btn btn-primary btn-sm rounded-2 mr-2" 
+                  <button type="button" class="btn btn-primary btn-sm rounded-2 mr-1" 
                     onclick="window.location.href='/hospital/{{hos_id}}/employee/sts/active'" alt="Cadastro de Funcionários" data-toggle="tooltip" data-placement="top" title="Cadastro de Funcionários">
                     <i class="fa fa-user-md" ></i>
                   </button>
                 </div>
                 <div>
-                  <button id="{{hsp_id}}" type="button" class="btn btn-primary btn-sm rounded-2 mr-2" data-toggle="modal" alt="Cadastro de Procedimentos" title="Procedimentos Médicos"
+                  <button id="{{hsp_id}}" type="button" class="btn btn-primary btn-sm rounded-2 mr-1" data-toggle="modal" alt="Cadastro de Procedimentos" title="Procedimentos Médicos"
                     data-target="#mdUpdate{{hos_id}}">
                     <i class="fa fa-list-alt" ></i>
                   </button>
                 </div> 
                 <form action="/hospital/{{hos_id}}"  method="get">
-                      <button id="{{hos_id}}" type="submit" class="btn btn-primary btn-sm rounded-2 mr-2" alt="Editar hospital" data-toggle="tooltip" data-placement="top" title="Editar hospital">
+                      <button id="{{hos_id}}" type="submit" class="btn btn-primary btn-sm rounded-2 mr-1" alt="Editar hospital" data-toggle="tooltip" data-placement="top" title="Editar hospital">
                         <i class="fa fa-edit"></i>
                       </button>
                 </form>
@@ -173,10 +179,9 @@
         this.parentNode.parentNode.querySelector('.text[type="text"]').disabled = !this.checked;
         this.parentNode.parentNode.querySelector('.text[type="text"]').value = '';
         this.parentNode.parentNode.querySelector('.text[type="text"]').required = this.checked;
-        
     });
   });
-  
+
   $(document).ready(function () {
     $('#listaHospital').DataTable({
             responsive: true,
