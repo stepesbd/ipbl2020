@@ -1,0 +1,39 @@
+{
+  "name": "hospital",
+  "version": "1.0.0",
+  "description": "Sistema Hospital",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon ./bin/www",
+    "test": "nodemon ./test.js",
+    "doc": "apidoc -i controllers/"
+  },
+  "dependencies": {
+    "alert-node": "^1.2.3",
+    "bigchaindb-driver": "^4.1.2",
+    "body-parser": "^1.18.3",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "~1.4.3",
+    "cpf-cnpj-validator": "^1.0.1",
+    "debug": "~2.6.9",
+    "express": "~4.16.0",
+    "express-handlebars": "^3.0.2",
+    "express-session": "^1.17.1",
+    "http-errors": "~1.6.2",
+    "moment": "^2.24.0",
+    "mongodb": "^3.5.7",
+    "mongoose": "^5.9.10",
+    "morgan": "~1.9.0",
+    "mysql2": "^1.6.5",
+    "nodemon": "^1.18.10",
+    "sequelize": "^5.2.12",
+    "sequelize-mysql-timestamp": "^1.4.0"
+  },
+  "devDependencies": {
+    "handlebars": "^4.5.0",
+    "jasmine": "^3.4.0",
+    "jasmine-pretty-html-reporter": "^0.2.5"
+  },
+  "author": "",
+  "license": "ISC"
+}

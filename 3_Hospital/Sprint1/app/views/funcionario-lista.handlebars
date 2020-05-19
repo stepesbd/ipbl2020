@@ -9,6 +9,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.js"></script>
 
 <br>
+
 <a href="/Hospital/{{hosp.hos_id}}/employee/New" class="float-right btn btn-success" alt="Cadastrar novo funcionário" title="Cadastrar novo funcionário"><i class="fa fa-plus mr-2" aria-hidden="true"></i> Adicionar</a>
 <br>
 <br>
@@ -20,47 +21,49 @@
     <a class="nav-link {{inactive}}" href="/Hospital/{{hosp.hos_id}}/employee/sts/inactive">Inativos</a>
   </li>
 </ul>
-<br>
-<h3>
-  <i class="fa fa-user-md" aria-hidden="true"></i>
-  Quadro de Funcionários
-</h3>
-<h5>{{hosp.hos_name}}</h5>
-<br>
+<div class="mt-4 mb-4">
+  <h3>
+    <i class="fa fa-user-md" aria-hidden="true"></i>
+    Quadro de Funcionários
+  </h3>
+  <h5>{{hosp.hos_name}}</h5>
+</div>
 
-<hr>
-
-<table id="listaFuncionario" class="table responsive table-striped table-hover" style="width:100%">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Nome</th>
-      <th>Código CNS</th>
-      <th>Função</th>
-      <th>Contato</th>
-	  <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    {{#each emp}}
-    <tr>
-      <td>{{emp_id}}</td>
-      <td>{{emp_name}}</td>
-      <td>{{emp_cns_code}}</td>
-      <td>{{emp_occupation}}</td>
-      <td></td>
-      <td class="text-center">
-        <div class="form-row text-center btn-group btn-group-justified" style="width:90px">
-          <button id={{emp_id}} type="button" class="btn btn-primary btn-sm rounded-2"
-            onclick="window.location.href='/hospital/{{@root.hosp.hos_id}}/employee/update/{{emp_id}}'" alt="Editar" data-toggle="tooltip" data-placement="top" title="Editar">
-            <i class="fa fa-edit"></i>
-          </button>
-        </div>
-      </td>
-    </tr>
-    {{/each}}
-  </tbody>
-</table>
+<div class="card mt-4 mb-4">
+    <div class="card-body">
+      <table id="listaFuncionario" class="table responsive table-striped table-hover" style="width:100%">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Código CNS</th>
+            <th>Função</th>
+            <th>Contato</th>
+          <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each emp}}
+          <tr>
+            <td>{{emp_id}}</td>
+            <td>{{emp_name}}</td>
+            <td>{{emp_cns_code}}</td>
+            <td>{{emp_occupation}}</td>
+            <td></td>
+            <td class="text-center">
+              <div class="form-row text-center btn-group btn-group-justified" style="width:90px">
+                <button id={{emp_id}} type="button" class="btn btn-primary btn-sm rounded-2"
+                  onclick="window.location.href='/hospital/{{@root.hosp.hos_id}}/employee/update/{{emp_id}}'" alt="Editar" data-toggle="tooltip" data-placement="top" title="Editar">
+                  <i class="fa fa-edit"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+</div>
  <a class="btn btn-primary" href="/Hospital" role="button">Voltar</a>
 
 

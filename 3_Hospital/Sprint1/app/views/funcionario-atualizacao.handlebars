@@ -5,162 +5,168 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.13.4/jquery.mask.min.js"></script>
 
-<a href="/Hospital/{{hos.hos_id}}/employee/Delete/{{emp.emp_id}}" class="float-right btn btn-danger" alt="Apagar funcionário" title="Apagar funcionário" data-toggle="modal" data-toggle="tooltip" data-placement="top" data-target="#mdDelete" >
-  <i class="fa fa-trash mr-2"></i> Remover
-</a>
-<h3>
-    <i class="fa fa-user-md" aria-hidden="true"></i>
-    {{emp.emp_name}}
-</h3>
-<h5>Atualização de Funcionário</h5>
-<hr>
+<div class="mb-4">
+  <a href="/Hospital/{{hos.hos_id}}/employee/Delete/{{emp.emp_id}}" class="float-right btn btn-danger" alt="Apagar funcionário" title="Apagar funcionário" data-toggle="modal" data-toggle="tooltip" data-placement="top" data-target="#mdDelete" >
+    <i class="fa fa-trash mr-2"></i> Remover
+  </a>
+  <h3>
+      <i class="fa fa-user-md" aria-hidden="true"></i>
+      {{emp.emp_name}}
+  </h3>
+  <h5>Atualização de Funcionário</h5>
+</div>
+
 
 <form action="/hospital/{{hos.hos_id}}/employee/Update/{{emp.emp_id}}" method="post">
-
-    <div class="row">
-        <div class="col">
-          <div class="form-group">
-            <label for="inputNome">Nome</label>
-            <input type="text" class="form-control" name="inputNome" placeholder="" maxlength="100" min="5" max="100" value="{{emp.emp_name}}" >
-          </div>
-        </div>
-        <div class="col">
-            <div class="form-group">
-              <label for="inputCNS">Código CNS</label>
-              <input type="text" class="form-control" name="inputCNS" placeholder="" maxlength="15" min="15" max="15" value="{{emp.emp_cns_code}}" onkeypress="return /[0-9]/i.test(event.key)">
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <div class="form-group">
-              <label for="inputFuncao">Função</label>
-              <input type="text" class="form-control" name="inputFuncao" placeholder="Ex.: Enfermeiro" maxlength="100" min="1" max="100" value="{{emp.emp_occupation}}" >
-            </div>
-        </div>
-        <div class="col">
-            <div class="form-group">
-              <label for="inputSalary">Salário</label>
-              <input type="text" id="inputSalary" name="inputSalary" class="money form-control" maxlength="10" value="{{hos_emp.hos_emp_salary}}" onkeypress="return /[0-9]/i.test(event.key)"/>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <div class="form-group">
-              <label for="inputAdmi">Admissão</label>
-              <input type="date" class="form-control" name="inputAdmi" maxlength="10" min="10" max="100" onkeypress="mascaraData(this)" value="{{hos_emp.hos_emp_admission_date}}" >
-            </div>
-        </div>
-          <div class="col">
-            <label for="inputDemiss">Demissão (opcional)</label>
-
-            <div class="input-group mb-3">
-              <div class="input-group-prepend">
-                <div class="input-group-text demiss">
-                  <input class="demissBtn btn btn-outline-danger" type="checkbox" id="demissButton" checked{{#activeEmployee hos_emp.hos_emp_demission_date}}not{{/activeEmployee}}>
+  <div class="card mt-4 mb-4">
+      <div class="card-body">
+            <div class="row">
+                <div class="col">
+                  <div class="form-group">
+                    <label for="inputNome">Nome</label>
+                    <input type="text" class="form-control" name="inputNome" placeholder="" maxlength="100" min="5" max="100" value="{{emp.emp_name}}" >
+                  </div>
                 </div>
-              </div>
-              <input type="date" class="form-control" id="inputDemiss" name="inputDemiss" maxlength="10" min="10" max="100" onkeypress="mascaraData(this)" 
-                    value="{{hos_emp.hos_emp_demission_date}}" {{#activeEmployee hos_emp.hos_emp_demission_date}}disabled{{/activeEmployee}}/>  
+                <div class="col">
+                    <div class="form-group">
+                      <label for="inputCNS">Código CNS</label>
+                      <input type="text" class="form-control" name="inputCNS" placeholder="" maxlength="15" min="15" max="15" value="{{emp.emp_cns_code}}" onkeypress="return /[0-9]/i.test(event.key)">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                      <label for="inputFuncao">Função</label>
+                      <input type="text" class="form-control" name="inputFuncao" placeholder="Ex.: Enfermeiro" maxlength="100" min="1" max="100" value="{{emp.emp_occupation}}" >
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                      <label for="inputSalary">Salário</label>
+                      <input type="text" id="inputSalary" name="inputSalary" class="money form-control" maxlength="10" value="{{hos_emp.hos_emp_salary}}" onkeypress="return /[0-9]/i.test(event.key)"/>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                      <label for="inputAdmi">Admissão</label>
+                      <input type="date" class="form-control" name="inputAdmi" maxlength="10" min="10" max="100" onkeypress="mascaraData(this)" value="{{hos_emp.hos_emp_admission_date}}" >
+                    </div>
+                </div>
+                  <div class="col">
+                    <label for="inputDemiss">Demissão (opcional)</label>
+
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <div class="input-group-text demiss">
+                          <input class="demissBtn btn btn-outline-danger" type="checkbox" id="demissButton" checked{{#activeEmployee hos_emp.hos_emp_demission_date}}not{{/activeEmployee}}>
+                        </div>
+                      </div>
+                      <input type="date" class="form-control" id="inputDemiss" name="inputDemiss" maxlength="10" min="10" max="100" onkeypress="mascaraData(this)" 
+                            value="{{hos_emp.hos_emp_demission_date}}" {{#activeEmployee hos_emp.hos_emp_demission_date}}disabled{{/activeEmployee}}/>  
+                    </div>
+
+                </div>
+            </div> 
+
+            <div class="row">
+              <div class="col">
+                    <label for="adresses">Endereço</label>
+                </div>
             </div>
 
-        </div>
-     </div> 
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                      <input type="text" class="form-control" name="inputStreet" placeholder="Rua" maxlength="45" min="5" max="45" value="{{add.add_street}}" >
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <input type="number" class="form-control" name="inputNumber" placeholder="Número" maxlength="5" min="0" max="99999"  value="{{add.add_number}}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                      <input type="text" class="form-control" name="inputCity" placeholder="Cidade" maxlength="50" min="1" max="50" value="{{add.add_city}}">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                      <input type="text" class="form-control" name="inputState" placeholder="Estado" maxlength="50" min="1" max="50" value="{{add.add_state}}">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                      <input type="text" class="form-control" name="inputCountry" placeholder="País" maxlength="50" min="1" max="50" value="{{add.add_country}}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                      <input type="text" class="zip_code form-control" name="inputZipCode" placeholder="Código Postal" maxlength="9" value="{{add.add_zip_code}}">
+                    </div>
+                </div>
+            </div>
 
-    <div class="row">
-       <div class="col">
-            <label for="adresses">Endereço</label>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col">
-            <div class="form-group">
-              <input type="text" class="form-control" name="inputStreet" placeholder="Rua" maxlength="45" min="5" max="45" value="{{add.add_street}}" >
+            <div class="form-row">
+                    <label for="adresses">Contato</label>
             </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="form-group">
-                <input type="number" class="form-control" name="inputNumber" placeholder="Número" maxlength="5" min="0" max="99999"  value="{{add.add_number}}">
+            <div class="form-row ml-2">
+            <table class="col-md-6" id="item_table">
+              {{#each con}}
+                  <tr>
+                    <td>
+                      <select name="inputContactType" class="form-control inputContactType mb-2">
+                        <option value="{{con_type}}">{{con_type}}</option>
+                      </select>
+                    </td>
+                    <td>
+                      <input type="text" name="inputContactBox" class="form-control inputContactBox mb-2 ml-2" value="{{con_desc}}" required/>
+                    </td>
+                    <td>
+                      <button type="button" name="remove" class="btn btn-danger  remove mb-2 ml-4">
+                        <span class="fa fa-minus"></span>
+                      </button>
+                    </td>
+                  </tr>
+                {{/each}}
+                <tr>
+                  <tr>
+                <td>
+                  Novos contatos:
+                </td>
+              </tr>
+                    <td>
+                        <select name="inputContactType" class="form-control inputContactType">
+                            <option value="Telefone">Telefone</option>
+                            <option value="E-mail">E-mail</option>
+                            <option value="Fax">Fax</option>
+                        </select>
+                    </td>
+                    <td><input type="text" id="newContactBox" name="inputContactBox" class="form-control inputContactBox ml-2" /></td>
+                    <td>
+                        <button type="button" name="add" class="btn btn-success add ml-4">
+                            <span class="fa fa-plus"></span>
+                        </button>
+                    </td>
+                </tr>
+            </table>
             </div>
-        </div>
+            <br>
+      </div>
     </div>
-    <div class="row">
-        <div class="col">
-            <div class="form-group">
-              <input type="text" class="form-control" name="inputCity" placeholder="Cidade" maxlength="50" min="1" max="50" value="{{add.add_city}}">
-            </div>
-        </div>
-        <div class="col">
-            <div class="form-group">
-              <input type="text" class="form-control" name="inputState" placeholder="Estado" maxlength="50" min="1" max="50" value="{{add.add_state}}">
-            </div>
-        </div>
-        <div class="col">
-            <div class="form-group">
-              <input type="text" class="form-control" name="inputCountry" placeholder="País" maxlength="50" min="1" max="50" value="{{add.add_country}}">
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4">
-            <div class="form-group">
-              <input type="text" class="zip_code form-control" name="inputZipCode" placeholder="Código Postal" maxlength="9" value="{{add.add_zip_code}}">
-            </div>
-        </div>
-    </div>
-
-    <div class="form-row">
-            <label for="adresses">Contato</label>
-    </div>
-    <div class="form-row ml-2">
-     <table class="col-md-6" id="item_table">
-       {{#each con}}
-          <tr>
-            <td>
-              <select name="inputContactType" class="form-control inputContactType mb-2">
-                <option value="{{con_type}}">{{con_type}}</option>
-              </select>
-            </td>
-            <td>
-              <input type="text" name="inputContactBox" class="form-control inputContactBox mb-2 ml-2" value="{{con_desc}}" required/>
-            </td>
-            <td>
-              <button type="button" name="remove" class="btn btn-danger  remove mb-2 ml-4">
-                <span class="fa fa-minus"></span>
-              </button>
-            </td>
-          </tr>
-        {{/each}}
-        <tr>
-          <tr>
-         <td>
-           Novos contatos:
-         </td>
-       </tr>
-            <td>
-                <select name="inputContactType" class="form-control inputContactType">
-                    <option value="Telefone">Telefone</option>
-                    <option value="E-mail">E-mail</option>
-                    <option value="Fax">Fax</option>
-                </select>
-            </td>
-            <td><input type="text" id="newContactBox" name="inputContactBox" class="form-control inputContactBox ml-2" /></td>
-            <td>
-                <button type="button" name="add" class="btn btn-success add ml-4">
-                    <span class="fa fa-plus"></span>
-                </button>
-            </td>
-        </tr>
-     </table>
-    </div>
-    <br>
+            
+  <div class="form-row text-center">
+      <button type="submit" class="btn btn-success mr-2">Salvar</button> 
+      <a class=" btn btn-primary" href="/hospital/{{hos.hos_id}}/employee/sts/active" role="button">Voltar</a>
+  </div>
     
-    <div class="form-row text-center">
-        <button type="submit" class="btn btn-success mr-2">Salvar</button> 
-        <a class=" btn btn-primary" href="/hospital/{{hos.hos_id}}/employee/sts/active" role="button">Voltar</a>
-    </div>
 </form>
 
 

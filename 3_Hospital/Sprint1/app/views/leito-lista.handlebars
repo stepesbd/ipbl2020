@@ -1,0 +1,69 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+  integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.js"></script>
+
+<br>
+
+<a href="/Hospital/{{hos.hos_id}}/leito/New" class="float-right btn btn-success" alt="Cadastrar novo leito" title="Cadastrar novo leito"><i class="fa fa-plus mr-2" aria-hidden="true"></i> Adicionar</a>
+<div class="mt-4 mb-4">
+  <h3>
+    <i class="fa fa-user-md" aria-hidden="true"></i>
+    Leitos
+  </h3>
+  <h5>{{hos.hos_name}}</h5>
+</div>
+
+<div class="card mt-4 mb-4">
+    <div class="card-body">
+      <table id="listaLeitos" class="table responsive table-striped table-hover" style="width:100%">
+        <thead>
+          <tr>
+            <th>Nome Leito: </th>
+            <th>Prontutário</th>
+          <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each bed}}
+          <tr>
+            <td>{{bed_name}}</td>
+            <td>{{ bed_medical_record }}</td>
+            <td></td>
+        <!--    <td class="text-center">
+              <div class="form-row text-center btn-group btn-group-justified" style="width:90px">
+                <button id={{emp_id}} type="button" class="btn btn-primary btn-sm rounded-2"
+                  onclick="window.location.href='/hospital/{{@root.hosp.hos_id}}/leito/update/{{emp_id}}'" alt="Editar" data-toggle="tooltip" data-placement="top" title="Editar">
+                  <i class="fa fa-edit"></i>
+                </button>
+              </div>
+            </td>
+          </tr> -->
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+</div>
+ <a class="btn btn-primary" href="/Hospital" role="button">Voltar</a>
+
+
+<script>
+  $(document).ready(function () {
+    $('#listaLeitos').DataTable({
+            responsive: true,
+            columnDefs: [{ responsivePriority: 1, targets: 1 },
+                         { responsivePriority: 2, targets: -1 },
+                         { responsivePriority: 3, targets: 3 },
+                         { responsivePriority: 4, targets: 4 },],
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Portuguese-Brasil.json",
+                decimal: ',',
+            }
+        });
+  });
+</script>

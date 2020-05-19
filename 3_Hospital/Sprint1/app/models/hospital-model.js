@@ -61,6 +61,14 @@ module.exports = (sequelize, DataTypes) => {
 					msg: 'A razão social do Hospital deve conter entre 10 e 100 caracteres alfanumericos'
 				}
 			}
+		},
+		hos_privateKey: {
+			type: DataTypes.STRING,
+			allowNull: true,
+		},
+		hos_publicKey: {
+			type: DataTypes.STRING,
+			allowNull: true,
 		}
 
 	},{

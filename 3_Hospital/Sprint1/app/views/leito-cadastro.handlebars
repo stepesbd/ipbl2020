@@ -1,0 +1,35 @@
+<br />
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+  integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.13.4/jquery.mask.min.js"></script>
+
+<div class="mb-4">
+    <h3>
+        <i class="fa fa-user-md" aria-hidden="true"></i>
+        Cadastro de Leito
+    </h3>
+    <h5>{{hosp.hos_name}}</h5>
+</div>
+
+<form action="/hospital/{{hosp.hos_id}}/leito/" method="post">
+    <div class="card mt-4 mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="inputName">Nome Leito</label>
+                        <input type="text" class="form-control" name="inputName" placeholder="Nome do Leito" maxlength="100" minlength="3" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-row text-center">
+        <button type="submit" class="btn btn-success mr-2">Cadastrar</button> 
+        <a class=" btn btn-danger" href="/Hospital/{{hosp.hos_id}}/leito/sts/{{hosp.hos_id}}" role="button">Cancelar</a>
+    </div>
+    <br>
+</form>
+
