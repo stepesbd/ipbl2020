@@ -112,17 +112,16 @@ export default function PatientForm (props){
 
 return (
   <Container fluid className="main-content-container px-4">
-    <Row noGutters className="page-header py-4">
-      <PageTitle title="Cadastro de Paciente" subtitle="Cadastros" md="12" className="ml-sm-auto mr-sm-auto" />
-    </Row>
+   
+    <br/>
+    <br/>
     <Row>
-      
     {salert}
 
       <Col lg="12">
       <Card small className="mb-4">
         <CardHeader className="border-bottom">
-          <h6 className="m-0">Paciente</h6>
+          <h6 className="m-0">Registre-se</h6>
         </CardHeader>
         <ListGroup flush>
           <ListGroupItem className="p-3">
@@ -131,7 +130,7 @@ return (
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <Row form>
                     {/* First Name */}
-                    <Col md="6" className="form-group">
+                    <Col md="12" className="form-group">
                       <label htmlFor="feFirstName">Nome*</label>
                       <FormInput
                         name="nome"
@@ -142,7 +141,7 @@ return (
                       {errors.nome && <span class="obg">Obrigátorio</span>}
                     </Col>
                     {/* Last Name */}
-                    <Col md="6" className="form-group">
+                    <Col md="12" className="form-group">
                       <label htmlFor="feLastName">Sobrenome*</label>
                       <FormInput
                         name="sobrenome"
@@ -154,7 +153,7 @@ return (
                     </Col>
                   </Row>
                   <Row form>
-                    <Col md="4" className="form-group">
+                    <Col md="12" className="form-group">
                       <label htmlFor="feEmail">E-mail*</label>
                       <FormInput
                         name="email"
@@ -164,15 +163,17 @@ return (
                       />
                       {errors.email && <span class="obg">Obrigátorio</span>}
                     </Col>
-                    <Col md="4" className="form-group">
-                      <label htmlFor="fePassword">CPF</label>
+                    <Col md="6" className="form-group">
+                      <label htmlFor="fePassword">CPF*</label>
                       <FormInput
                         name="cpf"
                         placeholder="cpf"
-                        innerRef={register}
+                        invalid={errors.cpf}
+                        innerRef={register({ required: true })}
                       />
+                      {errors.cpf && <span class="obg">Obrigátorio</span>}
                     </Col>
-                    <Col md="4" className="form-group">
+                    <Col md="6" className="form-group">
                       <label htmlFor="fePassword">Data Nascimento</label>
                       <FormInput
                         name="datanasc"
@@ -224,7 +225,7 @@ return (
                   </Row>*/}
                   <br/>
                   <Button theme="accent">Salvar</Button>
-                  <NavLink to="/patient-list">        
+                  <NavLink to="/step1">        
                     <Button theme="default" style={{marginLeft:'10px'}}>Voltar</Button>
                   </NavLink>
                   </form> 

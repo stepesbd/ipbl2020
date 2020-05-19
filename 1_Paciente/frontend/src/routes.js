@@ -2,7 +2,7 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 
 // Layout Types
-import { DefaultLayout } from "./layouts";
+import { DefaultLayout, Default2Layout } from "./layouts";
 
 // Route Views
 import Dashboard from "./views/Dashboard";
@@ -10,7 +10,10 @@ import UserProfile from "./views/UserProfile";
 import Errors from "./views/Help/Errors";
 import ComponentsOverview from "./views/Help/ComponentsOverview";
 import Tables from "./views/Help/Tables";
-
+import Step1 from "./views/Attendance/Step1";
+import Step2 from "./views/Attendance/Step2";
+import Step3 from "./views/Attendance/Step3";
+import Register from "./views/Attendance/Register";
 
 import PatientList from "./views/Registration/PatientList";
 import PatientForm from "./views/Registration/PatientForm";
@@ -56,5 +59,25 @@ export default [
     path: "/tables",
     layout: DefaultLayout,
     component: Tables
+  },
+  {
+    path: "/step1",
+    layout: Default2Layout,
+    component: Step1
+  },
+  {
+    path: "/step2",
+    layout: Default2Layout,
+    component: Step2
+  },
+  {
+    path: "/step3",
+    layout: Default2Layout,
+    component: Step3
+  },
+  {
+    path: "/register",
+    layout: Default2Layout,
+    component: Register
   }
 ];

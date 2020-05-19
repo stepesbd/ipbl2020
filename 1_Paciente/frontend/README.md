@@ -1,7 +1,10 @@
 
 
 <p align="center">
-Project React with admin template.
+Project React with admin template. 
+</p>
+<p>
+Doc template: https://designrevision.com/docs/shards-react/component/alert#
 </p>
 
 <br />
