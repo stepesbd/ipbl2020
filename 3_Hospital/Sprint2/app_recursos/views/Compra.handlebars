@@ -1,0 +1,179 @@
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/fixedcolumns/3.3.0/js/dataTables.fixedColumns.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+
+<div class="mb-4">
+  <h3>
+    <i class="fas fa-handshake" aria-hidden="true"></i>
+    Compras
+  </h3>
+</div>
+
+<hr>
+
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+  <p class="lead">Escolha um dos itens disponíveis pelos fornecedores.</p>
+</div>
+
+
+<div class="card mt-4 mb-4">
+  <div class="card-body">
+    <table id="listaCompra" class="table responsive table-striped table-hover" style="width:100%">
+
+      <thead>
+        <tr>
+            <th class="text-center">DESCRIÇÃO</th>
+            <th class="text-center">TIPO</th>
+            <th class="text-center">FABRICANTE</th>
+            <th class="text-center">FORNECEDOR</th>
+            <th class="text-center">PREÇO <br> UNITÁRIO</th>
+            <th class="text-center">QUANTIDADE <br> DISPONÍVEL</th>
+            <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+          {{#each item}}
+            <tr>
+              <td class="text-center">{{asset.Product.Description}}</td>
+              <td class="text-center">{{asset.Product.Type}}</td>
+              <td class="text-center">{{asset.Product.Manufacturer}}</td>
+              <td class="text-center">{{provider.name}}</td>
+              <td class="text-center money">{{unit_price}}</td>
+              <td class="text-center">{{quantidade}}</td>
+              <td class="text-center" data-priority="2">
+                <div class="form-row text-center btn-group btn-group-justified" style="width:70px">
+                    <div>
+                      <button id="{{transaction_id}}" type="button" class="btn btn-primary rounded-2 mr-2" data-toggle="modal" alt="Comprar" title="Comprar"
+                        data-target="#mdUpdate{{transaction_id}}">
+                        <i class="fas fa-cart-plus fa-lg" ></i>
+                      </button>
+                    </div>
+                  </div>
+                </td>
+            </tr>
+          {{/each}}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<form action="/" method="GET">
+  <div class="form-row text-center">
+    {{#if hos}}
+      <a href="/hospital/{{hos.hos_cnes_code}}" class=" btn btn-primary">Voltar</a>
+    {{else}}
+      <a href="/fornecedor/{{pro.pro_id}}" class=" btn btn-primary">Voltar</a>
+    {{/if}}"
+  </div>  
+</form>
+
+
+</body>
+
+{{#each item}}
+<!-- Modal Update -->
+<div class="modal fade bd-example-modal-lg" id="mdUpdate{{transaction_id}}" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel{{transaction_id}}"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="updateModalLabel{{transaction_id}}">Confira o item e escolha a quantidade</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- FORM COMPRA  -->
+        <form action="{{#if @root.hos}}
+                        /hospital/{{@root.hos.hos_cnes_code}}/purchased/order
+                      {{else}}
+                        /fornecedor/{{@root.pro.pro_id}}/purchased/order
+                      {{/if}}" method="POST">       
+
+              <table class="table">
+                <tr>
+                  <td style="width:30%"><h6><strong>Produto: </strong> </h6></td>
+                  <td>{{asset.Product.Description}}</td>
+                </tr>
+                <tr>
+                  <td style="width:30%"><h6><strong>Tipo: </strong> </h6></td>
+                  <td>{{asset.Product.Type}}</td>
+                </tr>
+                <tr>
+                  <td style="width:30%"><h6><strong>Fornecedor: </strong> </h6></td>
+                  <td>{{provider.name}}</td>
+                </tr>
+                <tr>
+                  <td style="width:30%"><h6><strong>Quantidade Disponivel: </strong> </h6></td>
+                  <td>{{quantidade}}</td>
+                </tr>
+              </table>
+          <hr>
+          <div class="col">
+            <div class="form-group">
+                <li class="list-group-item list-group-item-primary text-center mb-2">
+                  <h6>Quantidade solicitada</h6>
+                </li>
+                <input type="number" class="form-control" name="inputQty" placeholder="Número" maxlength="5" required>
+                <input type="hidden" id="inputTransactionID" name="inputTransactionID" value="{{transaction_id}}">
+                <input type="hidden" id="inputProviderID" name="inputProviderID" value="{{provider.id}}">
+                </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-success">Comprar</button>
+          </div>
+        </form>
+        <!--  FIM FORM COMPRA  --->
+      </div>
+    </div>
+  </div>
+</div>
+{{/each}}
+
+
+<script>
+
+$(document).ready(function () {
+    $('#listaCompra').DataTable({
+            responsive: true,
+            columnDefs: [{ responsivePriority: 1, targets: 0 },
+                         { responsivePriority: 2, targets: -1 },
+                         { responsivePriority: 3, targets: 2 }],
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Portuguese-Brasil.json",
+                decimal: ',',
+            }
+        });
+  });
+
+
+      var MoneyOpts = { reverse:true,
+                      maxlength: false,
+                      placeholder: 'Insira um valor',
+                      onKeyPress: function(v, ev, curField, opts) {
+                        var mask = curField.data('mask').mask;
+                            decimalSep = (/0(.)00/gi).exec(mask)[1] || ',';
+                        if (curField.data('mask-isZero') && curField.data('mask-keycode') == 8)
+                          $(curField).val('');
+                        else if (v) {
+                          // remove previously added stuff at start of string
+                          v = v.replace(new RegExp('^0*\\'+decimalSep+'?0*'), ''); //v = v.replace(/^0*,?0*/, '');
+                          v = v.length == 0 ? '0'+decimalSep+'00' : (v.length == 1 ? '0'+decimalSep+'0'+v : (v.length == 2 ? '0'+decimalSep+v : v));
+                          $(curField).val(v).data('mask-isZero', (v=='0'+decimalSep+'00'));
+                        }
+                      }
+                    };
+
+ $('.money').mask("#.##0,00", MoneyOpts);
+
+</script>

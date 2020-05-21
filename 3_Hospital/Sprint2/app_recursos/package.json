@@ -19,6 +19,7 @@
     "express": "~4.16.0",
     "express-handlebars": "^3.0.2",
     "express-session": "^1.17.1",
+    "got": "^11.1.4",
     "http-errors": "~1.6.2",
     "moment": "^2.24.0",
     "mongodb": "^3.5.7",

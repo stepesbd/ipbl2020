@@ -1,0 +1,101 @@
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/fixedcolumns/3.3.0/js/dataTables.fixedColumns.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.13.4/jquery.mask.min.js"></script>
+
+<div class="mb-4">
+  <h3>
+    <i class="fas fa-handshake" aria-hidden="true"></i>
+    Venda
+  </h3>
+</div>
+
+<hr>
+
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+  <p class="lead">Preencha os dados do novo item para vender.</p>
+</div>
+
+<form action="/fornecedor/{{pro.pro_id}}/new" method="POST">
+<div class="card mt-4 mb-4">
+  <div class="card-body">
+    
+    <div class="row">
+      <div class="col col-md-8">
+          <div class="form-group">
+              <label for="inputNome">Descrição</label>
+              <input type="text" class="form-control" name="inputDesc" placeholder="" required>
+          </div>
+      </div>
+      <div class="col">
+          <div class="form-group">
+              <label for="inputFabric">Fabricante</label>
+              <input type="text" class="form-control" name="inputFabric" placeholder="" required>
+          </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+          <label for="inputType">Tipo</label>
+          <select name="inputType" class="form-control">
+                  <option value="Descartaveis">Descartável</option>
+                  <option value="Permanente">Permanente</option>
+            </select>
+      </div>
+      <div class="col">
+          <div class="form-group">
+              <label for="inputQty">Quantidade</label>
+              <input type="number" class="form-control" name="inputQty" placeholder="Número" maxlength="5" required>
+          </div>
+      </div>
+      <div class="col">
+        <label for="inputPrice">Preço unitário</label>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">R$</span>
+          </div>
+          <input type="text" id="inputPrice" name="inputPrice" class="money form-control" maxlength="10" onkeypress="return /[0-9]/i.test(event.key)" required/>
+        </div>
+      </div>
+      </div>
+  </div>
+</div>
+
+  <div class="form-row text-center">
+          <button type="submit" class="btn btn-success mr-2">Vender</button> 
+          <a class=" btn btn-danger" href="/fornecedor/{{pro.pro_id}}/" role="button">Cancelar</a>
+  </div>
+ </form>
+
+</body>
+
+
+<script>
+
+    var MoneyOpts = { reverse:true,
+                      maxlength: false,
+                      placeholder: 'Insira um valor',
+                      onKeyPress: function(v, ev, curField, opts) {
+                        var mask = curField.data('mask').mask;
+                            decimalSep = (/0(.)00/gi).exec(mask)[1] || ',';
+                        if (curField.data('mask-isZero') && curField.data('mask-keycode') == 8)
+                          $(curField).val('');
+                        else if (v) {
+                          // remove previously added stuff at start of string
+                          v = v.replace(new RegExp('^0*\\'+decimalSep+'?0*'), ''); //v = v.replace(/^0*,?0*/, '');
+                          v = v.length == 0 ? '0'+decimalSep+'00' : (v.length == 1 ? '0'+decimalSep+'0'+v : (v.length == 2 ? '0'+decimalSep+v : v));
+                          $(curField).val(v).data('mask-isZero', (v=='0'+decimalSep+'00'));
+                        }
+                      }
+                    };
+
+ $('.money').mask("#.##0,00", MoneyOpts);
+
+</script>
