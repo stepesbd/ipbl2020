@@ -21,10 +21,11 @@ exports.get = async (req, res, next) => {
 
         // ESTABELECENDO CONEXÃO COM API DA BIGCHAINDB
         const conn = new driver.Connection(BigchainDB_API_PATH)
-
-        var teste = ''
+        var type_of_page = '';
+        if(req.params.page)
+            type_of_page = req.params.page.toUpperCase()
         // CASO ACESSADO PÁGINA DE ESTOQUE
-        if(req.params.page == 'estoque'){
+        if(type_of_page == 'ESTOQUE'){
             // LISTA DE ARRAYS PARA ARMAZENAR INFORMAÇÕES PASSADAS PARA FRONT-END
             const userAssets = [];
             const assetHistory = [];
@@ -93,57 +94,95 @@ exports.get = async (req, res, next) => {
                 }));
             }
             res.render('Estoque', { title: 'Estoque Hospital' , hos: hos, assets: userAssets})
-        }else if(req.params.page == 'compra'){
-        // CASO ACESSADO PÁGINA DE COMPRA
-        
-            // ENCONTRANDO TODOS OS FORNECEDORES NO BANCO DE DADOS
-            const someProviders = await Provider.findAll();
-            
-            // BUSCAR TODOS OS ASSETS DOS FORNECEDORES E CONCENTRAR EM UM ÚNICO ARRAY
-            const providerAssets = []
-            await Promise.all(someProviders.map(async pro => {
-                // CASO O FORNECEDOR DA VEZ TENHA CHAVE JÁ CADASTRADA, FAZ A BUSCA DE ITENS À VENDA
-                if(pro.pro_privateKey){
-                    // LISTAR TODOS OS UNSPENT-ASSETS DESTE FORNECEDOR
-                    const proAllTransfers = await conn.listOutputs(pro.pro_publicKey, false)
-                    // MAPEAR TODAS OS UNSPENT-ASSETS
-                    await Promise.all(proAllTransfers.map(async oneTransfer => {
-                        const transaction_id = oneTransfer.transaction_id
-                        const transaction = await conn.getTransaction(transaction_id)
+        }else if(type_of_page == 'COMPRA'){
+            var type_of_mode = '';
+            if(req.params.mode)
+                type_of_mode = req.params.mode.toUpperCase()
+            // CASO ACESSADO PÁGINA DE COMPRA
+            if(type_of_mode != 'PEDIDOS'){   // SUBPÁGINA DE NOVOS PEDIDOS
+                // ENCONTRANDO TODOS OS FORNECEDORES NO BANCO DE DADOS
+                const someProviders = await Provider.findAll();
+                
+                // BUSCAR TODOS OS ASSETS DOS FORNECEDORES E CONCENTRAR EM UM ÚNICO ARRAY
+                const providerAssets = []
+                await Promise.all(someProviders.map(async pro => {
+                    // CASO O FORNECEDOR DA VEZ TENHA CHAVE JÁ CADASTRADA, FAZ A BUSCA DE ITENS À VENDA
+                    if(pro.pro_privateKey){
+                        // LISTAR TODOS OS UNSPENT-ASSETS DESTE FORNECEDOR
+                        const proAllTransfers = await conn.listOutputs(pro.pro_publicKey, false)
+                        // MAPEAR TODAS OS UNSPENT-ASSETS
+                        await Promise.all(proAllTransfers.map(async oneTransfer => {
+                            const transaction_id = oneTransfer.transaction_id
+                            const transaction = await conn.getTransaction(transaction_id)
 
-                        // MAPERAR TODOS OS OUTPUTS DESTA TRANSFER (JÁ FORNECEDOR JÁ VENDEU PARCIAL)
-                        await Promise.all(transaction.outputs.map(async output => {
-                            // IDENTIFICA O FORNECEDOR ATRAVÉS DA CHAVE PÚBLICA NO OUTPUT
-                            const pro = await Provider.findOne({where: { pro_publicKey: output.public_keys[0] }})
-                            // CASO O ASSET SEJA DE UM FORNECEDOR, ESTÁ À VENDA
-                            if(pro){
-                                // DE ACORDO COM O TIPO DE UNSPENT-TRANSFER (CREATE/TRANSFER), PREENCHER O ARRAY DE ASSETS
-                                const provider = transaction.metadata.Provider
-                                const unit_price = transaction.metadata.Unit_price
-                                if(transaction.operation == 'CREATE'){
-                                    const asset = transaction.asset.data
-                                    const quantidade = output.amount
-                                    const asset_info = { provider, unit_price, asset, quantidade, transaction_id }
-                                    providerAssets.push(asset_info);
-                                }else if(transaction.operation == 'TRANSFER'){
-                                    const assetFullString = await got('http://35.247.236.106:9984/api/v1/assets/?search=' + transaction.asset.id);
-                                    const assetFullObj = JSON.parse(assetFullString.body);
-                                    const asset = assetFullObj[0].data
-                                    const quantidade = output.amount
-                                    const asset_info = { provider, unit_price, asset, quantidade, transaction_id }
-                                    providerAssets.push(asset_info);
+                            // MAPERAR TODOS OS OUTPUTS DESTA TRANSFER (JÁ FORNECEDOR JÁ VENDEU PARCIAL)
+                            await Promise.all(transaction.outputs.map(async output => {
+                                // IDENTIFICA O FORNECEDOR ATRAVÉS DA CHAVE PÚBLICA NO OUTPUT
+                                const pro = await Provider.findOne({where: { pro_publicKey: output.public_keys[0] }})
+                                // CASO O ASSET SEJA DE UM FORNECEDOR, ESTÁ À VENDA
+                                if(pro){
+                                    // DE ACORDO COM O TIPO DE UNSPENT-TRANSFER (CREATE/TRANSFER), PREENCHER O ARRAY DE ASSETS
+                                    const provider = transaction.metadata.Provider
+                                    const unit_price = transaction.metadata.Unit_price
+                                    if(transaction.operation == 'CREATE'){
+                                        const asset = transaction.asset.data
+                                        const quantidade = output.amount
+                                        const asset_info = { provider, unit_price, asset, quantidade, transaction_id }
+                                        providerAssets.push(asset_info);
+                                    }else if(transaction.operation == 'TRANSFER'){
+                                        const assetFullString = await got('http://35.247.236.106:9984/api/v1/assets/?search=' + transaction.asset.id);
+                                        const assetFullObj = JSON.parse(assetFullString.body);
+                                        const asset = assetFullObj[0].data
+                                        const quantidade = output.amount
+                                        const asset_info = { provider, unit_price, asset, quantidade, transaction_id }
+                                        providerAssets.push(asset_info);
+                                    }
                                 }
-                            }
-                        }));
-                    })).catch(err=>{
-                        console.log(err)
-                    });
-                }
-            })).catch(err=>{
-                console.log(err)
-            })
-            
-            res.render('Compra', { title: 'Compra de Material', hos: hos, item: providerAssets })
+                            }));
+                        })).catch(err=>{
+                            console.log(err)
+                        });
+                    }
+                })).catch(err=>{
+                    console.log(err)
+                })
+                res.render('Compra-novos', { title: 'Compra de Material', hos: hos, item: providerAssets, abaNovos: 'active' })
+            }else{  // SUBPÁGINA DE PEDIDOS JÁ REALIZADOS
+                // ENCONTRAR TODOS OS PEDIDOS DE UM DETERMINADO HOSPITAL
+                const ords = await Order.findAll({
+                    raw: true,
+                    include: [{
+                        model: Hospital,
+                        through: { model: Ord_seller_consumer }
+                    }]
+                });
+
+                // MAPEAR CADA PEDIDO E COLOCAR SUAS INFORMAÇÕES EM UM ARRAY ORDERS
+                var orders = []
+                await Promise.all(ords.map(async ord => {
+                    // CONCATENAR INFORMAÇÕES DO PEDIDO MYSQL COM ID DA TRANSFER NA BLOCKCHAIN
+                    const transaction = await conn.getTransaction(ord.ord_asset_id)
+                    // ACHANDO O FORNECEDOR DO PRODUTO
+                    const pro = await Provider.findOne({ raw: true, where: { pro_publicKey: transaction.inputs[0].owners_before[0] }})
+                    // ENCONTRANDO O ASSET QUE ESTÁ À VENDA
+                    const asset = transaction.asset.data.Product
+                    // CALCULANDO O VALOR TOTAL DA COMPRA
+                    var totalPrice = transaction.metadata.Unit_price
+                    totalPrice = totalPrice.split('R').join("");
+                    totalPrice = totalPrice.split('$').join("");
+                    totalPrice = totalPrice.split(' ').join("");
+                    totalPrice = totalPrice.split(',').join("");
+                    totalPrice = parseFloat(totalPrice)  * ord.ord_quantity
+                    totalPrice = totalPrice.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})
+                    // COLOCANDO TUDO EM UM OBJETO PARA ENVIAR AO FRONT-END
+                    var orderJoinObj = { ord, pro, asset, totalPrice }
+                    // EMPILHA INFORMAÇÕES DA ORDER NO ARRAY
+                    orders.push(orderJoinObj)
+                }));
+                // REDIRECIONA APÓS CONCLUIR PEDIDO
+                res.render('Compra-pedidos', { title: 'Compra de Material', hos: hos, orders: orders, abaPedidos: 'active'})
+            }
+
         }else{
             res.render('index', { title: 'Recursos' , hos: hos})
         }
@@ -184,7 +223,6 @@ exports.post = async (req, res, next) => {
                     },
                     {where: {hos_cnes_code: req.params.user_id}}
                 )
-                
             }
 
             // IDENTIFICANDO AS CHAVES DE ASSINATURA DO COMPRADOR E VENDEDOR
@@ -263,49 +301,50 @@ exports.post = async (req, res, next) => {
             // NUMERO DE OUTPUTS JÁ TRANSFERIDOS DO FORNECEDOR
             .then(()=>{
                 req.flash("success_msg", "Aquisição de material realizada com sucesso.")
-                res.redirect("/hospital/" + Hos.hos_cnes_code + "/estoque") 
+                res.redirect("/hospital/" + Hos.hos_cnes_code + "/compra") 
             }).catch((err)=>{console.log(err); throw err})
         }
 
         if(type_of_purchase == 'ORDER'){
-            
-            
-            Order.create({
-                ord_asset_id : req.body.inputTransactionID,
-                ord_quantity: req.body.inputQty,
-                ord_date : new Date(),
-                }).then( (ord) => {
-                    Provider.findOne({ where: {pro_id: req.body.inputProviderID}, raw: true }).then((pro)=>{
-                        // ENCONTRANDO O HOSPITAL COMPRADOR
-                        Hospital.findOne({ where: {hos_cnes_code: req.params.user_id}, raw: true }).then((Hos)=>{
-
-                            ord.addHospital(Hos.hos_id, {
-                                through: { 
-                                    osc_seller_id: pro.pro_id,
-                                } 
-                            })
-
-                            req.flash("success_msg", "Pedido feito com sucesso. Aguarde confirmação do fornecedor.")
-                            res.redirect("/hospital/" + Hos.hos_cnes_code + "/estoque") 
-                        }).catch((err)=>{
-                            console.log(err);
-                            req.flash("error_msg", "Erro ao realizar pedido.");
-                            return res.redirect('/0');
-                        });
-                    });
-                    
-                    // ENCONTRANDO O FORNECEDOR VENDEDOR E COLETANDO SUAS INFORMAÇÕES
-                    
-                    
-                    
-                }).catch((err)=>{
-                    console.log(err);
-                    req.flash("error_msg", "Erro ao realizar pedido.");
-                    return res.redirect('/0');
+            // INICIANDO CONEXÃO COM API BIGCHAINDB
+            const conn = new driver.Connection(BigchainDB_API_PATH)
+            // IDENTIFICANDO A TRANSACTION QUE A ORDER SE REFERE NA BLOCKCHAIN
+            const transaction = await conn.getTransaction(req.body.inputTransactionID)
+            // IDENTIFICANDO O FORNECEDOR
+            const pro = await Provider.findOne({ where: {pro_id: req.body.inputProviderID}, raw: true });
+            // ENCONTRANDO O HOSPITAL COMPRADOR
+            const Hos = await Hospital.findOne({ where: {hos_cnes_code: req.params.user_id}, raw: true });
+            // IDENTIFICANDO A QUANTIDADE REMANESCENTE NO ESTOQUE DO FORNECEDOR
+            var remainQuantity = 0;
+            if(transaction.operation == 'CREATE'){
+                remainQuantity = parseInt(transaction.outputs[0].amount) - req.body.inputQty
+            }else if(transaction.operation == 'TRANSFER'){
+                await Promise.all(transaction.outputs.map(async output => {
+                    if(output.public_keys[0] == pro.pro_publicKey){
+                        remainQuantity = parseInt(output.amount) - req.body.inputQty
+                    }
+                }))
+            }
+            // VERIFICANDO SE A QUANTIDADE SOLICITADA É MAIOR QUE O ESTOQUE DO FORNECEDOR
+            if(remainQuantity >= 0){    // SE FOR MENOR OU IGUAL, PERMITE REGISTRO DE PEDIDO
+                // CRIANDO REGISTRO DE PEDIDO NO BANCO RELACIONAL
+                const ord = await Order.create({
+                    ord_asset_id : req.body.inputTransactionID,
+                    ord_quantity: req.body.inputQty,
+                    ord_date : new Date(),
+                    // ORD_STATUS NO BANCO É DEFAULT 'processing'
+                });
+                // CRIANDO REGISTRO NA JOIN TABLE ORD_SELLER_CONSUMER
+                ord.addHospital(Hos.hos_id, {
+                    through: { osc_seller_id: pro.pro_id,} 
                 })
-
+                req.flash("success_msg", "Pedido feito com sucesso. Aguarde confirmação do fornecedor.")
+                return res.redirect("/hospital/" + Hos.hos_cnes_code + "/compra") 
+            }else{  // SE FOR MAIOR, IMPEDE REGISTRO COM MENSAGEM DE ERRO
+                req.flash("error_msg", "Não é possível comprar um número acima do estoque.");
+                return res.redirect("/hospital/" + Hos.hos_cnes_code + "/compra")
+            }
         }
-           
     }catch(err){
         console.log(err);
         req.flash("error_msg", "Erro ao carregar a página.");

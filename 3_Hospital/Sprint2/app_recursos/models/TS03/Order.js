@@ -13,7 +13,9 @@ module.exports = (sequelize, DataTypes) => {
 		ord_date: { type: DataTypes.DATE,
             allowNull: true
         },
-
+		ord_status: { type: DataTypes.DATE,
+            allowNull: true
+        },
 	},{
 		freezeTableName: true,
 		timestamps: false,
