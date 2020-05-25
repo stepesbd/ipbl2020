@@ -10,6 +10,12 @@ const { Provider } = require('../models/TS03');
 const { Order } = require('../models/TS03');
 const { Ord_seller_consumer } = require('../models/TS03');
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/* 
+    MÉTODO GET
+*/
+
 exports.get = async (req, res, next) => {
 
     try{
@@ -164,8 +170,7 @@ exports.get = async (req, res, next) => {
                     const transaction = await conn.getTransaction(ord.ord_asset_id)
                     // ACHANDO O FORNECEDOR DO PRODUTO
                     const pro = await Provider.findOne({ raw: true, where: { pro_publicKey: transaction.inputs[0].owners_before[0] }})
-                    // ENCONTRANDO O ASSET QUE ESTÁ À VENDA
-                    const asset = transaction.asset.data.Product
+
                     // CALCULANDO O VALOR TOTAL DA COMPRA
                     var totalPrice = transaction.metadata.Unit_price
                     totalPrice = totalPrice.split('R').join("");
@@ -174,10 +179,26 @@ exports.get = async (req, res, next) => {
                     totalPrice = totalPrice.split(',').join("");
                     totalPrice = parseFloat(totalPrice)  * ord.ord_quantity
                     totalPrice = totalPrice.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})
-                    // COLOCANDO TUDO EM UM OBJETO PARA ENVIAR AO FRONT-END
-                    var orderJoinObj = { ord, pro, asset, totalPrice }
-                    // EMPILHA INFORMAÇÕES DA ORDER NO ARRAY
-                    orders.push(orderJoinObj)
+                    
+                    // ENCONTRANDO O ASSET QUE ESTÁ À VENDA
+                    if(transaction.operation == 'CREATE'){  // CASO CREATE, É A PRIMEIRA VENDA DO FORNECEDOR
+                        // ENCONTRAR NA TRANSACTION CREATE O ASSET JÁ POPULATED
+                        const asset = transaction.asset.data.Product
+                        // COLOCANDO TUDO EM UM OBJETO PARA ENVIAR AO FRONT-END
+                        var orderJoinObj = { ord, pro, asset, totalPrice }
+                        // EMPILHA INFORMAÇÕES DA ORDER NO ARRAY
+                        orders.push(orderJoinObj)
+                    }else if(transaction.operation == 'TRANSFER'){  // CASO TRANSFER, FORNECEDOR JÁ VENDEU, PELO MENOS UMA VEZ, ITENS DO LOTE DO ASSET
+                        // ENCONTRAR O ASSET NA COLLECTION DO BANCO DE DADOS ATRAVÉS DO ASSET_ID DA TRANSACTION TRANSFER
+                        const assetObj = await bigchain.collection('assets').findOne({ id: transaction.asset.id });
+                        // ENCONTRAR OS DADOS PERTINENTES DO ASSET
+                        const asset = assetObj.data.Product
+                        // COLOCANDO TUDO EM UM OBJETO PARA ENVIAR AO FRONT-END
+                        var orderJoinObj = { ord, pro, asset, totalPrice }
+                        // EMPILHA INFORMAÇÕES DA ORDER NO ARRAY
+                        orders.push(orderJoinObj)
+                    }
+                    
                 }));
                 // REDIRECIONA APÓS CONCLUIR PEDIDO
                 res.render('Compra-pedidos', { title: 'Compra de Material', hos: hos, orders: orders, abaPedidos: 'active'})
@@ -204,7 +225,7 @@ exports.get = async (req, res, next) => {
 exports.post = async (req, res, next) => {
     try{    
         var type_of_purchase = req.params.type.toUpperCase()
-        if(type_of_purchase == 'DIRECT'){
+        if(type_of_purchase == 'RECEBER'){
             // ENCONTRANDO O FORNECEDOR VENDEDOR E COLETANDO SUAS INFORMAÇÕES
             const pro = await Provider.findOne({ where: {pro_id: req.body.inputProviderID}, raw: true }); req.body.inputProviderID 
             const pro_info = {name: pro.pro_name, id: pro.pro_id}
@@ -261,7 +282,6 @@ exports.post = async (req, res, next) => {
                     }
                 }))
             }
-
            
             // DEFININDO OS OUTPUTS DA TRRANSAÇÃO A PARTIR DA QUANTIDADE COMPRADA
             var outputs = []
@@ -299,9 +319,15 @@ exports.post = async (req, res, next) => {
             // POST COM UM COMMIT, ENTÃO A TRANSAÇÃO É VALIDADE E INSERIDA EM UM BLOCO
             conn.postTransaction(txTransferAssetSigned)
             // NUMERO DE OUTPUTS JÁ TRANSFERIDOS DO FORNECEDOR
-            .then(()=>{
-                req.flash("success_msg", "Aquisição de material realizada com sucesso.")
-                res.redirect("/hospital/" + Hos.hos_cnes_code + "/compra") 
+            .then(async ()=>{
+                // MENSAGEM DE SUCESSO NO CONSOLE
+                console.log('TRANSFER transaction realizada com sucesso: ' + txTransferAssetSigned)
+                // MODIFICANDO STATUS DA ORDER NO BANCO RELACIONAL
+                const ord = await Order.findByPk(req.body.inputOrderID)
+                await ord.save();
+                // REDIRECIONANDO APÓS A TRANSAÇÃO
+                req.flash("success_msg", "Material(is) adicionado(s) ao estoque com sucesso.")
+                res.redirect("/hospital/" + Hos.hos_cnes_code + "/compra")
             }).catch((err)=>{console.log(err); throw err})
         }
 

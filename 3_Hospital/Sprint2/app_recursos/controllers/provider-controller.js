@@ -101,6 +101,7 @@ exports.post = async (req, res, next) => {
                                 'Description': req.body.inputDesc,
                                 'Part_number': rand, 
                                 'Manufacturer': req.body.inputFabric,
+                                
                             }
                         },
                         // ASSET METADATA
