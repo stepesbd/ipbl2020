@@ -40,10 +40,10 @@ namespace rabbitMQPerformaceTest
                 factory.UserName = tbuser.Text;
                 factory.Password = tbPass.Text;
                 factory.HostName = tbServer.Text;
-                factory.VirtualHost = "/";
+                factory.Port = Protocols.DefaultProtocol.DefaultPort;
 
                 //ConnectionFactory factory = new ConnectionFactory();
-                //factory.Uri = new Uri("amqp://"+tbuser.Text+":"+tbPass.Text+"@"+tbServer.Text+":5672/");
+                //factory.Uri = new Uri("amqp://" + tbuser.Text + ":" + tbPass.Text + "@" + tbServer.Text + ":5672/");
 
                 conn = factory.CreateConnection();
 
@@ -105,9 +105,10 @@ namespace rabbitMQPerformaceTest
                     {
                         int id = Convert.ToInt32(data.Split(' ')[0]);
                         TimeSpan dif = DateTime.Now.Subtract(dicionarioTeste[id]);
-                        dicionarioResultado.Add(id, dif);
+                        dicionarioResultado.Add(id, dif);                        
                         textBox1.AppendText("teste : " + id.ToString() + " | Diferença de tempo: " + dif.ToString("ss':'fff") + Environment.NewLine);
-
+                        if (id == dicionarioTeste.Count)
+                            finalizarTeste();
                     }
                     catch (Exception)
                     {
@@ -139,29 +140,6 @@ namespace rabbitMQPerformaceTest
                     Thread.Sleep(Convert.ToInt32(msgSleep.Text));
                 }
 
-                Thread.Sleep(1000);
-
-                int perdidas = 0;
-                TimeSpan media = new TimeSpan();
-
-                foreach (var item in dicionarioTeste)
-                {
-                    if (!dicionarioResultado.ContainsKey(item.Key))
-                        perdidas++;
-                }
-
-                foreach (var item in dicionarioResultado)
-                {
-                    media += item.Value;
-                }
-
-                media = TimeSpan.FromMilliseconds(media.TotalMilliseconds / dicionarioResultado.Count);
-
-                label4.Text = "Mensagens perdidas: " + perdidas.ToString();
-                label5.Text = "Média de tempo: " + media.ToString("ss':'fff");
-
-                button1.Text = "Iniciar Teste";
-                button1.Enabled = true;
             }
             catch (Exception ex)
             {
@@ -171,6 +149,31 @@ namespace rabbitMQPerformaceTest
 
 
 
+        }
+
+        private void finalizarTeste()
+        {
+            int perdidas = 0;
+            TimeSpan media = new TimeSpan();
+
+            foreach (var item in dicionarioTeste)
+            {
+                if (!dicionarioResultado.ContainsKey(item.Key))
+                    perdidas++;
+            }
+
+            foreach (var item in dicionarioResultado)
+            {
+                media += item.Value;
+            }
+
+            media = TimeSpan.FromMilliseconds(media.TotalMilliseconds / dicionarioResultado.Count);
+
+            label4.Text = "Mensagens perdidas: " + perdidas.ToString();
+            label5.Text = "Média de tempo: " + media.ToString("ss':'fff");
+
+            button1.Text = "Iniciar Teste";
+            button1.Enabled = true;
         }
 
         private void button3_Click(object sender, EventArgs e)

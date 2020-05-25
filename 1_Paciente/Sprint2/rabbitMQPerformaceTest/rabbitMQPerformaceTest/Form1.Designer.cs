@@ -189,7 +189,7 @@
             this.tbServer.Name = "tbServer";
             this.tbServer.Size = new System.Drawing.Size(197, 22);
             this.tbServer.TabIndex = 19;
-            this.tbServer.Text = "localhost";
+            this.tbServer.Text = "stepesbd.ddns.net";
             // 
             // label9
             // 
@@ -233,7 +233,7 @@
             this.tbPass.Name = "tbPass";
             this.tbPass.Size = new System.Drawing.Size(95, 22);
             this.tbPass.TabIndex = 24;
-            this.tbPass.Text = "guest";
+            this.tbPass.Text = "stepesbd2020";
             // 
             // label11
             // 
