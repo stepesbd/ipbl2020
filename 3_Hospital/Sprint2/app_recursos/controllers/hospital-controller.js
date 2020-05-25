@@ -159,7 +159,11 @@ exports.get = async (req, res, next) => {
                     raw: true,
                     include: [{
                         model: Hospital,
-                        through: { model: Ord_seller_consumer }
+                        through: { 
+                            model: Ord_seller_consumer,
+                            where: { osc_consumer_id: hos.hos_id }
+                        },
+                        where: { hos_id: hos.hos_id }
                     }]
                 });
 
@@ -321,13 +325,14 @@ exports.post = async (req, res, next) => {
             // NUMERO DE OUTPUTS JÁ TRANSFERIDOS DO FORNECEDOR
             .then(async ()=>{
                 // MENSAGEM DE SUCESSO NO CONSOLE
-                console.log('TRANSFER transaction realizada com sucesso: ' + txTransferAssetSigned)
+                console.log('TRANSFER transaction realizada com sucesso: ' + txTransferAssetSigned.id)
                 // MODIFICANDO STATUS DA ORDER NO BANCO RELACIONAL
                 const ord = await Order.findByPk(req.body.inputOrderID)
+                ord.ord_status = 'complete'
                 await ord.save();
                 // REDIRECIONANDO APÓS A TRANSAÇÃO
                 req.flash("success_msg", "Material(is) adicionado(s) ao estoque com sucesso.")
-                res.redirect("/hospital/" + Hos.hos_cnes_code + "/compra")
+                res.redirect("/hospital/" + Hos.hos_cnes_code + "/compra/pedidos")
             }).catch((err)=>{console.log(err); throw err})
         }
 
