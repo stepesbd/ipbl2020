@@ -18,7 +18,7 @@ namespace stepesdb_api
         public string PatRhFactor { get; set; }
         public DateTime PatInclusionDate { get; set; }
         public int PatStatus { get; set; }
-        public int PerId { get; set; }
+        public int? PerId { get; set; }
 
         public virtual Person Per { get; set; }
         public virtual ICollection<Attendance> Attendance { get; set; }

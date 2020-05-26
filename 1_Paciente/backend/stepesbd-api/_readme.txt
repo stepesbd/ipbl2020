@@ -5,7 +5,7 @@ dotnet add package Microsoft.VisualStudio.Web.CodeGeneration.Design
 dotnet tool install --global dotnet-aspnet-codegenerator
 
 Gerar Context
-dotnet ef dbcontext scaffold "Server=database-test.c0aryf8gxxoa.sa-east-1.rds.amazonaws.com;Database=stepes_bd;User=admin;Password=password;TreatTinyAsBoolean=true;" "Pomelo.EntityFrameworkCore.MySql"
+dotnet ef dbcontext scaffold "Server=stepesbd.ddns.net;Database=stepes_bd;User=root;Password=stepesbd2020;Port=6603;TreatTinyAsBoolean=true;" "Pomelo.EntityFrameworkCore.MySql"
 
 Atualizar Context
-dotnet ef dbcontext scaffold "Server=database-test.c0aryf8gxxoa.sa-east-1.rds.amazonaws.com;Database=stepes_bd;User=admin;Password=password;TreatTinyAsBoolean=true;" "Pomelo.EntityFrameworkCore.MySql" --force
+dotnet ef dbcontext scaffold "Server=stepesbd.ddns.net;Database=stepes_bd;User=root;Password=stepesbd2020;Port=6603;TreatTinyAsBoolean=true;" "Pomelo.EntityFrameworkCore.MySql" --force
