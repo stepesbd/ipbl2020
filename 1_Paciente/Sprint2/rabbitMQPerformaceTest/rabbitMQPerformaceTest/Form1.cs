@@ -68,7 +68,7 @@ namespace rabbitMQPerformaceTest
             QueueDeclareOk queue;
             using (var channel = connection.CreateModel())
             {
-                queue = channel.QueueDeclare(queueName, true, false, false, null);
+                queue = channel.QueueDeclare(queueName, false, false, true, null);
             }
             return queue;
         }
