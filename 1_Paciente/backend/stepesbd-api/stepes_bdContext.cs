@@ -27,8 +27,7 @@ namespace stepesdb_api
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseMySql("server=database-test.c0aryf8gxxoa.sa-east-1.rds.amazonaws.com;database=stepes_bd;user=admin;password=password;treattinyasboolean=true", x => x.ServerVersion("8.0.17-mysql"));
+                optionsBuilder.UseMySql("server=stepesbd.ddns.net;database=stepes_bd;user=root;password=stepesbd2020;port=6603;treattinyasboolean=true", x => x.ServerVersion("8.0.20-mysql"));
             }
         }
 
@@ -41,9 +40,7 @@ namespace stepesdb_api
 
                 entity.ToTable("address");
 
-                entity.Property(e => e.AddId)
-                    .HasColumnName("add_id")
-                    .HasColumnType("int(11)");
+                entity.Property(e => e.AddId).HasColumnName("add_id");
 
                 entity.Property(e => e.AddCity)
                     .IsRequired()
@@ -103,9 +100,7 @@ namespace stepesdb_api
                 entity.HasIndex(e => e.PatId)
                     .HasName("fk_att_pat_idx");
 
-                entity.Property(e => e.AttId)
-                    .HasColumnName("att_id")
-                    .HasColumnType("int(11)");
+                entity.Property(e => e.AttId).HasColumnName("att_id");
 
                 entity.Property(e => e.AttDate)
                     .HasColumnName("att_date")
@@ -122,7 +117,6 @@ namespace stepesdb_api
 
                 entity.Property(e => e.AttEmergency)
                     .HasColumnName("att_emergency")
-                    .HasColumnType("int(11)")
                     .HasComment("Boolean Value. 0-Routine 1-Emergency");
 
                 entity.Property(e => e.AttLocation)
@@ -133,9 +127,7 @@ namespace stepesdb_api
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
-                entity.Property(e => e.PatId)
-                    .HasColumnName("pat_id")
-                    .HasColumnType("int(11)");
+                entity.Property(e => e.PatId).HasColumnName("pat_id");
 
                 entity.HasOne(d => d.Pat)
                     .WithMany(p => p.Attendance)
@@ -157,13 +149,9 @@ namespace stepesdb_api
                 entity.HasIndex(e => e.PatId)
                     .HasName("fk_dia_pat_idx");
 
-                entity.Property(e => e.DiaId)
-                    .HasColumnName("dia_id")
-                    .HasColumnType("int(11)");
+                entity.Property(e => e.DiaId).HasColumnName("dia_id");
 
-                entity.Property(e => e.DiaChronic)
-                    .HasColumnName("dia_chronic")
-                    .HasColumnType("int(11)");
+                entity.Property(e => e.DiaChronic).HasColumnName("dia_chronic");
 
                 entity.Property(e => e.DiaClosed)
                     .IsRequired()
@@ -177,13 +165,9 @@ namespace stepesdb_api
                     .HasColumnName("dia_date")
                     .HasColumnType("date");
 
-                entity.Property(e => e.DisId)
-                    .HasColumnName("dis_id")
-                    .HasColumnType("int(11)");
+                entity.Property(e => e.DisId).HasColumnName("dis_id");
 
-                entity.Property(e => e.PatId)
-                    .HasColumnName("pat_id")
-                    .HasColumnType("int(11)");
+                entity.Property(e => e.PatId).HasColumnName("pat_id");
 
                 entity.HasOne(d => d.Dis)
                     .WithMany(p => p.Diagnosis)
@@ -205,9 +189,7 @@ namespace stepesdb_api
 
                 entity.ToTable("disease");
 
-                entity.Property(e => e.DisId)
-                    .HasColumnName("dis_id")
-                    .HasColumnType("int(11)");
+                entity.Property(e => e.DisId).HasColumnName("dis_id");
 
                 entity.Property(e => e.DisCode)
                     .IsRequired()
@@ -234,9 +216,7 @@ namespace stepesdb_api
                 entity.HasIndex(e => e.PatId)
                     .HasName("fk_emr_pat_idx");
 
-                entity.Property(e => e.EmrId)
-                    .HasColumnName("emr_id")
-                    .HasColumnType("int(11)");
+                entity.Property(e => e.EmrId).HasColumnName("emr_id");
 
                 entity.Property(e => e.EmrDate)
                     .HasColumnName("emr_date")
@@ -252,7 +232,6 @@ namespace stepesdb_api
 
                 entity.Property(e => e.EmrReferenceId)
                     .HasColumnName("emr_reference_id")
-                    .HasColumnType("int(11)")
                     .HasComment("Value of Primary Key in Target Entity");
 
                 entity.Property(e => e.EmrType)
@@ -264,9 +243,7 @@ namespace stepesdb_api
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
-                entity.Property(e => e.PatId)
-                    .HasColumnName("pat_id")
-                    .HasColumnType("int(11)");
+                entity.Property(e => e.PatId).HasColumnName("pat_id");
 
                 entity.HasOne(d => d.Pat)
                     .WithMany(p => p.EventMedicalRecord)
@@ -285,9 +262,7 @@ namespace stepesdb_api
                 entity.HasIndex(e => e.PerId)
                     .HasName("fk_pat_per_idx");
 
-                entity.Property(e => e.PatId)
-                    .HasColumnName("pat_id")
-                    .HasColumnType("int(11)");
+                entity.Property(e => e.PatId).HasColumnName("pat_id");
 
                 entity.Property(e => e.PatBloodGroup)
                     .HasColumnName("pat_blood_group")
@@ -309,22 +284,16 @@ namespace stepesdb_api
 
                 entity.Property(e => e.PatStatus)
                     .HasColumnName("pat_status")
-                    .HasColumnType("int(1)")
                     .HasDefaultValueSql("'1'")
                     .HasComment("1. ativo (default) 2. falecido 3. exclusão por erro operacional");
 
-                entity.Property(e => e.PatSusNumber)
-                    .HasColumnName("pat_sus_number")
-                    .HasColumnType("int(11)");
+                entity.Property(e => e.PatSusNumber).HasColumnName("pat_sus_number");
 
-                entity.Property(e => e.PerId)
-                    .HasColumnName("per_id")
-                    .HasColumnType("int(11)");
+                entity.Property(e => e.PerId).HasColumnName("per_id");
 
                 entity.HasOne(d => d.Per)
                     .WithMany(p => p.Patient)
                     .HasForeignKey(d => d.PerId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_pat_per");
             });
 
@@ -342,21 +311,15 @@ namespace stepesdb_api
                     .HasName("per_cpf_UNIQUE")
                     .IsUnique();
 
-                entity.Property(e => e.PerId)
-                    .HasColumnName("per_id")
-                    .HasColumnType("int(11)");
+                entity.Property(e => e.PerId).HasColumnName("per_id");
 
-                entity.Property(e => e.AddId)
-                    .HasColumnName("add_id")
-                    .HasColumnType("int(11)");
+                entity.Property(e => e.AddId).HasColumnName("add_id");
 
                 entity.Property(e => e.PerBirth)
                     .HasColumnName("per_birth")
                     .HasColumnType("date");
 
-                entity.Property(e => e.PerCpf)
-                    .HasColumnName("per_cpf")
-                    .HasColumnType("int(11)");
+                entity.Property(e => e.PerCpf).HasColumnName("per_cpf");
 
                 entity.Property(e => e.PerEmail)
                     .HasColumnName("per_email")

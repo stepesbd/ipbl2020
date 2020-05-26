@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
 		ord_date: { type: DataTypes.DATE,
             allowNull: true
         },
-		ord_status: { type: DataTypes.DATE,
+		ord_status: { type: DataTypes.STRING,
             allowNull: true
         },
 	},{
