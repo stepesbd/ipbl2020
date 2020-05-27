@@ -183,7 +183,7 @@ return (
                       />
                     </Col>
                   </Row>
-                  {/* <FormGroup>
+                   <FormGroup>
                     <label htmlFor="feAddress">Endereço</label>
                     <FormInput
                       id="feAddress"
@@ -217,12 +217,6 @@ return (
                       />
                     </Col>
                   </Row>
-                  <Row form>
-                    <Col md="12" className="form-group">
-                      <label htmlFor="feDescription">Descrição</label>
-                      <FormTextarea id="feDescription" rows="5" />
-                    </Col>
-                  </Row>*/}
                   <br/>
                   <Button theme="accent">Salvar</Button>
                   <NavLink to="/step1">        

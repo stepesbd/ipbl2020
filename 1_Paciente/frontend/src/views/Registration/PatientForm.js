@@ -21,6 +21,7 @@ import {
 import { UsePutApi,UsePostApi } from "../../services/apiService";
 import ClipLoader from "react-spinners/ClipLoader";
 import SweetAlert from "react-bootstrap-sweetalert";
+import { testModeAPI } from "react-ga";
 
 export default function PatientForm (props){
 
@@ -68,6 +69,7 @@ export default function PatientForm (props){
       item.perEmail = data.email;
       item.perCpf = data.cpf;
       item.perBirth = dtN;
+    
 
       console.log(item)
       UsePutApi(endPoint,item.perId,item).then(result => {
@@ -182,7 +184,7 @@ return (
                       />
                     </Col>
                   </Row>
-                  {/* <FormGroup>
+                   <FormGroup>
                     <label htmlFor="feAddress">Endereço</label>
                     <FormInput
                       id="feAddress"
@@ -216,12 +218,6 @@ return (
                       />
                     </Col>
                   </Row>
-                  <Row form>
-                    <Col md="12" className="form-group">
-                      <label htmlFor="feDescription">Descrição</label>
-                      <FormTextarea id="feDescription" rows="5" />
-                    </Col>
-                  </Row>*/}
                   <br/>
                   <Button theme="accent">Salvar</Button>
                   <NavLink to="/patient-list">        
