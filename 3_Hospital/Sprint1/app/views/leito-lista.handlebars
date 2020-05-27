@@ -35,21 +35,91 @@
             <td>{{bed_name}}</td>
             <td>{{ bed_medical_record }}</td>
             <td></td>
-        <!--    <td class="text-center">
-              <div class="form-row text-center btn-group btn-group-justified" style="width:90px">
-                <button id={{emp_id}} type="button" class="btn btn-primary btn-sm rounded-2"
-                  onclick="window.location.href='/hospital/{{@root.hosp.hos_id}}/leito/update/{{emp_id}}'" alt="Editar" data-toggle="tooltip" data-placement="top" title="Editar">
+          <td class="text-center">
+              <div class="form-row text-center btn-group btn-group-justified" style="width:45px">
+                <button id={{bed_id}} type="button" class="btn btn-primary btn-sm rounded-2 mr-1" data-toggle="modal"
+          data-target="#BedUpdate{{bed_id}}">
                   <i class="fa fa-edit"></i>
                 </button>
               </div>
+              <div class="form-row text-center btn-group btn-group-justified" style="width:45px">
+               <button id={{bed_id}} type="button" class="btn btn-primary btn-sm rounded-2 mr-1" data-toggle="modal"
+                    data-target="#mdDelete{{bed_id}}">
+                    <i class="fas fa-trash"></i>
+                </button>
+              </div>
             </td>
-          </tr> -->
+          </tr> 
           {{/each}}
         </tbody>
       </table>
     </div>
 </div>
  <a class="btn btn-primary" href="/Hospital" role="button">Voltar</a>
+
+
+{{#each bed}}
+<!-- Modal Update -->
+<div class="modal fade bd-example-modal-lg" id="BedUpdate{{bed_id}}" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel{{bed_id}}"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="updateModalLabel{{bed_id}}">Atualizar Leito</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- FORM ATUALIZACAO  -->
+        <form action="/hospital/{{@root.hos.hos_id}}/leito/update/{{bed_id}}" method="post">
+	      <div class="form-group">
+	        <label for="inputDesc">Descri&ccedil;&atilde;o</label>
+	        <input type="text" class="form-control" name="inputDesc" id="inputDesc" placeholder="Descri&ccedil;&atilde;o da Leito" value="{{bed_name}}">
+	      </div>
+          <!--  FIM FORM ATUALIZACAO  --->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-success">Atualizar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal Delete-->
+<div class="modal fade bd-example-modal-lg" id="mdDelete{{bed_id}}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Remove</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Deseja desativar esse registro?
+        Leito: <span id="info"> {{bed_name}} </span>
+      </div>
+      <div class="modal-footer">
+        <form action="/hospital/{{@root.hos.hos_id}}/leito/Delete/{{bed_id}}" method="get">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-danger">Desativar</button>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+{{/each}}
+
+
 
 
 <script>

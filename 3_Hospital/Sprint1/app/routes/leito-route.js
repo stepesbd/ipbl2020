@@ -8,8 +8,8 @@ module.exports = function(app) {
     router.get('/sts/:id', controller.get);
     router.get('/New', controller.new);
     router.post('/', controller.post);
-    router.get('/Update/:employee_id', controller.get);
-    router.get('/Delete/:employee_id', controller.delete);
+    router.post('/Update/:bed_id', controller.update);
+    router.get('/Delete/:bed_id', controller.delete);
     //router.post('/Update/:employee_id', controller.update);
     return router;
 };
