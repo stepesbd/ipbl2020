@@ -14,10 +14,11 @@ exports.up = function (knex) {
         table.string('city').notNullable()
         table.string('district').notNullable()
         table.string('street').notNullable()
-        table.string('number').notNullable()
+        table.string('status').notNullable()
     })
 };
 
 exports.down = function (knex) {
     return knex.schema.dropTable('addresses')
+    //return knex.schema.dropTable('addresses')
 };

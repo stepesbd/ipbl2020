@@ -16,10 +16,10 @@
             {{#if hos}}
                 <a class="navbar-brand" href="/hospital/{{hos.hos_cnes_code}}">
             {{else}}
-                <a class="navbar-brand" href="/fornecedor/FORNECEDOR_ID"></a>
+                <a class="navbar-brand" href="/fornecedor/{{pro.pro_id}}">
             {{/if}}
             
-            <i class="fa fas fa-hand-holding-medical"></i>
+            <i class="fas fa-briefcase-medical"></i>
             Recursos
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,9 +35,9 @@
                             Estoque</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/hospital/{{hos.hos_cnes_code}}/aquisicao">
-                            <i class="fas fa-handshake mr-2" aria-hidden="true"></i>   
-                            Aquisição
+                            <a class="nav-link" href="/hospital/{{hos.hos_cnes_code}}/compra">
+                            <i class="fas fa-cart-plus mr-2" aria-hidden="true"></i>   
+                            Compras
                             </a>
                         </li>
                     </ul>
@@ -54,20 +54,20 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="/fornecedor/FORNECEDOR_id/estoque">
+                            <a class="nav-link" href="/fornecedor/{{pro.pro_id}}/estoque">
                             <i class="fas fa-cubes mr-2"></i>
                             Estoque</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/fornecedor/FORNECEDOR_id/aquisicao">
-                            <i class="fas fa-comment-dollar mr-2" aria-hidden="true"></i>   
-                            Aquisição
+                            <a class="nav-link" href="/fornecedor/{{pro.pro_id}}/compra">
+                            <i class="fas fa-cart-plus mr-2" aria-hidden="true"></i>   
+                            Compras
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/fornecedor/FORNECEDOR_id/transferencia">
+                            <a class="nav-link" href="/fornecedor/{{pro.pro_id}}/venda">
                             <i class="fas fa-handshake mr-2" aria-hidden="true"></i>   
-                            Transferência
+                            Vendas
                             </a>
                         </li>
                     </ul>
@@ -75,16 +75,8 @@
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
                         <span class="navbar-brand">
-                            <i class="fa fa-h-square mr-2" aria-hidden="true"></i>
-                            {{hos.hos_name}}
-                        </span>
-                    </li>
-                </ul>
-                <ul class="navbar-nav">
-                    <li class="nav-item dropdown">
-                        <span class="navbar-brand">
-                            <i class="fas fa-bullhorn mr-2" aria-hidden="true"></i>
-                            INSERIR AQUI O FORNECEDOR-OBJETO
+                            <i class="fas fa-hand-holding-usd mr-2" aria-hidden="true"></i>
+                            {{pro.pro_name}}
                         </span>
                     </li>
                 </ul>

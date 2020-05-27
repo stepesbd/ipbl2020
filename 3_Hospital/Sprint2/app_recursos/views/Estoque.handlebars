@@ -28,22 +28,17 @@
 
       <thead>
         <tr>
-          {{#if hos}}
             <th class="text-center">DESCRIÇÃO</th>
             <th class="text-center">TIPO</th>
             <th class="text-center">LOTE</th>
             <th class="text-center">FABRICANTE</th>
             <th class="text-center">QUANTIDADE</th>
             <th></th>
-          {{else}}
-            AQUI INSERIR AS COLUNAS DE INTERESSE PARA FORNECEDORES
-          {{/if}}
         </tr>
       </thead>
 
       <tbody>
-        {{#if hos}}
-          {{#each mat}}
+          {{#each assets}}
             <tr>
               <td class="text-center">{{asset.data.Product.Description}}</td>
               <td class="text-center">{{asset.data.Product.Type}}</td>
@@ -53,8 +48,8 @@
               <td class="text-center" data-priority="2">
                 <div class="form-row text-center btn-group btn-group-justified" style="width:70px">
                     <div>
-                      <button type="button" class="btn btn-primary rounded-2 mr-2" 
-                        onclick="window.location.href='/hospital/{{hos.hos_cnes_code}}/estoque/#'" alt="Ver histórico" data-toggle="tooltip" data-placement="top" title="Ver histórico">
+                      <button id="{{asset.id}}" type="button" class="btn btn-primary rounded-2 mr-2" data-toggle="modal" alt="Ver histórico" title="Ver histórico"
+                        data-target="#mdUpdate{{asset.id}}">
                         <i class="fas fa-history fa-lg" ></i>
                       </button>
                     </div>
@@ -62,13 +57,70 @@
                 </td>
             </tr>
           {{/each}}
-        {{else}}
-          AQUI INSERIR AS COLUNAS DE INTERESSE PARA FORNECEDORES
-        {{/if}}      
       </tbody>
     </table>
   </div>
 </div>
+
+
+
+
+{{#each assets}}
+<!-- Modal Update -->
+<div class="modal fade" id="mdUpdate{{asset.id}}" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel{{asset.id}}"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="updateModalLabel{{asset.id}}">Histórico: <strong>{{asset.data.Product.Description}}</strong></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-striped">
+                <thead class="thead-dark">
+                  <tr>
+                    <th class="text-center" scope="col">Vendedor</th>
+                    <th class="text-center" scope="col">Comprador</th>
+                    <th class="text-center" scope="col">Quantidade <br> Comprada</th>
+                    <th class="text-center" scope="col">Valor <br> unitário</th>
+                    <th class="text-center" scope="col">Valor <br> total</th>
+                    <th class="text-center" scope="col">Data da<br>compra</th>
+                  </tr>
+                </thead>
+        {{#each assetHistory}}
+          
+          {{#ifEquals ../asset_id asset_id }}
+            
+            {{#ifEquals consumer @root.hos.hos_name}}
+
+              
+                <tbody>
+                  <tr>
+                    <th class="text-center" scope="row">{{seller}}</th>
+                    <td class="text-center">{{consumer}}</td>
+                    <td class="text-center">{{quantity}}</td>
+                    <td class="text-center">{{unit_price}}</td>
+                    <td class="text-center">{{total_price}}</td>
+                    <td class="text-center">{{date}}</td>
+                  </tr>
+                
+
+
+            {{/ifEquals}}
+
+          {{else}}
+          
+          {{/ifEquals}}
+        {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{{/each}}
 
 <script>
 

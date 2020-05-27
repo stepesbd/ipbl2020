@@ -1,33 +1,22 @@
 'use strict' 
-
 const express = require('express');
 const router = express.Router();
+const controllerHospital = require('../controllers/hospital-controller')
+const controllerProvider = require('../controllers/provider-controller')
 
-/*
-const controller = require('../controllers/MongoDB/controller')
 module.exports = function(app) {
-    router.get('/:user/:user_id', controller.get);
-    router.get('/:user/:user_id/:page/', controller.get);
-    router.get('/:user/:user_id/:page/:mode', controller.get);
-    router.post('/:user/:user_id', controller.post);
-    //router.get('/:hos_cnes_code/:new/:fornecedor_id/', controller.get);
-    //router.post('/:hos_cnes_code/:new/:fornecedor_id/:material_id', controller.post);
-    //router.post('/Update/edit/:id', controller.update);
-    //router.get('/Delete/:id', controller.delete);
-    return router;
-};
-*/
+    router.get('/hospital/:user_id', controllerHospital.get);
+    router.get('/hospital/:user_id/:page/', controllerHospital.get);
+    router.get('/hospital/:user_id/:page/:mode', controllerHospital.get);
+    router.post('/hospital/:user_id', controllerHospital.post);
+    router.post('/hospital/:user_id/purchased/:type', controllerHospital.post);
+
+    router.get('/fornecedor/:user_id', controllerProvider.get);
+    router.get('/fornecedor/:user_id/:page/', controllerProvider.get);
+    router.get('/fornecedor/:user_id/:page/:mode', controllerProvider.get);
+    router.post('/fornecedor/:user_id/purchased', controllerProvider.post);
+    router.post('/fornecedor/:user_id/new', controllerProvider.post);
 
 
-const controller = require('../controllers/MySQL/controller')
-module.exports = function(app) {
-    router.get('/:user/:user_id', controller.get);
-    router.get('/:user/:user_id/:page/', controller.get);
-    router.get('/:user/:user_id/:page/:mode', controller.get);
-    router.post('/:user/:user_id', controller.post);
-    //router.get('/:hos_cnes_code/:new/:fornecedor_id/', controller.get);
-    //router.post('/:hos_cnes_code/:new/:fornecedor_id/:material_id', controller.post);
-    //router.post('/Update/edit/:id', controller.update);
-    //router.get('/Delete/:id', controller.delete);
     return router;
 };

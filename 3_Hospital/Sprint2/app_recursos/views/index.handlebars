@@ -3,14 +3,14 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <div class="jumbotron">
-  <h1 class="display-4 text-center"><i class="fa fas fa-hand-holding-medical mr-4" aria-hidden="true" style="font-size:60px;color:rgb(65, 137, 219)">  </i>RECURSOS</h1>
+  <h1 class="display-4 text-center"><i class="fas fa-briefcase-medical mr-4" aria-hidden="true" style="font-size:60px;color:rgb(65, 137, 219)">  </i>RECURSOS</h1>
   <p class="lead">Essa página tem como objetivo mostrar a interação entre os Times Scrum 03 e 04, a fim de concretizar, em uma prova de conceito, uma blockchain em uma cadeia de suprimentos hospitalares.</p>
   <hr class="my-4">
   <p>Bem vindo à pagina de Recursos, 
     {{#if hos}}
         <strong>{{hos.hos_name}}</strong>
     {{else}}
-        <strong>INSERIR NOME DO FORNECEDOR-OBJETO</strong> 
+        <strong>{{pro.pro_name}}</strong> 
     {{/if}}
     .
   </p>
@@ -40,7 +40,7 @@
     <div class="col text-center ml-2">
       <div class="card">
         <div class="card-body">
-          <i class="fa fa-bullhorn" aria-hidden="true" style="font-size:90px;color:rgb(65, 137, 219)">  </i>
+          <i class="fas fa-hand-holding-usd" aria-hidden="true" style="font-size:90px;color:rgb(65, 137, 219)">  </i>
           <h5 class="card-title">Fornecedores</h5>
           <p>
             <strong>Time Scrum 04</strong> 
