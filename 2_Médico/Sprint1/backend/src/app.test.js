@@ -17,7 +17,7 @@ let testSpecialtyId;
 async function waitForId(pendingId, isToDelete, toDeleteCounter) {
   return new Promise((resolve, reject) => {
     const interval = setInterval(() => {
-      if(pendingId && (!isToDelete || toDeleteCounter === 0)) {
+      if (pendingId && (!isToDelete || toDeleteCounter === 0)) {
         resolve(pendingId);
         clearInterval(interval);
       } else if (pendingId === null) {
@@ -134,7 +134,7 @@ describe('Test physicians routes', () => {
 
     expect(response.statusCode).toBe(200);
     expect(body.msg).toEqual(
-      expect.objectContaining({...newPhysician, ...updates})
+      expect.objectContaining({ ...newPhysician, ...updates })
     );
 
     toDeleteCounter--;
@@ -144,7 +144,7 @@ describe('Test physicians routes', () => {
     const id = await waitForId(physicianId, true, toDeleteCounter);
     const response = await request(app)
       .delete(`${baseEndpoint}/${id}`);
-    
+
     expect(response.statusCode).toBe(204);
   });
 });
@@ -210,7 +210,7 @@ describe('Test specialties routes', () => {
 
     expect(response.statusCode).toBe(200);
     expect(body.msg).toEqual(
-      expect.objectContaining({...newSpecialty, ...updates})
+      expect.objectContaining({ ...newSpecialty, ...updates })
     );
 
     toDeleteCounter--;
@@ -219,7 +219,7 @@ describe('Test specialties routes', () => {
   test('Delete the specialty', async () => {
     const id = await waitForId(specialtyId, true, toDeleteCounter);
     const response = await request(app).delete(`${baseEndpoint}/${id}`);
-    
+
     expect(response.statusCode).toBe(204);
   });
 });
@@ -284,7 +284,7 @@ describe('Test physician specialty routes', () => {
   test('Delete the physician specialty', async () => {
     const id = await waitForId(physicianSpecialtyId, true, toDeleteCounter);
     const response = await request(app).delete(`${baseEndpoint}/${id}`);
-    
+
     expect(response.statusCode).toBe(204);
   });
 });
@@ -391,7 +391,7 @@ describe('Test addresses routes', () => {
 
     expect(response.statusCode).toBe(200);
     expect(body.msg).toEqual(
-      expect.objectContaining({...newAddress, ...updates})
+      expect.objectContaining({ ...newAddress, ...updates })
     );
 
     toDeleteCounter--;
@@ -400,7 +400,7 @@ describe('Test addresses routes', () => {
   test('Delete the address', async () => {
     const id = await waitForId(addressId, true, toDeleteCounter);
     const response = await request(app).delete(`${baseEndpoint}/${id}`);
-    
+
     expect(response.statusCode).toBe(204);
   });
 });
@@ -482,7 +482,7 @@ describe('Test contact routes', () => {
 
     expect(response.statusCode).toBe(200);
     expect(body.msg).toEqual(
-      expect.objectContaining({...newContact, ...updates})
+      expect.objectContaining({ ...newContact, ...updates })
     );
 
     toDeleteCounter--;
@@ -491,7 +491,7 @@ describe('Test contact routes', () => {
   test('Delete the contact', async () => {
     const id = await waitForId(addressId, true, toDeleteCounter);
     const response = await request(app).delete(`${baseEndpoint}/${id}`);
-    
+
     expect(response.statusCode).toBe(204);
   });
 });

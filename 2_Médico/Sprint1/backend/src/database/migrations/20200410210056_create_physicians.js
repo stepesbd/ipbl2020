@@ -5,6 +5,7 @@ exports.up = function (knex) {
         table.string('name').notNullable()
         table.string('crm').notNullable()
         table.string('cpf', 11).notNullable()
+        table.boolean('status').notNullable().defaultTo(true)
     })
 }
 
