@@ -18,7 +18,9 @@ import {
   Button
 } from "shards-react";
 import ClipLoader from "react-spinners/ClipLoader";
+import SweetAlert from "react-bootstrap-sweetalert";
 import PageTitle from "../../components/common/PageTitle";
+import { UsePostApi } from "../../services/apiService";
 
 const Step1 = (props) => 
 {
@@ -27,15 +29,53 @@ const Step1 = (props) =>
 
   const [loading,setloading] = React.useState(false);
   const onSubmit = data => {
-    props.history.push('/step2')
+
+    let obj = {
+      cpf: data.cpf,
+      senha: data.senha
+    };
+    let endPoint = 'attendance';
+    setloading(true);
+
+    UsePostApi(endPoint,obj).then(result => {
+      console.log(result)
+      if (result.status !== 204 && result.status !== 200) {
+        setsalert(<SweetAlert warning title={result.message} onConfirm={hideAlert} />);
+        setloading(false);
+        return false;
+      }
+
+
+      setloading(false);
+      if(result.data)
+      { 
+        props.history.push({
+          pathname: '/step2',
+          state:{item:result.data}
+        })
+      }
+      else
+      {
+        setsalert(<SweetAlert warning title="Usuário ou senha não encontrado!" onConfirm={hideAlert} />); 
+      }
+      return true;
+    });
+    
   };
 
-  const handleVoltar = () =>{
+  const hangleRegister = () =>{
     props.history.push('/register')
+  }
+
+  const [salert,setsalert] = React.useState();
+  const hideAlert = () =>{
+    setsalert(null);
   }
 
 return (
   <Container fluid className="main-content-container px-4">
+    
+    {salert}
     <br/><br/>
     {/* Default Light Table */}
     <Row>
@@ -56,7 +96,6 @@ return (
                       <FormInput
                         name="cpf"
                         invalid={errors.cpf}
-                        placeholder="000.000.000-00"
                         innerRef={register({ required: true })}
                       />
                       {errors.cpf && <span class="obg">Obrigátorio</span>}
@@ -76,8 +115,10 @@ return (
                   </Row>
                   
                   <br/>  
-                    <Button type="submit" theme="accent">Enviar (Sintomas)</Button>
-                    <Button type="button" onClick={e => handleVoltar(e)}  theme="default">Enviar (Cadastro)</Button> 
+                  
+                   <Button type="submit" theme="accent">Enviar</Button>     
+                   <Button type="button" theme="default"  onClick={e => hangleRegister(e)} style={{float:'right'}}>Registre-se</Button>
+                   
                   </form> 
             
               </Col>

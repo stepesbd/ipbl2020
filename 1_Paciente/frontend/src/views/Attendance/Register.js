@@ -22,29 +22,11 @@ import { UsePutApi,UsePostApi } from "../../services/apiService";
 import ClipLoader from "react-spinners/ClipLoader";
 import SweetAlert from "react-bootstrap-sweetalert";
 
-export default function PatientForm (props){
+export default function Register (props){
 
   const { register, handleSubmit, errors, setValue,setError } = useForm();
   const [item,setitem] = React.useState({});
   
-  useEffect(() => {
-    verifyItem();    
-  }, []);
-
-  const verifyItem = () =>{
-    if(props.location.pasprops)
-    {
-      let dados = props.location.pasprops.item;
-      setitem(dados);
-      setValue("nome",dados.perFirstName);
-      setValue("sobrenome",dados.perLastName);
-      if(dados.perBirth)
-        setValue('datanasc', moment(item.perBirth).format('DD/MM/YYYY')); 
-      setValue("email",dados.perEmail);
-      setValue("cpf",dados.perCpf); 
-    }
-  }
-
   const [loading,setloading] = React.useState(false);
   const onSubmit = data => {
     
@@ -54,57 +36,58 @@ export default function PatientForm (props){
     }
 
     setloading(true);
-    let endPoint = "person/"
+    let endPoint = "patient/"
     let dtN = null;
 
     if(data.datanasc)
       dtN = moment(data.datanasc, 'DD/MM/YYYY').toDate()
 
-    if(item.perId)
-    {
-      //Editar
-      item.perFirstName = data.nome;
-      item.perLastName = data.sobrenome;
-      item.perEmail = data.email;
-      item.perCpf = data.cpf;
-      item.perBirth = dtN;
-
-      console.log(item)
-      UsePutApi(endPoint,item.perId,item).then(result => {
-        if (result.status !== 200) {
-          setsalert(<SweetAlert warning title={result.message} onConfirm={hideAlert} />);
-          setloading(false);
-          return false;
+    //Inserir
+    let obj = {
+      patInclusionDate: new Date(),
+      patStatus:1,
+      per:
+        {
+          perFirstName: data.nome,
+          perLastName: data.sobrenome,
+          perEmail: data.email,
+          perSenha: data.senha,
+          perCpf: data.cpf,
+          perBirth: dtN,
+          add:
+            {
+              addStreet:data.rua,
+              addNumber:data.numero,
+              addCity:data.cidade,
+              addState:data.estado,
+              addNeighborhood:data.bairro,
+              addCountry:data.pais,
+              addZipcode:data.cep
+            }
         }
+      };
+    UsePostApi(endPoint,obj).then(result => {
+      console.log(result)
+      if (result.status !== 201) {
+        setsalert(<SweetAlert warning title={result.message} onConfirm={hideAlert} />);
         setloading(false);
-        setsalert(<SweetAlert success title={result.message} onConfirm={hideAlert} />);
-        return true;
-      });
-    }
-    else
-    {
-      
-      //Inserir
-      let obj ={
-        perId:0,
-        perFirstName: data.nome,
-        perLastName: data.sobrenome,
-        perEmail: data.email,
-        perCpf: data.cpf,
-        perBirth: dtN
+        return false;
       }
-      UsePostApi(endPoint,obj).then(result => {
-        if (result.status !== 200) {
-          setsalert(<SweetAlert warning title={result.message} onConfirm={hideAlert} />);
-          setloading(false);
-          return false;
-        }
-        setloading(false);
-        setsalert(<SweetAlert success title={result.message} onConfirm={hideAlert} />);
-        return true;
-      });
-    }
+      setloading(false);
+      setsalert(<SweetAlert success title={result.message} onConfirm={() => sendToStep2(result.data)} />);
+      return true;
+    });
+    
   }
+
+  const sendToStep2 = (data) =>{
+    console.log(data)
+    props.history.push({
+      pathname: '/step2',
+      state:{item:data}
+    })
+  }
+
   const [salert,setsalert] = React.useState();
   const hideAlert = () =>{
     setsalert(null);
@@ -127,10 +110,10 @@ return (
           <ListGroupItem className="p-3">
             <Row>
               <Col>
-                <form onSubmit={handleSubmit(onSubmit)}>
+              <form onSubmit={handleSubmit(onSubmit)}>
                   <Row form>
                     {/* First Name */}
-                    <Col md="12" className="form-group">
+                    <Col md="6" className="form-group">
                       <label htmlFor="feFirstName">Nome*</label>
                       <FormInput
                         name="nome"
@@ -141,7 +124,7 @@ return (
                       {errors.nome && <span class="obg">Obrigátorio</span>}
                     </Col>
                     {/* Last Name */}
-                    <Col md="12" className="form-group">
+                    <Col md="6" className="form-group">
                       <label htmlFor="feLastName">Sobrenome*</label>
                       <FormInput
                         name="sobrenome"
@@ -153,7 +136,7 @@ return (
                     </Col>
                   </Row>
                   <Row form>
-                    <Col md="12" className="form-group">
+                    <Col md="6" className="form-group">
                       <label htmlFor="feEmail">E-mail*</label>
                       <FormInput
                         name="email"
@@ -164,71 +147,114 @@ return (
                       {errors.email && <span class="obg">Obrigátorio</span>}
                     </Col>
                     <Col md="6" className="form-group">
-                      <label htmlFor="fePassword">CPF*</label>
-                      <FormInput
-                        name="cpf"
-                        placeholder="cpf"
-                        invalid={errors.cpf}
-                        innerRef={register({ required: true })}
-                      />
-                      {errors.cpf && <span class="obg">Obrigátorio</span>}
-                    </Col>
-                    <Col md="6" className="form-group">
-                      <label htmlFor="fePassword">Data Nascimento</label>
+                      <label htmlFor="fePassword">Data Nascimento*</label>
                       <FormInput
                         name="datanasc"
                         invalid={errors.datanasc}
                         placeholder="datanasc"
-                        innerRef={register}
+                        innerRef={register({ required: true })}
                       />
+                      {errors.datanasc && <span class="obg">Obrigátorio</span>}
                     </Col>
                   </Row>
-                  {/* <FormGroup>
-                    <label htmlFor="feAddress">Endereço</label>
-                    <FormInput
-                      id="feAddress"
-                      placeholder="Address"
-                      value="Rua Palmeira"
-                      onChange={() => {}}
-                    />
-                  </FormGroup>
-                  <Row form>
+                  <Row form>                    
+                  <Col md="6" className="form-group">
+                      <label htmlFor="fePassword">CPF*</label>
+                      <FormInput
+                        name="cpf"
+                        invalid={errors.cpf}
+                        placeholder="cpf"
+                        innerRef={register({ required: true })}
+                      />
+                      {errors.cpf && <span class="obg">Obrigátorio</span>}
+                    </Col>
+                    
                     <Col md="6" className="form-group">
-                      <label htmlFor="feCity">Cidade</label>
+                      <label htmlFor="feEmail">Senha*</label>
                       <FormInput
-                        id="feCity"
-                        placeholder="Cidade"
-                        onChange={() => {}}
+                        name="senha"
+                        invalid={errors.senha}
+                        placeholder="senha"
+                        type="password"
+                        innerRef={register({ required: true })}
                       />
-                    </Col>
-                    <Col md="4" className="form-group">
-                      <label htmlFor="feInputState">Estado</label>
-                      <FormSelect id="feInputState">
-                        <option>Selecione...</option>
-                        <option>...</option>
-                      </FormSelect>
-                    </Col>
-                    <Col md="2" className="form-group">
-                      <label htmlFor="feZipCode">CEP</label>
-                      <FormInput
-                        id="feZipCode"
-                        placeholder="CEP"
-                        onChange={() => {}}
-                      />
+                      {errors.senha && <span class="obg">Obrigátorio</span>}
                     </Col>
                   </Row>
                   <Row form>
                     <Col md="12" className="form-group">
-                      <label htmlFor="feDescription">Descrição</label>
-                      <FormTextarea id="feDescription" rows="5" />
+                      <label htmlFor="feZipCode">CEP</label>
+                      <FormInput
+                      name="cep"
+                      invalid={errors.cep}
+                      innerRef={register({ required: true })}
+                    />
+                    {errors.cep && <span class="obg">Obrigátorio</span>}
                     </Col>
-                  </Row>*/}
+                    <Col md="8" className="form-group">
+                      <label htmlFor="feAddress">Endereço</label>
+                      <FormInput
+                        name="rua"
+                        invalid={errors.rua}
+                        innerRef={register({ required: true })}
+                      />
+                      {errors.rua && <span class="obg">Obrigátorio</span>}
+                    </Col>
+                    <Col md="4" className="form-group">
+                      <label htmlFor="feAddress">Nº</label>
+                      <FormInput
+                        name="numero"
+                        invalid={errors.numero}
+                        innerRef={register({ required: true })}
+                      />
+                      {errors.numero && <span class="obg">Obrigátorio</span>}
+                    </Col>
+                  </Row>
+                  <Row form>                    
+                    <Col md="6" className="form-group">
+                        <label htmlFor="feCity">Bairro</label>
+                        <FormInput
+                        name="bairro"
+                        invalid={errors.bairro}
+                        innerRef={register({ required: true })}
+                      />
+                      {errors.bairro && <span class="obg">Obrigátorio</span>}
+                    </Col>
+                    <Col md="6" className="form-group">
+                      <label htmlFor="feCity">Cidade</label>
+                      <FormInput
+                      name="cidade"
+                      invalid={errors.cidade}
+                      innerRef={register({ required: true })}
+                    />
+                    {errors.cidade && <span class="obg">Obrigátorio</span>}
+                    </Col>
+                    <Col md="6" className="form-group">
+                      <label htmlFor="feInputState">Estado</label>
+                      <FormInput
+                      name="estado"
+                      invalid={errors.estado}
+                      innerRef={register({ required: true })}
+                    />
+                    {errors.estado && <span class="obg">Obrigátorio</span>}
+                    </Col>
+                    <Col md="6" className="form-group">
+                      <label htmlFor="feInputState">Pais</label>
+                      <FormInput
+                      name="pais"
+                      invalid={errors.pais}
+                      innerRef={register({ required: true })}
+                    />
+                    {errors.pais && <span class="obg">Obrigátorio</span>}
+                    </Col>
+                  </Row>
                   <br/>
                   <Button theme="accent">Salvar</Button>
                   <NavLink to="/step1">        
                     <Button theme="default" style={{marginLeft:'10px'}}>Voltar</Button>
                   </NavLink>
                   </form> 
+            
             
               </Col>
             </Row>

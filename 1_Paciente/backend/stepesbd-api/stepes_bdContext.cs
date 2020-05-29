@@ -16,12 +16,19 @@ namespace stepesdb_api
         }
 
         public virtual DbSet<Address> Address { get; set; }
+        public virtual DbSet<Addresses> Addresses { get; set; }
         public virtual DbSet<Attendance> Attendance { get; set; }
+        public virtual DbSet<Contacts> Contacts { get; set; }
         public virtual DbSet<Diagnosis> Diagnosis { get; set; }
         public virtual DbSet<Disease> Disease { get; set; }
         public virtual DbSet<EventMedicalRecord> EventMedicalRecord { get; set; }
+        public virtual DbSet<KnexMigrations> KnexMigrations { get; set; }
+        public virtual DbSet<KnexMigrationsLock> KnexMigrationsLock { get; set; }
         public virtual DbSet<Patient> Patient { get; set; }
         public virtual DbSet<Person> Person { get; set; }
+        public virtual DbSet<PhysicianSpecialties> PhysicianSpecialties { get; set; }
+        public virtual DbSet<Physicians> Physicians { get; set; }
+        public virtual DbSet<Specialties> Specialties { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -88,6 +95,79 @@ namespace stepesdb_api
                     .HasColumnType("varchar(100)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.AddZipcode)
+                    .IsRequired()
+                    .HasColumnName("add_zipcode")
+                    .HasColumnType("varchar(45)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+            });
+
+            modelBuilder.Entity<Addresses>(entity =>
+            {
+                entity.ToTable("addresses");
+
+                entity.HasIndex(e => e.PhysicianId)
+                    .HasName("addresses_physicianid_foreign");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.City)
+                    .IsRequired()
+                    .HasColumnName("city")
+                    .HasColumnType("varchar(255)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.District)
+                    .IsRequired()
+                    .HasColumnName("district")
+                    .HasColumnType("varchar(255)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.PhysicianId).HasColumnName("physicianId");
+
+                entity.Property(e => e.State)
+                    .IsRequired()
+                    .HasColumnName("state")
+                    .HasColumnType("varchar(2)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.Status)
+                    .IsRequired()
+                    .HasColumnName("status")
+                    .HasColumnType("varchar(255)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.Street)
+                    .IsRequired()
+                    .HasColumnName("street")
+                    .HasColumnType("varchar(255)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.Type)
+                    .IsRequired()
+                    .HasColumnName("type")
+                    .HasColumnType("varchar(255)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.Zipcode)
+                    .IsRequired()
+                    .HasColumnName("zipcode")
+                    .HasColumnType("varchar(255)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.HasOne(d => d.Physician)
+                    .WithMany(p => p.Addresses)
+                    .HasForeignKey(d => d.PhysicianId)
+                    .HasConstraintName("addresses_physicianid_foreign");
             });
 
             modelBuilder.Entity<Attendance>(entity =>
@@ -134,6 +214,37 @@ namespace stepesdb_api
                     .HasForeignKey(d => d.PatId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_att_pat");
+            });
+
+            modelBuilder.Entity<Contacts>(entity =>
+            {
+                entity.ToTable("contacts");
+
+                entity.HasIndex(e => e.PhysicianId)
+                    .HasName("contacts_physicianid_foreign");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Contact)
+                    .IsRequired()
+                    .HasColumnName("contact")
+                    .HasColumnType("varchar(255)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.PhysicianId).HasColumnName("physicianId");
+
+                entity.Property(e => e.Type)
+                    .IsRequired()
+                    .HasColumnName("type")
+                    .HasColumnType("varchar(255)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.HasOne(d => d.Physician)
+                    .WithMany(p => p.Contacts)
+                    .HasForeignKey(d => d.PhysicianId)
+                    .HasConstraintName("contacts_physicianid_foreign");
             });
 
             modelBuilder.Entity<Diagnosis>(entity =>
@@ -252,6 +363,37 @@ namespace stepesdb_api
                     .HasConstraintName("fk_emr_pat");
             });
 
+            modelBuilder.Entity<KnexMigrations>(entity =>
+            {
+                entity.ToTable("knex_migrations");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Batch).HasColumnName("batch");
+
+                entity.Property(e => e.MigrationTime)
+                    .HasColumnName("migration_time")
+                    .HasColumnType("timestamp");
+
+                entity.Property(e => e.Name)
+                    .HasColumnName("name")
+                    .HasColumnType("varchar(255)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+            });
+
+            modelBuilder.Entity<KnexMigrationsLock>(entity =>
+            {
+                entity.HasKey(e => e.Index)
+                    .HasName("PRIMARY");
+
+                entity.ToTable("knex_migrations_lock");
+
+                entity.Property(e => e.Index).HasColumnName("index");
+
+                entity.Property(e => e.IsLocked).HasColumnName("is_locked");
+            });
+
             modelBuilder.Entity<Patient>(entity =>
             {
                 entity.HasKey(e => e.PatId)
@@ -326,6 +468,8 @@ namespace stepesdb_api
                     .HasColumnType("varchar(100)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
+                
+                entity.Property(e => e.PerSenha).HasColumnName("per_senha");
 
                 entity.Property(e => e.PerFirstName)
                     .IsRequired()
@@ -345,6 +489,85 @@ namespace stepesdb_api
                     .WithMany(p => p.Person)
                     .HasForeignKey(d => d.AddId)
                     .HasConstraintName("fk_per_add");
+            });
+
+            modelBuilder.Entity<PhysicianSpecialties>(entity =>
+            {
+                entity.ToTable("physician_specialties");
+
+                entity.HasIndex(e => e.PhysicianId)
+                    .HasName("physician_specialties_physicianid_foreign");
+
+                entity.HasIndex(e => e.SpecialtiesId)
+                    .HasName("physician_specialties_specialtiesid_foreign");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.PhysicianId).HasColumnName("physicianId");
+
+                entity.Property(e => e.SpecialtiesId).HasColumnName("specialtiesId");
+
+                entity.HasOne(d => d.Physician)
+                    .WithMany(p => p.PhysicianSpecialties)
+                    .HasForeignKey(d => d.PhysicianId)
+                    .HasConstraintName("physician_specialties_physicianid_foreign");
+
+                entity.HasOne(d => d.Specialties)
+                    .WithMany(p => p.PhysicianSpecialties)
+                    .HasForeignKey(d => d.SpecialtiesId)
+                    .HasConstraintName("physician_specialties_specialtiesid_foreign");
+            });
+
+            modelBuilder.Entity<Physicians>(entity =>
+            {
+                entity.ToTable("physicians");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Cpf)
+                    .IsRequired()
+                    .HasColumnName("cpf")
+                    .HasColumnType("varchar(11)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.Crm)
+                    .IsRequired()
+                    .HasColumnName("crm")
+                    .HasColumnType("varchar(255)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasColumnName("name")
+                    .HasColumnType("varchar(255)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.Status)
+                    .IsRequired()
+                    .HasColumnName("status")
+                    .HasDefaultValueSql("'1'");
+            });
+
+            modelBuilder.Entity<Specialties>(entity =>
+            {
+                entity.ToTable("specialties");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasColumnName("name")
+                    .HasColumnType("varchar(255)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.Status)
+                    .IsRequired()
+                    .HasColumnName("status")
+                    .HasDefaultValueSql("'1'");
             });
 
             OnModelCreatingPartial(modelBuilder);
