@@ -28,7 +28,7 @@ export default function PatientList() {
   const loadList = () => {
     setloading(true);
     let endPoint = "patient"
-    UseGetApi(endPoint).then(result => {
+    UseGetApi('P',endPoint).then(result => {
       if (result.status !== 200) {
         hangleNotification(true, result.message, 'danger')
         setloading(false);
@@ -44,13 +44,12 @@ export default function PatientList() {
   const removerRegistro = (id) =>{
     
     let endPoint = "patient/"
-    UseDeleteApi(endPoint,id).then(result => {
+    UseDeleteApi('P',endPoint,id).then(result => {
       if (result.status !== 200) {
         setsalert(<SweetAlert warning title={result.message} onConfirm={hideAlert} />);
         setloading(false);
         return false;
       }
-      console.log(result.data)
 
       var listFiltered = list.filter(obj => {
           return obj.patId !== id;
