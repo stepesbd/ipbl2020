@@ -23,7 +23,7 @@ namespace testeSend2MqttDotNetCore
                 Password = "stepesbd2020"
             };
 
-            string queue2ack = "manfrimdotnet";
+            string queue2ack = "ts_01_ack_queue";
 
             Thread thread = new Thread(() => startsubscriber(queue2ack));
             thread.Start();
