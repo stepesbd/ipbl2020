@@ -3,18 +3,12 @@ import { useForm } from 'react-hook-form'
 import {
   Container,
   Card,
-  CardBody,
-  NavLink,
   CardHeader,
   ListGroup,
   ListGroupItem,
   Row,
   Col,
-  Form,
-  FormGroup,
   FormInput,
-  FormSelect,
-  FormTextarea,
   Button
 } from "shards-react";
 import ClipLoader from "react-spinners/ClipLoader";
@@ -37,7 +31,7 @@ const Step1 = (props) =>
     let endPoint = 'attendance';
     setloading(true);
 
-    UsePostApi(endPoint,obj).then(result => {
+    UsePostApi('P',endPoint,obj).then(result => {
       console.log(result)
       if (result.status !== 204 && result.status !== 200) {
         setsalert(<SweetAlert warning title={result.message} onConfirm={hideAlert} />);

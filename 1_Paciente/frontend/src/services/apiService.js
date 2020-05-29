@@ -1,12 +1,13 @@
 import axios from 'axios';
 
-const urlApi = process.env.REACT_APP_API_ENDPOINT
+const urlApiPaciente = process.env.REACT_APP_API_ENDPOINT_PATIENT
+const urlApiMedico = process.env.REACT_APP_API_ENDPOINT_DOCTOR
 
-const UseGetApi = (endpoint) => {          
+const UseGetApi = (url,endpoint) => {          
   
   try 
   {
-      const urlComplete = urlApi+endpoint;                            
+      const urlComplete = (url == "P" ? urlApiPaciente : urlApiMedico) +endpoint;                            
       return axios.get(urlComplete)
       .then(result => {          
         var newResult = {
@@ -50,11 +51,11 @@ const UseGetApi = (endpoint) => {
   }  
 };
 
-const UsePostApi = (endpoint, obj) => {   
+const UsePostApi = (url, endpoint, obj) => {   
     
     try 
     {
-      const urlComplete = urlApi+endpoint; 
+      const urlComplete = (url == "P" ? urlApiPaciente : urlApiMedico) +endpoint; 
       const headers = {headers: {'Content-Type': 'application/json'}};
       return axios.post(urlComplete, obj, headers)
       .then(result => {    
@@ -100,10 +101,10 @@ const UsePostApi = (endpoint, obj) => {
     }    
 };
 
-const UsePutApi = (endpoint, id, obj) => {  
+const UsePutApi = (url, endpoint, id, obj) => {  
     try 
     {
-      const urlComplete = urlApi+endpoint+id; 
+      const urlComplete = (url == "P" ? urlApiPaciente : urlApiMedico) +endpoint+id; 
       const headers = {headers: {'Content-Type': 'application/json'}};
       return axios.put(urlComplete,obj, headers)
       .then(result => {                
@@ -150,17 +151,17 @@ const UsePutApi = (endpoint, id, obj) => {
     }    
 };
 
-const UseDeleteApi = (endpoint, id) => {      
+const UseDeleteApi = (url, endpoint, id) => {      
    
     try 
     {
-      const urlComplete = urlApi+endpoint+id; 
+      const urlComplete = (url == "P" ? urlApiPaciente : urlApiMedico) +endpoint+id; 
       const headers = {headers: {'Content-Type': 'application/json'}};
       return axios.delete(urlComplete, headers)
       .then(result => {        
         var newResult = {
           status: result.status,
-          message:"Alteração realizada com sucesso!",
+          message:"Registro removido com sucesso!",
           data: result.data
         }  
         return newResult;
