@@ -14,7 +14,7 @@ connection = pika.BlockingConnection(parameters)
 channel = connection.channel()
 
 channel.queue_declare(queue='mqtt2mongo')
-queue2ack = 'teste_de_agora'
+queue2ack = 'teste_manfrim'
 channel.queue_declare(queue=queue2ack)
 
 def callback(ch, method, properties, body): 

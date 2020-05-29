@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "Z46OJWalRzFP8OAIG6s1+wwwCZlJfYOl631x2Jm5LliYpXJGsG+ByvtWuWeMXiUMru2RM5njicQwY20ChdB4MA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\guilh\\Desktop\\Projetos\\ipbl2020\\1_Paciente\\Sprint2\\rabbitmq2MongoScript\\testeSend2MqttDotNetCore\\testeSend2MqttDotNetCore.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\guilh\\.nuget\\packages\\rabbitmq.client\\6.0.0\\rabbitmq.client.6.0.0.nupkg.sha512",
+    "C:\\Users\\guilh\\.nuget\\packages\\system.memory\\4.5.4\\system.memory.4.5.4.nupkg.sha512",
+    "C:\\Users\\guilh\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\3.1.2\\microsoft.aspnetcore.app.ref.3.1.2.nupkg.sha512"
+  ],
+  "logs": []
+}
