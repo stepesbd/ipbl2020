@@ -18,6 +18,11 @@ import Register from "./views/Attendance/Register";
 import PatientList from "./views/Registration/PatientList";
 import PatientForm from "./views/Registration/PatientForm";
 
+//Physicians
+import PhysicianList from './views/Physicians/PhysicianList';
+import PhysicianForm from './views/Physicians/PhysicianForm';
+import SpecialtyList from './views/Specialties/SpecialtyList';
+
 export default [
   {
     path: "/",
@@ -34,6 +39,21 @@ export default [
     path: "/patient-form",
     layout: DefaultLayout,
     component: PatientForm
+  },
+  {
+    path: "/physician-list",
+    layout: DefaultLayout,
+    component: PhysicianList
+  },
+  {
+    path: "/physician-form",
+    layout: DefaultLayout,
+    component: PhysicianForm
+  },
+  {
+    path: "/specialties",
+    layout: DefaultLayout,
+    component: SpecialtyList
   },
   {
     path: "/dashboard",
