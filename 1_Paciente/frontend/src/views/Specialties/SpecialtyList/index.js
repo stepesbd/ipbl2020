@@ -28,7 +28,7 @@ function SpecialtyList() {
     const loadList = () => {
         setloading(true);
         let endPoint = "specialties"
-        UseGetApi(endPoint).then(result => {
+        UseGetApi('D',endPoint).then(result => {
             if (result.status !== 200) {
                 hangleNotification(true, result.message, 'danger')
                 setloading(false);
