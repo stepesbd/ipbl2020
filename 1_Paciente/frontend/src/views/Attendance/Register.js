@@ -66,7 +66,7 @@ export default function Register (props){
             }
         }
       };
-    UsePostApi(endPoint,obj).then(result => {
+    UsePostApi('P',endPoint,obj).then(result => {
       console.log(result)
       if (result.status !== 201) {
         setsalert(<SweetAlert warning title={result.message} onConfirm={hideAlert} />);

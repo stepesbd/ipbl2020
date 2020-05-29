@@ -11,11 +11,7 @@ import {
   ListGroupItem,
   Row,
   Col,
-  Form,
-  FormGroup,
   FormInput,
-  FormSelect,
-  FormTextarea,
   Button
 } from "shards-react";
 import { UsePutApi,UsePostApi } from "../../services/apiService";
@@ -87,7 +83,7 @@ export default function PatientForm (props){
       item.per.add.addZipcode = data.cep;
 
       console.log(item)
-      UsePutApi(endPoint,item.patId,item).then(result => {
+      UsePutApi('P',endPoint,item.patId,item).then(result => {
         if (result.status !== 200) {
           setsalert(<SweetAlert warning title={result.message} onConfirm={hideAlert} />);
           setloading(false);
@@ -124,7 +120,7 @@ export default function PatientForm (props){
               }
           }
         };
-      UsePostApi(endPoint,obj).then(result => {
+      UsePostApi('P',endPoint,obj).then(result => {
         if (result.status !== 200) {
           setsalert(<SweetAlert warning title={result.message} onConfirm={hideAlert} />);
           setloading(false);
