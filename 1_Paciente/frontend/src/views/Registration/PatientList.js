@@ -27,7 +27,7 @@ export default function PatientList() {
   const [list,setlist] = React.useState([]);
   const loadList = () => {
     setloading(true);
-    let endPoint = "person"
+    let endPoint = "patient"
     UseGetApi(endPoint).then(result => {
       if (result.status !== 200) {
         hangleNotification(true, result.message, 'danger')
@@ -43,7 +43,7 @@ export default function PatientList() {
 
   const removerRegistro = (id) =>{
     
-    let endPoint = "person/"
+    let endPoint = "patient/"
     UseDeleteApi(endPoint,id).then(result => {
       if (result.status !== 200) {
         setsalert(<SweetAlert warning title={result.message} onConfirm={hideAlert} />);
@@ -53,7 +53,7 @@ export default function PatientList() {
       console.log(result.data)
 
       var listFiltered = list.filter(obj => {
-          return obj.perId !== id;
+          return obj.patId !== id;
       });
       setlist(listFiltered); 
       setloading(false);
@@ -137,13 +137,13 @@ return (
               </thead>
               <tbody>
                 {list.map(item => (
-                  <tr key={item.perId}>     
-                      <td>{item.perId}</td>                      
-                      <td>{item.perFirstName}</td>              
-                      <td>{item.perLastName}</td>
-                      <td style={{textAlign:'center'}}>{moment(item.perBirth).format("DD/MM/YYYY")}</td>             
-                      <td>{item.perEmail}</td>            
-                      <td>{item.perCpf}</td>
+                  <tr key={item.per.perId}>     
+                      <td>{item.per.perId}</td>                      
+                      <td>{item.per.perFirstName}</td>              
+                      <td>{item.per.perLastName}</td>
+                      <td style={{textAlign:'center'}}>{moment(item.per.perBirth).format("DD/MM/YYYY")}</td>             
+                      <td>{item.per.perEmail}</td>            
+                      <td>{item.per.perCpf}</td>
                       <td>
                       <NavLink to={{
                         pathname:"/patient-form",
@@ -153,7 +153,7 @@ return (
                         <i className="material-icons">edit</i> Editar
                       </Button>
                       </NavLink>
-                      <Button  onClick={(e) => confirmDelete(item.perId)}  outline size="sm" theme="danger" className="mb-2 mr-1">                 
+                      <Button  onClick={(e) => confirmDelete(item.patId)}  outline size="sm" theme="danger" className="mb-2 mr-1">                 
                         <i className="material-icons">delete</i> Remover
                       </Button>
                       </td>

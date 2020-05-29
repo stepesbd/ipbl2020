@@ -24,9 +24,23 @@ namespace stepesdb_api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Patient>>> Get()
         {
-            List<Patient> p = await _context.Patient
-            .ToListAsync();            
-            return p;
+            List<Patient> pacientes = await _context.Patient
+            .Include(x=>x.Per)
+                .ThenInclude(d=>d.Add)
+            .ToListAsync();    
+            
+            List<Patient> pacientes2 = new List<Patient>();
+            foreach(Patient p in pacientes)
+            {
+                if(p.Per != null)
+                {
+                    if(p.Per.Add != null)
+                        pacientes2.Add(p);
+                }
+
+            }
+
+            return pacientes2;
         }
 
         // PUT: api/Patient/5
@@ -37,9 +51,12 @@ namespace stepesdb_api.Controllers
                 return BadRequest(new BadRequest("O id da ulr deve ser igual do objeto"));
 
             try
-            {
-                _context.Entry(patient).State = EntityState.Modified;
-                await _context.SaveChangesAsync();            
+            {            
+                _context.Entry(patient.Per).State = EntityState.Modified;
+                await _context.SaveChangesAsync(); 
+
+                _context.Entry(patient.Per.Add).State = EntityState.Modified;
+                await _context.SaveChangesAsync();        
             }
             catch (Exception ex)
             {                
@@ -70,16 +87,35 @@ namespace stepesdb_api.Controllers
         }
 
         // DELETE: api/Patient/5
-        [HttpDelete("{id}/{UsuarioDeletadoId}")]
+        [HttpDelete("{id}")]
         public async Task<ActionResult<Patient>> Delete(long id)
         {
-            Patient patientDel = await _context.Patient.Where(d=>d.PatId == id).FirstOrDefaultAsync();
+            Patient patientDel = await _context.Patient
+            .Where(d=>d.PatId == id)
+            .FirstOrDefaultAsync();
+
+            Person personDel = await _context.Person
+            .Where(d=>d.PerId == patientDel.PerId)
+            .FirstOrDefaultAsync();
 
             if(patientDel == null)            
                 return BadRequest(new BadRequest("O registro não foi entrado"));
 
             try
             {
+                if(personDel.AddId != null)
+                {
+                    Address addDel = await _context.Address
+                    .Where(d=>d.AddId == personDel.AddId)
+                    .FirstOrDefaultAsync();
+
+                    _context.Entry(addDel).State = EntityState.Deleted;
+                    await _context.SaveChangesAsync();
+                }
+
+                _context.Entry(personDel).State = EntityState.Deleted;
+                await _context.SaveChangesAsync();               
+
                 _context.Entry(patientDel).State = EntityState.Deleted;
                 await _context.SaveChangesAsync();
             }

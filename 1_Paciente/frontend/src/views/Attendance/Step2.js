@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from 'react-hook-form'
 import {
   Container,
@@ -20,6 +20,19 @@ const Step2 = (props) =>
 {
   
   const { register, handleSubmit, errors, setValue,setError } = useForm();
+
+  useEffect(() => {
+    verifyProps();    
+  }, []);
+
+  const [nome,setnome] = React.useState('');
+  const verifyProps = () =>{
+    if(props.location.state.item)
+    {
+      let dados = props.location.state.item; 
+      setnome(dados.per.perFirstName);
+    }
+  }
 
   const [sintomas,setsintomas] = React.useState({
     febre: false,
@@ -71,7 +84,7 @@ return (
                   <Row form>
                     {/* First Name */}
                     <Col md="12" className="form-group">
-                      <label htmlFor="feFirstName">Selecione os sintomas: *</label>
+                      <h5>Olá, {nome}!</h5> <label htmlFor="feFirstName">Informe seus sintomas: *</label>
                       <div>
                         <FormCheckbox
                           checked={sintomas.febre}

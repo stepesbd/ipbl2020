@@ -36,12 +36,20 @@ export default function PatientForm (props){
     {
       let dados = props.location.pasprops.item;
       setitem(dados);
-      setValue("nome",dados.perFirstName);
-      setValue("sobrenome",dados.perLastName);
-      if(dados.perBirth)
-        setValue('datanasc', moment(item.perBirth).format('DD/MM/YYYY')); 
-      setValue("email",dados.perEmail);
-      setValue("cpf",dados.perCpf); 
+      setValue("nome",dados.per.perFirstName);
+      setValue("sobrenome",dados.per.perLastName);
+      if(dados.per.perBirth)
+        setValue('datanasc', moment(dados.per.perBirth).format('DD/MM/YYYY')); 
+      setValue("email",dados.per.perEmail);
+      setValue("senha",dados.per.perSenha);
+      setValue("cpf",dados.per.perCpf);      
+      setValue("cep",dados.per.add.addZipcode); 
+      setValue("rua",dados.per.add.addStreet); 
+      setValue("numero",dados.per.add.addNumber); 
+      setValue("bairro",dados.per.add.addNeighborhood); 
+      setValue("cidade",dados.per.add.addCity);
+      setValue("estado",dados.per.add.addState);  
+      setValue("pais",dados.per.add.addCountry);  
     }
   }
 
@@ -54,23 +62,32 @@ export default function PatientForm (props){
     }
 
     setloading(true);
-    let endPoint = "person/"
+    let endPoint = "patient/"
     let dtN = null;
 
     if(data.datanasc)
       dtN = moment(data.datanasc, 'DD/MM/YYYY').toDate()
 
+
     if(item.perId)
     {
       //Editar
-      item.perFirstName = data.nome;
-      item.perLastName = data.sobrenome;
-      item.perEmail = data.email;
-      item.perCpf = data.cpf;
-      item.perBirth = dtN;
+      item.per.perFirstName = data.nome;
+      item.per.perLastName = data.sobrenome;
+      item.per.perEmail = data.email;
+      item.per.perSenha = data.senha;
+      item.per.perCpf = data.cpf;
+      item.per.perBirth = dtN;
+      item.per.add.addStreet = data.rua;
+      item.per.add.addNumber = data.numero;
+      item.per.add.addCity = data.cidade;
+      item.per.add.addState = data.estado;
+      item.per.add.addNeighborhood = data.bairro;
+      item.per.add.addCountry = data.pais;
+      item.per.add.addZipcode = data.cep;
 
       console.log(item)
-      UsePutApi(endPoint,item.perId,item).then(result => {
+      UsePutApi(endPoint,item.patId,item).then(result => {
         if (result.status !== 200) {
           setsalert(<SweetAlert warning title={result.message} onConfirm={hideAlert} />);
           setloading(false);
@@ -82,17 +99,31 @@ export default function PatientForm (props){
       });
     }
     else
-    {
-      
+    {      
       //Inserir
-      let obj ={
-        perId:0,
-        perFirstName: data.nome,
-        perLastName: data.sobrenome,
-        perEmail: data.email,
-        perCpf: data.cpf,
-        perBirth: dtN
-      }
+      let obj = {
+        patInclusionDate: new Date(),
+        patStatus:1,
+        per:
+          {
+            perFirstName: data.nome,
+            perLastName: data.sobrenome,
+            perEmail: data.email,
+            perSenha: data.senha,
+            perCpf: data.cpf,
+            perBirth: dtN,
+            add:
+              {
+                addStreet:data.rua,
+                addNumber:data.numero,
+                addCity:data.cidade,
+                addState:data.estado,
+                addNeighborhood:data.bairro,
+                addCountry:data.pais,
+                addZipcode:data.cep
+              }
+          }
+        };
       UsePostApi(endPoint,obj).then(result => {
         if (result.status !== 200) {
           setsalert(<SweetAlert warning title={result.message} onConfirm={hideAlert} />);
@@ -154,7 +185,7 @@ return (
                     </Col>
                   </Row>
                   <Row form>
-                    <Col md="4" className="form-group">
+                    <Col md="6" className="form-group">
                       <label htmlFor="feEmail">E-mail*</label>
                       <FormInput
                         name="email"
@@ -164,64 +195,108 @@ return (
                       />
                       {errors.email && <span class="obg">Obrigátorio</span>}
                     </Col>
-                    <Col md="4" className="form-group">
-                      <label htmlFor="fePassword">CPF</label>
-                      <FormInput
-                        name="cpf"
-                        placeholder="cpf"
-                        innerRef={register}
-                      />
-                    </Col>
-                    <Col md="4" className="form-group">
-                      <label htmlFor="fePassword">Data Nascimento</label>
+                    <Col md="6" className="form-group">
+                      <label htmlFor="fePassword">Data Nascimento*</label>
                       <FormInput
                         name="datanasc"
                         invalid={errors.datanasc}
                         placeholder="datanasc"
-                        innerRef={register}
+                        innerRef={register({ required: true })}
                       />
+                      {errors.datanasc && <span class="obg">Obrigátorio</span>}
                     </Col>
                   </Row>
-                  {/* <FormGroup>
-                    <label htmlFor="feAddress">Endereço</label>
-                    <FormInput
-                      id="feAddress"
-                      placeholder="Address"
-                      value="Rua Palmeira"
-                      onChange={() => {}}
-                    />
-                  </FormGroup>
-                  <Row form>
-                    <Col md="6" className="form-group">
-                      <label htmlFor="feCity">Cidade</label>
+                  <Row form>                    
+                  <Col md="6" className="form-group">
+                      <label htmlFor="fePassword">CPF*</label>
                       <FormInput
-                        id="feCity"
-                        placeholder="Cidade"
-                        onChange={() => {}}
+                        name="cpf"
+                        invalid={errors.cpf}
+                        placeholder="cpf"
+                        innerRef={register({ required: true })}
                       />
+                      {errors.cpf && <span class="obg">Obrigátorio</span>}
                     </Col>
-                    <Col md="4" className="form-group">
-                      <label htmlFor="feInputState">Estado</label>
-                      <FormSelect id="feInputState">
-                        <option>Selecione...</option>
-                        <option>...</option>
-                      </FormSelect>
+                    
+                    <Col md="6" className="form-group">
+                      <label htmlFor="feEmail">Senha*</label>
+                      <FormInput
+                        name="senha"
+                        invalid={errors.senha}
+                        placeholder="senha"
+                        type="password"
+                        innerRef={register({ required: true })}
+                      />
+                      {errors.senha && <span class="obg">Obrigátorio</span>}
                     </Col>
+                  </Row>
+                  <Row form>
                     <Col md="2" className="form-group">
                       <label htmlFor="feZipCode">CEP</label>
                       <FormInput
-                        id="feZipCode"
-                        placeholder="CEP"
-                        onChange={() => {}}
+                      name="cep"
+                      invalid={errors.cep}
+                      innerRef={register({ required: true })}
+                    />
+                    {errors.cep && <span class="obg">Obrigátorio</span>}
+                    </Col>
+                    <Col md="8" className="form-group">
+                      <label htmlFor="feAddress">Endereço</label>
+                      <FormInput
+                        name="rua"
+                        invalid={errors.rua}
+                        innerRef={register({ required: true })}
                       />
+                      {errors.rua && <span class="obg">Obrigátorio</span>}
+                    </Col>
+                    <Col md="2" className="form-group">
+                      <label htmlFor="feAddress">Nº</label>
+                      <FormInput
+                        name="numero"
+                        invalid={errors.numero}
+                        innerRef={register({ required: true })}
+                      />
+                      {errors.numero && <span class="obg">Obrigátorio</span>}
                     </Col>
                   </Row>
-                  <Row form>
-                    <Col md="12" className="form-group">
-                      <label htmlFor="feDescription">Descrição</label>
-                      <FormTextarea id="feDescription" rows="5" />
+                  <Row form>                    
+                    <Col md="3" className="form-group">
+                        <label htmlFor="feCity">Bairro</label>
+                        <FormInput
+                        name="bairro"
+                        invalid={errors.bairro}
+                        innerRef={register({ required: true })}
+                      />
+                      {errors.bairro && <span class="obg">Obrigátorio</span>}
                     </Col>
-                  </Row>*/}
+                    <Col md="3" className="form-group">
+                      <label htmlFor="feCity">Cidade</label>
+                      <FormInput
+                      name="cidade"
+                      invalid={errors.cidade}
+                      innerRef={register({ required: true })}
+                    />
+                    {errors.cidade && <span class="obg">Obrigátorio</span>}
+                    </Col>
+                    <Col md="3" className="form-group">
+                      <label htmlFor="feInputState">Estado</label>
+                      <FormInput
+                      name="estado"
+                      invalid={errors.estado}
+                      innerRef={register({ required: true })}
+                    />
+                    {errors.estado && <span class="obg">Obrigátorio</span>}
+                    </Col>
+                    <Col md="3" className="form-group">
+                      <label htmlFor="feInputState">Pais</label>
+                      <FormInput
+                      name="pais"
+                      invalid={errors.pais}
+                      innerRef={register({ required: true })}
+                    />
+                    {errors.pais && <span class="obg">Obrigátorio</span>}
+                    </Col>
+                  </Row>
                   <br/>
                   <Button theme="accent">Salvar</Button>
                   <NavLink to="/patient-list">        
