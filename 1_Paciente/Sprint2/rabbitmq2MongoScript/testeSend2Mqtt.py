@@ -1,27 +1,58 @@
 #!/usr/bin/env python
 import pika
+import time
+from threading import Thread
 
-connection = pika.BlockingConnection(
-    pika.ConnectionParameters(host='localhost'))
+credentials = pika.PlainCredentials('guest', 'stepesbd2020')
+parameters = pika.ConnectionParameters('stepesbd.ddns.net',
+                                   5672,
+                                   '/',
+                                   credentials)
+
+connection = pika.BlockingConnection(parameters)
+
 channel = connection.channel()
 
 channel.queue_declare(queue='mqtt2mongo')
-#Insert
-channel.basic_publish(exchange='', routing_key='mqtt2mongo', body='{ "operation": "insert", "name": "test" }')
+queue2ack = 'teste_de_agora'
+channel.queue_declare(queue=queue2ack)
 
-input("Press Enter to continue...")
+def callback(ch, method, properties, body): 
+    print(body)
+
+def myfunc():
+    channel.basic_consume(queue=queue2ack, on_message_callback=callback, auto_ack=True)
+    channel.start_consuming()
+
+t = Thread(target=myfunc)
+t.start()
+
+input("...\n")
+
+#Insert
+print('Inserting...')
+channel.basic_publish(exchange='', routing_key='mqtt2mongo', body='{"ack_queue": "'+queue2ack+'", "operation": "insert", "name": "test" }')
+input("...\n")
 
 #Get
-channel.basic_publish(exchange='', routing_key='mqtt2mongo', body='{ "operation": "get" }')
-
-input("Press Enter to continue...")
+print('Geting...')
+channel.basic_publish(exchange='', routing_key='mqtt2mongo', body='{"ack_queue": "'+queue2ack+'", "operation": "get", "attribute": "name", "value": "test" }')
+input("...\n")
 
 #Update
-channel.basic_publish(exchange='', routing_key='mqtt2mongo', body='{ "operation": "update", "attribute": "name", "value": "test", "new_value": "test2" }')
-
-input("Press Enter to continue...")
+print('Updating...')
+channel.basic_publish(exchange='', routing_key='mqtt2mongo', body='{"ack_queue": "'+queue2ack+'", "operation": "update", "attribute": "name", "value": "test", "new_value": "test2" }')
+input("...\n")
 
 #Remove
-channel.basic_publish(exchange='', routing_key='mqtt2mongo', body='{ "operation": "remove", "attribute": "name", "value": "test2" }')
+print('removing...')
+channel.basic_publish(exchange='', routing_key='mqtt2mongo', body='{"ack_queue": "'+queue2ack+'", "operation": "remove", "attribute": "name", "value": "test2" }')
+input("...\n")
+
+t.join
+
+channel.stop_consuming
+
+channel.queue_delete(queue=queue2ack)
 
 connection.close()
