@@ -4,51 +4,66 @@ from bson.json_util import loads, dumps
 import json
 
 # Creating MongoDB Connection
-client = MongoClient("mongodb+srv://stepesbd:stepesbd@stepesbd-8e6rc.mongodb.net/test?retryWrites=true&w=majority")
+client = MongoClient("mongodb://localhost:27017")
 # select database
-mydb = client["STEPESBD"]
+mydb = client["stepesbd"]
 
 # select collection
-mycol = mydb["ATENDIMENTOS"]
+mycol = mydb["atendimentos"]
 
 # RabbitMQ connection config
-connection = pika.BlockingConnection(
-    pika.ConnectionParameters(host='localhost'))
+credentials = pika.PlainCredentials('guest', 'stepesbd2020')
+parameters = pika.ConnectionParameters('localhost',
+                                   5672,
+                                   '/',
+                                   credentials)
+
+connection = pika.BlockingConnection(parameters)
 channel = connection.channel()
 
 # Create Queue on RabbitMQ (Optional)
 channel.queue_declare(queue='mqtt2mongo')
 
+
+def sendAck(ackMessage,queue2Send):
+    channel.basic_publish(exchange='', routing_key=queue2Send, body= ackMessage )
+
 # Callback of received message event
 def callback(ch, method, properties, body): 
-    obj = json.loads(body)   
-    print(obj['operation'])
-    if (obj['operation']) == 'insert':
-        mycol.insert_one(loads(body))
-    elif (obj['operation']) == 'get':
-        #for x in mycol.find({},{ "_id": 0, "name": 1, "address": 1 }):
-        for x in mycol.find():
-            print(x)
-    elif (obj['operation']) == 'remove':
-        myquery = {obj['attribute']:obj['value']}
-        mycol.delete_many(myquery)
-    elif (obj['operation']) == 'update':
-        myquery = {obj['attribute']:obj['value']}
-        newvalues = { "$set": {obj['attribute']:obj['new_value']} }
-        mycol.update_many(myquery,newvalues)
-
-    #mycol.insert_one(loads(body))
-    #print("Sent 2 mongo")
+    try:        
+        obj = json.loads(body)  
+        try:
+            q_ack = str(obj['ack_queue']) 
+        except:
+            q_ack = 'invalid'
+            print('invalid ack_queue')
+        #print(q_ack+' '+obj['operation'])
+        if (obj['operation']) == 'insert':
+            mycol.insert_one(loads(body))            
+        elif (obj['operation']) == 'get':
+            for x in mycol.find({},{ obj['attribute']:obj['value'] }):                         
+                sendAck(str(x),q_ack)
+        elif (obj['operation']) == 'remove':
+            myquery = {obj['attribute']:obj['value']}
+            mycol.delete_many(myquery)
+        elif (obj['operation']) == 'update':
+            myquery = {obj['attribute']:obj['value']}
+            newvalues = { "$set": {obj['attribute']:obj['new_value']} }
+            mycol.update_many(myquery,newvalues)        
+    except:
+        try:
+            sendAck('ERROR',q_ack)
+        except:
+            print('no queue to ack')
+    sendAck('OK',q_ack)
 
 # Creating RabbitMQ consumer
-channel.basic_consume(
-    queue='mqtt2mongo', on_message_callback=callback, auto_ack=True)
+channel.basic_consume(queue='mqtt2mongo', on_message_callback=callback, auto_ack=True)
 
 
 print('Waiting for messages...')
 # Running RabbitMQ consumer
-while 1:
-    #channel.start_consuming()      
+while 1:      
     try:
         channel.start_consuming()        
     except:

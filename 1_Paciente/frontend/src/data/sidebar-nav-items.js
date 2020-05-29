@@ -1,4 +1,4 @@
-export default function() {
+export default function () {
   return [
     {
       title: "Lista de Pacientes",
@@ -11,33 +11,51 @@ export default function() {
       to: "/patient-form",
       htmlBefore: '<i class="material-icons">assignment_ind</i>',
       htmlAfter: ""
-    },  
+    },
+    {
+      title: "Lista de Médicos",
+      to: "/physician-list",
+      htmlBefore: '<i class="material-icons">list</i>',
+      htmlAfter: ""
+    },
+    {
+      title: "Cadastro de Médicos",
+      to: "/physician-form",
+      htmlBefore: '<i class="material-icons">healing</i>',
+      htmlAfter: ""
+    },
+    {
+      title: "Especicalidades",
+      to: "/specialties",
+      htmlBefore: '<i class="material-icons">folder_special</i>',
+      htmlAfter: ""
+    },
     {
       title: "Atendimento",
       to: "/step1",
       htmlBefore: '<i class="material-icons">add_to_home_screen</i>',
       htmlAfter: ""
-    },  
-   /* {
-      title: "Dashboard",
-      to: "/dashboard",
-      htmlBefore: '<i class="material-icons">home</i>',
-      htmlAfter: ""
-    }, 
-    {
-      title: "Forms & Componentes",
-      htmlBefore: '<i class="material-icons">view_module</i>',
-      to: "/components-overview",
     },
-    {
-      title: "Tabelas",
-      htmlBefore: '<i class="material-icons">table_chart</i>',
-      to: "/tables",
-    },
-    {
-      title: "Erros",
-      htmlBefore: '<i class="material-icons">error</i>',
-      to: "/errors",
-    }*/
+    /* {
+       title: "Dashboard",
+       to: "/dashboard",
+       htmlBefore: '<i class="material-icons">home</i>',
+       htmlAfter: ""
+     }, 
+     {
+       title: "Forms & Componentes",
+       htmlBefore: '<i class="material-icons">view_module</i>',
+       to: "/components-overview",
+     },
+     {
+       title: "Tabelas",
+       htmlBefore: '<i class="material-icons">table_chart</i>',
+       to: "/tables",
+     },
+     {
+       title: "Erros",
+       htmlBefore: '<i class="material-icons">error</i>',
+       to: "/errors",
+     }*/
   ];
 }
