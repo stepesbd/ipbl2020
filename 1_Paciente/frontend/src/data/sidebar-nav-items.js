@@ -36,12 +36,17 @@ export default function () {
       htmlBefore: '<i class="material-icons">add_to_home_screen</i>',
       htmlAfter: ""
     },
+    {
+      title: "Agenda Médica",
+      to: "/schedule",
+      htmlBefore: '<i class="material-icons">assignment_turned_in</i>'
+    },
     /* {
        title: "Dashboard",
        to: "/dashboard",
        htmlBefore: '<i class="material-icons">home</i>',
        htmlAfter: ""
-     }, 
+     },
      {
        title: "Forms & Componentes",
        htmlBefore: '<i class="material-icons">view_module</i>',
