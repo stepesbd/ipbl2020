@@ -1,49 +1,47 @@
 require('dotenv/config');
-const amqp = require('amqplib/callback_api')
+const amqp = require('amqplib')
 
-class rabbitMQ {
-
+class RabbitMQ {
     constructor() {
-        this.queue = 'mqtt2mongo';
+        this.queues = {
+            output: 'mqtt2mongo',
+            input: 'ts2-backend',
+        }
+        this.connection = undefined;
+        this.channel = undefined;
     }
 
-    bail(err) {
-        console.error(err);
-        process.exit(1);
-    }
-
-    connect() {
-        amqp.connect(process.env.AMQP_URL, (err, conn) => {
-            if (err != null) this.bail(err);
-            //this.consumer(conn, this.queue)
-            //this.publisher(conn, this.queue)
-        })
+    async connect() {
+        if (typeof this.connection === "undefined") {
+            this.connection = await amqp.connect(process.env.AMQP_URL);
+            this.channel = await this.connection.createChannel();
+        }
     }
 
     // Publisher
-    publisher(conn, queue, msg) {
-        conn.createChannel(on_open);
-        function on_open(err, ch) {
-            if (err != null) this.bail(err);
-            ch.assertQueue(queue);
-            ch.sendToQueue(queue, Buffer.from(msg));
+    async publisher(msg) {
+        if (typeof this.connection === "undefined") {
+            await this.connect();
         }
+        if (typeof msg !== "string") {
+            throw new Error("TypeError: The message must be string");
+        }
+        const queue = this.queues.output;
+        this.channel.assertQueue(queue);
+        this.channel.sendToQueue(queue, Buffer.from(msg));
     }
 
     // Consumer
-    consumer(conn, queue) {
-        var ok = conn.createChannel(on_open);
-        function on_open(err, ch) {
-            if (err != null) bail(err);
-            ch.assertQueue(queue);
-            ch.consume(queue, function (msg) {
-                if (msg !== null) {
-                    //console.log(msg.content.toString());
-                    ch.ack(msg);
-                }
-            });
+    async consumer() {
+        if (typeof this.connection === "undefined") {
+            await this.connect();
         }
+        const queue = this.queues.input;
+        this.channel.assertQueue(queue);
+        return this.channel.consume(queue);
     }
 }
+
+const rabbitMQ = new RabbitMQ();
 
 module.exports = rabbitMQ;

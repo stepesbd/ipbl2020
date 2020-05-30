@@ -8,11 +8,9 @@ app.use(cors({ origin: "*" }));
 app.use(express.json());
 
 
-const amqpClient = new rabbitMQ();
-mqttClient.connect()
 
-app.use((request, response, next) => {
-    request.amqp = amqpClient;
+app.use(async (request, response, next) => {
+    request.amqp = rabbitMQ;
     return next();
 })
 

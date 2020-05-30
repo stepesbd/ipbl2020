@@ -6,7 +6,6 @@ module.exports = {
     },
 
     async store(request, response) {
-        request.mqttClient.sendMessage(request.body.message)
-        response.status(200).send("teste")
+        await request.amqp.publisher(JSON.stringify(request.body))
     }
 }
