@@ -1,5 +1,5 @@
 require('dotenv/config');
-const mqtt = require('mqtt');
+
 
 class MqttHandler {
     constructor() {
@@ -12,16 +12,14 @@ class MqttHandler {
 
     connect(subscriber) {
         // Connect mqtt with credentials (in case of needed, otherwise we can omit 2nd param)
-        this.mqttClient = mqtt.connect(this.host, {
-            //port: this.port
-        });
+        this.mqttClient = mqtt.connect('amqp://');
 
         // Mqtt error calback
         this.mqttClient.on('error', (err) => {
             console.log(err);
             this.mqttClient.end();
         });
-
+        /*
         // Connection callback
         this.mqttClient.on('connect', () => {
             console.log(`mqtt client connected`);
@@ -38,6 +36,7 @@ class MqttHandler {
         this.mqttClient.on('close', () => {
             console.log(`mqtt client disconnected`);
         });
+        */
     }
 
     // Sends a mqtt message to topic: mytopic

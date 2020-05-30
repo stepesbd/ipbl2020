@@ -2,18 +2,20 @@ const express = require('express');
 const cors = require('cors');
 const routes = require('./routes');
 const app = express();
-const MqttHandler = require('./services/MqttHandler')
+const rabbitMQ = require('./services/rabbitMQ')
 
 app.use(cors({ origin: "*" }));
 app.use(express.json());
 
-const mqttClient = new MqttHandler();
-mqttClient.connect('mqtt2mongo');
+
+const amqpClient = new rabbitMQ();
+mqttClient.connect()
 
 app.use((request, response, next) => {
-    request.mqttClient = mqttClient;
+    request.amqp = amqpClient;
     return next();
 })
+
 
 app.use(routes);
 
