@@ -16,7 +16,6 @@ class RabbitMQ {
             this.connection = await amqp.connect(process.env.AMQP_URL);
             this.channel = await this.connection.createChannel();
         }
-        this.consumer()
     }
 
     // Publisher
@@ -35,6 +34,7 @@ class RabbitMQ {
 
     // Consumer
     async consumer() {
+        let message = []
         if (typeof this.connection === "undefined") {
             await this.connect();
         }
@@ -42,9 +42,9 @@ class RabbitMQ {
         this.channel.assertQueue(ack_queue);
         this.channel.consume(ack_queue, async (msg) => {
             console.log(msg.content.toString())
-            let result = await this.channel.ack(msg)
-            console.log(result)
+            this.channel.ack(msg)
         })
+        return message
     }
 }
 

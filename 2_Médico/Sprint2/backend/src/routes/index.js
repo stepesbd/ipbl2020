@@ -55,8 +55,12 @@ routes.group("/api", (router) => {
     router.put("/specialties/:id", SpecialtyController.update)
     router.delete("/specialties/:id", SpecialtyController.destroy)
 
+    //Attendances's routes
     router.get("/attendances", AttendanceController.index)
+    //router.get("/attendances/:id", AttendanceController.show)
     router.post("/attendances", AttendanceController.store)
+    //router.put("/attendances/:attribute", AttendanceController.update)
+    //router.delete("/attendances/:attribute", AttendanceController.destroy)
 });
 
 module.exports = routes;
