@@ -13,7 +13,7 @@
 <a href="/Hospital/{{hos.hos_id}}/leito/New" class="float-right btn btn-success" alt="Cadastrar novo leito" title="Cadastrar novo leito"><i class="fa fa-plus mr-2" aria-hidden="true"></i> Adicionar</a>
 <div class="mt-4 mb-4">
   <h3>
-    <i class="fa fa-user-md" aria-hidden="true"></i>
+    <i class="fa fas fa-procedures" aria-hidden="true"></i>
     Leitos
   </h3>
   <h5>{{hos.hos_name}}</h5>
@@ -25,31 +25,132 @@
         <thead>
           <tr>
             <th>Nome Leito: </th>
-            <th>Prontutário</th>
+            <th>Prontuário</th>
+            <th>Setor</th>
+            <th>Situação</th>
           <th></th>
           </tr>
         </thead>
         <tbody>
           {{#each bed}}
+            
           <tr>
             <td>{{bed_name}}</td>
-            <td>{{ bed_medical_record }}</td>
-            <td></td>
-        <!--    <td class="text-center">
-              <div class="form-row text-center btn-group btn-group-justified" style="width:90px">
-                <button id={{emp_id}} type="button" class="btn btn-primary btn-sm rounded-2"
-                  onclick="window.location.href='/hospital/{{@root.hosp.hos_id}}/leito/update/{{emp_id}}'" alt="Editar" data-toggle="tooltip" data-placement="top" title="Editar">
+            <td>{{bed_medical_record }}</td>              
+            <td>{{Bed_sector.sector_desc}}</td>
+            {{#ifEquals bed_status 0 }}
+                <td><i class="fa fa-circle" style="color:green" aria-hidden="true"></i></td>   
+            {{/ifEquals}} 
+            {{#ifEquals bed_status 1 }}
+                <td><i class="fa fa-circle" style="color:red" aria-hidden="true"></i></td>   
+            {{/ifEquals}}         
+          <td class="text-center">
+              <div class="form-row text-center btn-group btn-group-justified" style="width:45px">
+                <button id={{bed_id}} type="button" class="btn btn-primary btn-sm rounded-2 mr-1" data-toggle="modal"
+          data-target="#BedUpdate{{bed_id}}">
                   <i class="fa fa-edit"></i>
                 </button>
               </div>
+              <div class="form-row text-center btn-group btn-group-justified" style="width:45px">
+               <button id={{bed_id}} type="button" class="btn btn-primary btn-sm rounded-2 mr-1" data-toggle="modal"
+                    data-target="#mdDelete{{bed_id}}">
+                    <i class="fas fa-trash"></i>
+                </button>
+              </div>
             </td>
-          </tr> -->
+          </tr> 
           {{/each}}
         </tbody>
       </table>
     </div>
 </div>
  <a class="btn btn-primary" href="/Hospital" role="button">Voltar</a>
+
+
+{{#each bed}}
+<!-- Modal Update -->
+<div class="modal fade bd-example-modal-lg" id="BedUpdate{{bed_id}}" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel{{bed_id}}"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="updateModalLabel{{bed_id}}">Atualizar Leito</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- FORM ATUALIZACAO  -->
+        <form action="/hospital/{{@root.hos.hos_id}}/leito/update/{{bed_id}}" method="post">
+	      <div class="form-group">
+	        <label for="inputDesc">Descri&ccedil;&atilde;o</label>
+	        <input type="text" class="form-control" name="inputDesc" id="inputDesc" placeholder="Descri&ccedil;&atilde;o da Leito" value="{{bed_name}}">
+	      </div>
+         <div class="row">
+                <div class="col">
+                  <div class="form-group">
+                     <label for="inputSetor">Setor</label>
+                          <select class="form-control" name="inputSetor">                                                        
+                              <option value="1">UTI </option>
+                              <option value="2">AMBULATORIO</option>                              
+                          </select>                                      
+                  </div>
+                </div>
+            </div>  
+            <div class="row">
+                <div class="col">
+                  <div class="form-group">
+                     <label for="inputStatus">Status de Leito</label>
+                          <select class="form-control" name="inputStatus">                                                        
+                              <option value="0">Disponível</option>
+                              <option value="1">Ocupado</option>                              
+                          </select>                                      
+                  </div>
+                </div>
+            </div>  
+          <!--  FIM FORM ATUALIZACAO  --->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-success">Atualizar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal Delete-->
+<div class="modal fade bd-example-modal-lg" id="mdDelete{{bed_id}}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Remove</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Deseja desativar esse registro?
+        Leito: <span id="info"> {{bed_name}} </span>
+      </div>
+      <div class="modal-footer">
+        <form action="/hospital/{{@root.hos.hos_id}}/leito/Delete/{{bed_id}}" method="get">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-danger">Desativar</button>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+{{/each}}
+
+
 
 
 <script>
