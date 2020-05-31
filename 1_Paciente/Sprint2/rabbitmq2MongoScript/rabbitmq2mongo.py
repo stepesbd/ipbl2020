@@ -47,13 +47,11 @@ def callback(ch, method, properties, body):
 
             if (obj['attribute']) == 'all':
                 for x in mycol.find({}):
-                    toSend = re.sub(r'[\000-\011\013-\037]', '', str(x))
-                    toSend = re.sub(',\n}$', '\n}', toSend)
+                    toSend = dumps(x)  
                     sendAck(toSend,q_ack)
             else:
-                for x in mycol.find({ obj['attribute']:obj['value'] }):                         
-                    toSend = re.sub(r'[\000-\011\013-\037]', '', str(x))
-                    toSend = re.sub(',\n}$', '\n}', toSend)
+                for x in mycol.find({ obj['attribute']:obj['value'] }): 
+                    toSend = dumps(x)      
                     sendAck(toSend,q_ack)
 
         elif (obj['operation']) == 'remove':
