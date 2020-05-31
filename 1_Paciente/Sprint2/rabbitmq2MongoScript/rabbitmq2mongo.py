@@ -22,7 +22,7 @@ connection = pika.BlockingConnection(parameters)
 channel = connection.channel()
 
 # Create Queue on RabbitMQ (Optional)
-channel.queue_declare(queue='mqtt2mongo')
+channel.queue_declare(queue='mqtt2mongo', durable=True)
 
 
 def sendAck(ackMessage,queue2Send):
@@ -41,8 +41,14 @@ def callback(ch, method, properties, body):
         if (obj['operation']) == 'insert':
             mycol.insert_one(loads(body))            
         elif (obj['operation']) == 'get':
-            for x in mycol.find({},{ obj['attribute']:obj['value'] }):                         
-                sendAck(str(x),q_ack)
+
+            if (obj['attribute']) == 'all':
+                for x in mycol.find({}):
+                    sendAck(str(x),q_ack)
+            else:
+                for x in mycol.find({ obj['attribute']:obj['value'] }):                         
+                    sendAck(str(x),q_ack)
+
         elif (obj['operation']) == 'remove':
             myquery = {obj['attribute']:obj['value']}
             mycol.delete_many(myquery)

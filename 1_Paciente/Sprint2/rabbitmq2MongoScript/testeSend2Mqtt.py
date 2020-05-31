@@ -13,7 +13,7 @@ connection = pika.BlockingConnection(parameters)
 
 channel = connection.channel()
 
-channel.queue_declare(queue='mqtt2mongo')
+channel.queue_declare(queue='mqtt2mongo', durable=True)
 queue2ack = 'teste_manfrim'
 channel.queue_declare(queue=queue2ack)
 
@@ -33,6 +33,13 @@ input("...\n")
 print('Inserting...')
 channel.basic_publish(exchange='', routing_key='mqtt2mongo', body='{"ack_queue": "'+queue2ack+'", "operation": "insert", "name": "test" }')
 input("...\n")
+
+
+#Get All
+print('Geting All...')
+channel.basic_publish(exchange='', routing_key='mqtt2mongo', body='{"ack_queue": "'+queue2ack+'", "operation": "get", "attribute": "all" }')
+input("...\n")
+
 
 #Get
 print('Geting...')
