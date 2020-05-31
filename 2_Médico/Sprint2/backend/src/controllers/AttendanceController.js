@@ -9,8 +9,9 @@ module.exports = {
             ack_queue,
             attribute
         }
-        await request.amqp.publisher(JSON.stringify(data))
-        return response.json('result')
+        let result = await request.amqp.publisher(JSON.stringify(data))
+        //let result = await request.amqp.consumer()
+        return response.json(result)
     },
 
     async show(request, response) {
