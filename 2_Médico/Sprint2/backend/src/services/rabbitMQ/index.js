@@ -4,8 +4,8 @@ const amqp = require('amqplib')
 class RabbitMQ {
     constructor() {
         this.queues = {
-            output: 'mqtt2mongo',
-            input: 'ts2-backend',
+            input: 'mqtt2mongo',
+            ack_queue: 'ts2-backend',
         }
         this.connection = undefined;
         this.channel = undefined;
@@ -16,6 +16,7 @@ class RabbitMQ {
             this.connection = await amqp.connect(process.env.AMQP_URL);
             this.channel = await this.connection.createChannel();
         }
+        this.consumer()
     }
 
     // Publisher
@@ -26,8 +27,9 @@ class RabbitMQ {
         if (typeof msg !== "string") {
             throw new Error("TypeError: The message must be string");
         }
-        const queue = this.queues.output;
-        this.channel.assertQueue(queue);
+        const queue = this.queues.input;
+        const ack_queue = this.queues.ack_queue;
+        this.channel.assertQueue(ack_queue);
         this.channel.sendToQueue(queue, Buffer.from(msg));
     }
 
@@ -36,9 +38,13 @@ class RabbitMQ {
         if (typeof this.connection === "undefined") {
             await this.connect();
         }
-        const queue = this.queues.input;
-        this.channel.assertQueue(queue);
-        return this.channel.consume(queue);
+        const ack_queue = this.queues.ack_queue;
+        this.channel.assertQueue(ack_queue);
+        this.channel.consume(ack_queue, async (msg) => {
+            console.log(msg.content.toString())
+            let result = await this.channel.ack(msg)
+            console.log(result)
+        })
     }
 }
 
