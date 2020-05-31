@@ -22,7 +22,7 @@ connection = pika.BlockingConnection(parameters)
 channel = connection.channel()
 
 # Create Queue on RabbitMQ (Optional)
-channel.queue_declare(queue='mqtt2mongo')
+channel.queue_declare(queue='mqtt2mongo', durable=True)
 
 
 def sendAck(ackMessage,queue2Send):

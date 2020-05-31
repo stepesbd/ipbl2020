@@ -13,7 +13,7 @@ connection = pika.BlockingConnection(parameters)
 
 channel = connection.channel()
 
-channel.queue_declare(queue='mqtt2mongo')
+channel.queue_declare(queue='mqtt2mongo', durable=True)
 queue2ack = 'teste_manfrim'
 channel.queue_declare(queue=queue2ack)
 
