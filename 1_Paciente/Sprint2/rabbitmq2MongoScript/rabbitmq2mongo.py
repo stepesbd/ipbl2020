@@ -2,6 +2,8 @@ import pika
 from pymongo import MongoClient
 from bson.json_util import loads, dumps
 import json
+import time
+import re
 
 # Creating MongoDB Connection
 client = MongoClient("mongodb://localhost:27017")
@@ -26,6 +28,7 @@ channel.queue_declare(queue='mqtt2mongo', durable=True)
 
 
 def sendAck(ackMessage,queue2Send):
+    print('Enviando no topico ' + queue2Send +': ' +ackMessage)
     channel.basic_publish(exchange='', routing_key=queue2Send, body= ackMessage )
 
 # Callback of received message event
@@ -37,17 +40,19 @@ def callback(ch, method, properties, body):
         except:
             q_ack = 'invalid'
             print('invalid ack_queue')
-        #print(q_ack+' '+obj['operation'])
+        print('received: '+q_ack+' '+obj['operation'])
         if (obj['operation']) == 'insert':
             mycol.insert_one(loads(body))            
         elif (obj['operation']) == 'get':
 
             if (obj['attribute']) == 'all':
                 for x in mycol.find({}):
-                    sendAck(str(x),q_ack)
+                    toSend = dumps(x)  
+                    sendAck(toSend,q_ack)
             else:
-                for x in mycol.find({ obj['attribute']:obj['value'] }):                         
-                    sendAck(str(x),q_ack)
+                for x in mycol.find({ obj['attribute']:obj['value'] }): 
+                    toSend = dumps(x)      
+                    sendAck(toSend,q_ack)
 
         elif (obj['operation']) == 'remove':
             myquery = {obj['attribute']:obj['value']}
@@ -62,6 +67,7 @@ def callback(ch, method, properties, body):
         except:
             print('no queue to ack')
     sendAck('OK',q_ack)
+    print('Msg OK!')
 
 # Creating RabbitMQ consumer
 channel.basic_consume(queue='mqtt2mongo', on_message_callback=callback, auto_ack=True)
