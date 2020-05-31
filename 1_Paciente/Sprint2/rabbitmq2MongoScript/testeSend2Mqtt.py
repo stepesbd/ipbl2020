@@ -34,6 +34,13 @@ print('Inserting...')
 channel.basic_publish(exchange='', routing_key='mqtt2mongo', body='{"ack_queue": "'+queue2ack+'", "operation": "insert", "name": "test" }')
 input("...\n")
 
+
+#Get All
+print('Geting All...')
+channel.basic_publish(exchange='', routing_key='mqtt2mongo', body='{"ack_queue": "'+queue2ack+'", "operation": "get", "attribute": "all" }')
+input("...\n")
+
+
 #Get
 print('Geting...')
 channel.basic_publish(exchange='', routing_key='mqtt2mongo', body='{"ack_queue": "'+queue2ack+'", "operation": "get", "attribute": "name", "value": "test" }')
