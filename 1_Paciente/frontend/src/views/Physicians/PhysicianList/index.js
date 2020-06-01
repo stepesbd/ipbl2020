@@ -28,7 +28,7 @@ function PhysicianList() {
     const loadList = () => {
         setloading(true);
         let endPoint = "physicians"
-        UseGetApi('D',endPoint).then(result => {
+        UseGetApi('D', endPoint).then(result => {
             if (result.status !== 200) {
                 hangleNotification(true, result.message, 'danger')
                 setloading(false);
@@ -44,7 +44,7 @@ function PhysicianList() {
     const removerRegistro = (id) => {
 
         let endPoint = "physicians/"
-        UseDeleteApi('D',endPoint, id).then(result => {
+        UseDeleteApi('D', endPoint, id).then(result => {
             if (result.status !== 200) {
                 setsalert(<SweetAlert warning title={result.message} onConfirm={hideAlert} />);
                 setloading(false);
@@ -136,11 +136,12 @@ function PhysicianList() {
                                                     }}>
                                                         <Button outline size="sm" theme="info" className="mb-2 mr-1">
                                                             <i className="material-icons">edit</i> Editar
-                      </Button>
+                                                        </Button>
+
                                                     </NavLink>
                                                     <Button onClick={(e) => confirmDelete(item.id)} outline size="sm" theme="danger" className="mb-2 mr-1">
                                                         <i className="material-icons">delete</i> Remover
-                      </Button>
+                                                    </Button>
                                                 </td>
                                             </tr>
                                         ))}

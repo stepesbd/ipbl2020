@@ -1,26 +1,27 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
-import {
-    Container,
-    Card,
-    CardHeader,
-    ListGroup,
-    ListGroupItem,
-    Row,
-    Col,
-    Button,
-    ListGroupItemHeading,
-    ListGroupItemText
-} from "shards-react";
+import { Container, FormInput, FormTextarea, Card, CardHeader, ListGroup, ListGroupItem, Row, Col, Button, ListGroupItemHeading, ListGroupItemText } from "shards-react";
 import ClipLoader from "react-spinners/ClipLoader";
 import SweetAlert from "react-bootstrap-sweetalert";
-import PageTitle from "../../../components/common/PageTitle";
 import { UsePostApi } from "../../../services/apiService";
 
-function Schedule(props) {
-
+function AttendanceForm(props) {
+    const [name, setName] = useState('')
+    const [id, setId] = useState()
     const { register, handleSubmit, errors, setValue, setError } = useForm();
+
+    useEffect(() => {
+        verifyItem();
+    }, []);
+
+    const verifyItem = () => {
+        if (props.location.pasprops) {
+            let dados = props.location.pasprops.item;
+            setName(dados.per.perFirstName);
+            setId(dados.patId)
+        }
+    }
 
     const [loading, setloading] = React.useState(false);
     const onSubmit = data => {
@@ -61,7 +62,7 @@ function Schedule(props) {
     }
 
     const handleBack = () => {
-        props.history.push('/patient-list')
+        props.history.push('/new-attendance')
     }
 
     const [salert, setsalert] = React.useState();
@@ -74,54 +75,42 @@ function Schedule(props) {
 
             {salert}
             <br /><br />
-            {/* Default Light Table */}
+
             <Row>
                 <Col lg="12">
                     <Card small className="mb-4">
                         <CardHeader className="border-bottom">
-                            <h6 className="m-0">Atendimentos</h6>
+                            <h6 className="m-0">Atendimento</h6>
                         </CardHeader>
                         <ListGroup flush>
                             <ListGroupItem className="p-3">
                                 <Row>
-                                    <ListGroup>
-                                        <ListGroupItem>
-                                            <ListGroupItemHeading>
-                                                <Link to="">
-                                                    Luan Henrique Souza Dantas
-                                                </Link>
-                                            </ListGroupItemHeading>
-                                            <ListGroupItemText>Data: 01/06/2020</ListGroupItemText>
-                                        </ListGroupItem>
-                                        <ListGroupItem>
-                                            <ListGroupItemHeading>
-                                                <Link to="">
-                                                    João Das Neves
-                                                </Link>
-                                            </ListGroupItemHeading>
-                                            <ListGroupItemText>Data: 01/06/2020</ListGroupItemText>
-                                        </ListGroupItem>
-                                        <ListGroupItem>
-                                            <ListGroupItemHeading>
-                                                <Link to="">
-                                                    João Mário
-                                                </Link>
-                                            </ListGroupItemHeading>
-                                            <ListGroupItemText>Data: 01/06/2020</ListGroupItemText>
-                                        </ListGroupItem>
-                                        <ListGroupItem>
-                                            <ListGroupItemHeading>
-                                                <Link to="">
-                                                    João Silva
-                                                </Link>
-                                            </ListGroupItemHeading>
-                                            <ListGroupItemText>Data: 01/06/2020</ListGroupItemText>
-                                        </ListGroupItem>
-                                    </ListGroup>
+                                    <Container>
+                                        <label htmlFor="feFirstName">Paciente*</label>
+                                        <FormInput
+                                            name="nome"
+                                            value={name}
+                                            placeholder="Nome"
+                                            disabled={true}
+                                        />
+                                        <br />
+
+                                        <label htmlFor="diagnosis">Descrição*</label>
+                                        <FormTextarea name="diagnosis" />
+                                        <br />
+                                        <label htmlFor="newAttendance">Novo Agendamento*</label>
+                                        <FormInput
+                                            name="newAttendance"
+                                            invalid={errors.nome}
+                                            type="date"
+                                        />
+                                    </Container>
+
                                 </Row>
+                                <br />
                                 <Row>
                                     <Col>
-                                        <Button type="submit" onClick={handleNew} theme="accent">Novo Atendimento</Button>
+                                        <Button type="submit" onClick={handleNew} theme="accent">Salvar</Button>
                                         <Button type="button" onClick={handleBack} theme="default" style={{ float: 'right' }}>Voltar</Button>
                                     </Col>
                                 </Row>
@@ -146,4 +135,4 @@ function Schedule(props) {
     )
 };
 
-export default Schedule;
+export default AttendanceForm;

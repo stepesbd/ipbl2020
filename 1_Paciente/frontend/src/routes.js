@@ -25,6 +25,8 @@ import SpecialtyList from './views/Specialties/SpecialtyList';
 
 //Scheduling
 import Schedule from './views/Scheduling/Schedule'
+import AttendanceForm from './views/Scheduling/AttendanceForm'
+import NewAttendanceForm from './views/Scheduling/NewAttendanceForm'
 
 export default [
   {
@@ -107,5 +109,15 @@ export default [
     path: "/schedule",
     layout: Default2Layout,
     component: Schedule
+  },
+  {
+    path: "/new-attendance",
+    layout: DefaultLayout,
+    component: NewAttendanceForm
+  },
+  {
+    path: "/attendance-form",
+    layout: Default2Layout,
+    component: AttendanceForm
   }
 ];
