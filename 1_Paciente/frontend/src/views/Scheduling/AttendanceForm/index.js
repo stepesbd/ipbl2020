@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
 import { Container, FormInput, FormTextarea, Card, CardHeader, ListGroup, ListGroupItem, Row, Col, Button, ListGroupItemHeading, ListGroupItemText } from "shards-react";
 import ClipLoader from "react-spinners/ClipLoader";
 import SweetAlert from "react-bootstrap-sweetalert";
@@ -9,7 +8,11 @@ import { UsePostApi } from "../../../services/apiService";
 function AttendanceForm(props) {
     const [name, setName] = useState('')
     const [id, setId] = useState()
+    const [newAttendance, setNewAttendance] = useState('')
+    const [diagnosis, setDiagnosis] = useState('')
     const { register, handleSubmit, errors, setValue, setError } = useForm();
+    const physicianId = 1;
+
 
     useEffect(() => {
         verifyItem();
@@ -58,7 +61,12 @@ function AttendanceForm(props) {
     };
 
     const handleNew = () => {
-        props.history.push('/new-attendance')
+        console.log({
+            physicianId,
+            id,
+            diagnosis,
+            newAttendance
+        })
     }
 
     const handleBack = () => {
@@ -96,11 +104,15 @@ function AttendanceForm(props) {
                                         <br />
 
                                         <label htmlFor="diagnosis">Descrição*</label>
-                                        <FormTextarea name="diagnosis" />
+                                        <FormTextarea
+                                            name="diagnosis"
+                                        >{diagnosis}</FormTextarea>
                                         <br />
                                         <label htmlFor="newAttendance">Novo Agendamento*</label>
                                         <FormInput
                                             name="newAttendance"
+                                            value={newAttendance}
+                                            onChange={e => setNewAttendance(e.target.value)}
                                             invalid={errors.nome}
                                             type="date"
                                         />
