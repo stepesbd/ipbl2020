@@ -30,7 +30,6 @@ class RabbitMQ {
         const ack_queue = this.queues.ack_queue;
         this.channel.assertQueue(ack_queue);
         this.channel.sendToQueue(queue, Buffer.from(msg));
-        return this.consumer()
     }
 
     // Consumer
@@ -41,14 +40,15 @@ class RabbitMQ {
         }
         const ack_queue = this.queues.ack_queue;
         this.channel.assertQueue(ack_queue);
-        await this.channel.consume(ack_queue, async (msg) => {
-            if (msg.content.toString('utf8') !== 'OK') {
-                console.log(JSON.parse(msg.content.toString('utf8')))
-                message.push(JSON.parse(msg.content.toString('utf8')))
+        this.channel.consume(ack_queue, async (msg) => {
+            if (msg !== null) {
+                if (msg.content.toString('utf8') !== 'OK') {
+                    await message.push(JSON.parse(msg.content.toString('utf8')))
+                }
             }
             this.channel.ack(msg)
         })
-        return message;
+        return this.message;
     }
 }
 
