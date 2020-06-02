@@ -61,11 +61,20 @@ function AttendanceForm(props) {
     };
 
     const handleNew = () => {
-        console.log({
+        let endPoint = 'attendances';
+        let data = {
             physicianId,
-            id,
+            patId: id,
             diagnosis,
             newAttendance
+        }
+        UsePostApi('D', endPoint, data).then(result => {
+            console.log(data)
+            console.log(result)
+            props.history.push({
+                pathname: '/schedule',
+                //state: { item: data }
+            })
         })
     }
 
@@ -106,7 +115,9 @@ function AttendanceForm(props) {
                                         <label htmlFor="diagnosis">Descrição*</label>
                                         <FormTextarea
                                             name="diagnosis"
-                                        >{diagnosis}</FormTextarea>
+                                            value={diagnosis}
+                                            onChange={e => setDiagnosis(e.target.value)}
+                                        />
                                         <br />
                                         <label htmlFor="newAttendance">Novo Agendamento*</label>
                                         <FormInput

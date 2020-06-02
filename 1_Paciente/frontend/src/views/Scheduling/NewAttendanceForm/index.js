@@ -30,7 +30,6 @@ function NewAttendanceForm() {
                 setloading(false);
                 return false;
             }
-            console.log(result.data)
             setloading(false);
             setlist(result.data);
             return true;
