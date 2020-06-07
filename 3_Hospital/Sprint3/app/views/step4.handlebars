@@ -1,0 +1,92 @@
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<style>
+  .container {
+    position: relative;
+    color: black;
+  }
+  p.ex1 {
+    margin: 10px 73px;
+  }
+  .patient {
+    position: absolute;
+    text-align: left;
+    top: 280px;
+    left: 0px;
+  }
+  .assinatura_medico {
+    position: absolute;
+    bottom: 111px;
+    right: 80px;
+  }
+</style>
+
+<div class="container-fluid mt-4" >
+  <div class="row justify-content-center">
+      <div class="col-auto mb-3">
+        <div>
+          
+          <div class="container">
+            <img src="/medical_record.png">
+            <div class="patient">
+              <h6>
+                <p class="ex1">
+                    Data do atendimento: {{att.Atendimento.Data_atendimento}} <br>
+                    <img src="/line.png">
+                    Dados do Paciente: <br>
+                    Nome: <strong class="mr-4">{{att.Paciente.Nome}}</strong>
+                    Rua: <strong class="mr-2">{{att.Paciente.Endereco.Rua}}, {{att.Paciente.Endereco.Numero}}</strong>
+                    Cidade: <strong class="mr-2">{{att.Paciente.Endereco.Cidade}}</strong>  
+                    UF: <strong>{{att.Paciente.Endereco.UF}} </strong>
+                    <br>
+                    <img src="/line.png">
+                    Local de Atendimento: <br>
+                    Nome: <strong class="mr-4">{{hospital.hos.hos_name}}</strong>
+                    Rua: <strong class="mr-2">{{hospital.add.add_street}}, {{hospital.add.add_number}}</strong>
+                    Cidade: <strong class="mr-2">{{hospital.add.add_city}}</strong>  
+                    UF: <strong>{{hospital.add.add_state}} </strong> <br>
+                    {{#if att.Atendimento.Hospital.Internacao}}
+                      <strong style="color:rgb(221, 24, 24)">Paciente internado</strong> <br>
+                      Setor: <strong class="mr-4">{{att.Atendimento.Hospital.Internacao.Tipo}}</strong> Leito: <strong>{{att.Atendimento.Hospital.Internacao.Leito_nome}}</strong> 
+                      <br>
+                    {{/if}}
+                    <img src="/line.png">
+                    Dados do Médico: <br>
+                    Nome: <strong class="mr-4">{{att.Medico.Nome}}</strong>
+                    CRM: <strong class="mr-4">{{att.Medico.CRM}}</strong>
+                    <br>
+                    <img src="/line.png">
+                    Informações de atendimento: <br>
+                    <strong class="mr-4">{{att.Atendimento.Comentarios}}</strong>
+                    <br>
+                    <img src="/line.png">
+                    {{#each att.Atendimento.Hospital.Itens_consumidos}}
+                      {{#ifSubstring Name 'COVID'}}
+                        Resultado do teste de COVID-19: 
+                        {{#ifSubstring @root.att.Atendimento.Hospital.Exame_covid.Resultado 'POSITIVO'}}
+                          <strong style="color:rgb(221, 24, 24)">{{@root.att.Atendimento.Hospital.Exame_covid.Resultado}}</strong>
+                        {{else}}
+                          <strong style="color:rgb(58, 177, 37)">{{@root.att.Atendimento.Hospital.Exame_covid.Resultado}}</strong>
+                        {{/ifSubstring}}
+                        <br>
+                        <img src="/line.png">
+                      {{/ifSubstring}}
+                    {{/each}}
+                    Itens consumidos durante a consulta: <br>
+                    {{#each att.Atendimento.Hospital.Itens_consumidos}}
+                      <strong class="mr-4">{{Name}}</strong> 
+                    {{/each}}
+                </p>
+              </h6>
+            </div>
+            <div class="assinatura_medico"><small><strong>{{att.Medico.PublicKey}}</strong></small> </div>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
+
+
+
