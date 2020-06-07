@@ -207,29 +207,35 @@ exports.update =  (req, res) => {
     let me = req.body;
     let id = req.params.bed_id;
     Bed.findByPk(id).then(function(bed){
-        Bed.findOne({
-            where: { bed_id: id, bed_name:  me.inputDesc, sector_id : me.inputSetor, bed_status : me.inputStatus}
-        }).then(function(bedName){
-            // INVALIDAÇÃO EM CASO DE CGHPM REPETIDO
-            if( (bedName == null) ){
-                Bed.update(
-                    {
-                        bed_name : me.inputDesc,
-                        sector_id : me.inputSetor,
-                        bed_status : me.inputStatus
-                    },{
-                        where: { bed_id: id }
-                }).then(()=>{
-                    res.render('success-page', { title: 'Sucesso', success: 'Leito ATUALIZADO com sucesso! Clique no botão abaixo para ser direcionado à lista de leitos.', page: '/Hospital/'+bed.hos_id +'/leito/list' } );
-                }).catch(err => {
-                    var erro = err.message;
+        if(bed.bed_status == 1){
+            var erro = 'Não é possível atualizar um Leito ocupado.';
+            res.render('erro-page', { title: 'Erro', erro: erro} );
+        }else{
+            Bed.findOne({
+                where: { bed_id: id, bed_name:  me.inputDesc, sector_id : me.inputSetor, bed_status : me.inputStatus}
+            }).then(function(bedName){
+                // INVALIDAÇÃO EM CASO DE CGHPM REPETIDO
+                if( (bedName == null) ){
+                    Bed.update(
+                        {
+                            bed_name : me.inputDesc,
+                            sector_id : me.inputSetor,
+                            bed_status : me.inputStatus
+                        },{
+                            where: { bed_id: id }
+                    }).then(()=>{
+                        res.render('success-page', { title: 'Sucesso', success: 'Leito ATUALIZADO com sucesso! Clique no botão abaixo para ser direcionado à lista de leitos.', page: '/Hospital/'+bed.hos_id +'/leito/list' } );
+                    }).catch(err => {
+                        var erro = err.message;
+                        res.render('erro-page', { title: 'Erro', erro: erro} );
+                    });
+                }else{
+                    var erro = 'Leito já cadastrado!';
                     res.render('erro-page', { title: 'Erro', erro: erro} );
-                });
-            }else{
-                var erro = 'Leito já cadastrado!';
-                res.render('erro-page', { title: 'Erro', erro: erro} );
-            }
-        })
+                }
+            })
+        }
+            
     });               
 }
 //#endregion
