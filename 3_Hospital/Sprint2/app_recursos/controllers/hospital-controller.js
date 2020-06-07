@@ -4,7 +4,7 @@ const got = require('got');
 const moment = require('moment');
 moment.locale('pt-BR');
 const BigchainDB = require( '../config/dbBigchainDB' );
-const BigchainDB_API_PATH = 'http://35.247.236.106:9984/api/v1/'
+const BigchainDB_API_PATH = 'http://35.198.33.211:9984/api/v1/'
 const { Hospital } = require('../models/TS03');
 const { Provider } = require('../models/TS03');
 const { Order } = require('../models/TS03');
@@ -57,6 +57,21 @@ exports.get = async (req, res, next) => {
                     var quantidade = 0;
                     // ENCONTRAR TODAS AS TRANSACTIONS ENVOLVENDO O ASSET
                     await conn.listTransactions(asset_id).then(async allTranscactions =>{ 
+
+                        // BUSCAR TODAS AS UNSPENT-TRANSFER PARA CHECAR QUANTIDADE DESSE ASSET
+                        const unspentTransferS = await conn.listOutputs(hos.hos_publicKey, false)
+                        var arrayOfQuantityAssets = []
+                        // OBTER AS QUANTIDADES DE CADA TRANSFER
+                        await Promise.all(unspentTransferS.map(async transfer=>{
+                            const transaction = await conn.getTransaction(transfer.transaction_id)
+                            if(transaction.asset.id == asset_id)
+                                arrayOfQuantityAssets.push(parseInt(transaction.outputs[0].amount))
+                        }));
+                        // SOMAR AS QUANTIDADES DE ASSET DE CADA TRANSFER
+                        await Promise.all(arrayOfQuantityAssets.map(async oneQuantity => {
+                            quantidade = quantidade + oneQuantity
+                        }));
+
                         // EXECUTAR OS PASSOS ABAIXO PARA CADA TRANSACTION DESTE ASSET
                         await Promise.all(allTranscactions.map(async transaction => {
                             // ENCONTRANDO O VENDEDOR
@@ -77,17 +92,19 @@ exports.get = async (req, res, next) => {
                                 // CASO SEJA UMA TRANSACTION TRANSFER, VERIFICAR SE O HOSPITAL É UM DOS COMPRADORES DA TRANSACTION
                                 await Promise.all(transaction.outputs.map(async output => {
                                     if(output.public_keys == hos.hos_publicKey){
-                                        var date = moment(transaction.metadata.Transaction_date).format('L')
-                                        var unit_price = transaction.metadata.Unit_price
-                                        var total_price = transaction.metadata.Total_price
-                                        var quantity =  transaction.metadata.Quantity_purchased
-                                        quantidade = quantidade + parseInt(quantity, 10)
-                                        var consumer = hos.hos_name
-                                        var seller = pro.pro_name
-                                        // PREENCHIMENTO DE ITENS DO HISTÓRICO DESTE ASSET
-                                        var historyFields = { asset_id, seller, consumer, operation, date, unit_price, quantity, total_price}
-                                        // EMPILHA O HISTÓRICO
-                                        assetHistory.push(historyFields)
+                                        if(pro){
+                                            var date = moment(transaction.metadata.Transaction_date).format('L')
+                                            var unit_price = transaction.metadata.Unit_price
+                                            var total_price = transaction.metadata.Total_price
+                                            var quantity =  transaction.metadata.Quantity_purchased
+                                            var consumer = hos.hos_name
+                                            var seller = pro.pro_name
+                                            // PREENCHIMENTO DE ITENS DO HISTÓRICO DESTE ASSET
+                                            var historyFields = { asset_id, seller, consumer, operation, date, unit_price, quantity, total_price}
+                                            // EMPILHA O HISTÓRICO
+                                            assetHistory.push(historyFields)
+                                        }
+                                        
                                     }
                                 }));
                             }
@@ -95,6 +112,8 @@ exports.get = async (req, res, next) => {
                     }).catch(err=>{console.log(err)});
                     // CONCATENANDO AS INFORMAÇÕES DO ASSET EM UM OBJETO
                     const asset_info = { asset_id, asset, quantidade, assetHistory }
+                    console.log(asset_info)
+                    
                     // EMPILHANDO O HISTÓRICO
                     userAssets.push(asset_info);
                 }));
@@ -136,7 +155,7 @@ exports.get = async (req, res, next) => {
                                         const asset_info = { provider, unit_price, asset, quantidade, transaction_id }
                                         providerAssets.push(asset_info);
                                     }else if(transaction.operation == 'TRANSFER'){
-                                        const assetFullString = await got('http://35.247.236.106:9984/api/v1/assets/?search=' + transaction.asset.id);
+                                        const assetFullString = await got('http://35.198.33.211:9984/api/v1/assets/?search=' + transaction.asset.id);
                                         const assetFullObj = JSON.parse(assetFullString.body);
                                         const asset = assetFullObj[0].data
                                         const quantidade = output.amount
@@ -289,6 +308,7 @@ exports.post = async (req, res, next) => {
            
             // DEFININDO OS OUTPUTS DA TRRANSAÇÃO A PARTIR DA QUANTIDADE COMPRADA
             var outputs = []
+            console.log(req.body.inputQty)
             if(remainQuantity == 0){
                 // CASO COMPRE TODO O ESTOQUE DO VENDEDOR
                 outputs = [ driver.Transaction.makeOutput(driver.Transaction.makeEd25519Condition(consumer_publicKey), req.body.inputQty)]
