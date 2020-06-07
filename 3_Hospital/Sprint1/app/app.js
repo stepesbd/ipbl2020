@@ -42,6 +42,9 @@
                     var id2 = mongoose.Types.ObjectId(arg2);
                     return (id1.equals(id2)) ? options.fn(this) : options.inverse(this);
                 },
+                ifSubstring: function(arg1, arg2, options){
+                    return (arg1.includes(arg2.toString().toUpperCase())) ? options.fn(this) : options.inverse(this);
+                },
             }
         });
         app.engine("handlebars", hbs.engine)

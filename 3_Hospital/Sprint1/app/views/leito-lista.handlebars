@@ -24,10 +24,10 @@
       <table id="listaLeitos" class="table responsive table-striped table-hover" style="width:100%">
         <thead>
           <tr>
-            <th>Nome Leito: </th>
-            <th>Prontuário</th>
-            <th>Setor</th>
-            <th>Situação</th>
+            <th class='text-center'>Nome Leito: </th>
+            <th class='text-center' style="width:45px">Prontuário</th>
+            <th class='text-center'>Setor</th>
+            <th class='text-center' style="width:45px">Situação</th>
           <th></th>
           </tr>
         </thead>
@@ -35,25 +35,31 @@
           {{#each bed}}
             
           <tr>
-            <td>{{bed_name}}</td>
-            <td>{{bed_medical_record }}</td>              
-            <td>{{Bed_sector.sector_desc}}</td>
+            <td class='text-center'>{{bed_name}}</td>
+            <td class='text-center' style="width:45px">
+              <div class="form-row text-center btn-group btn-group-justified" style="width:45px">
+                {{#ifEquals bed_status 1 }}
+                  <a class="btn btn-primary btn-sm rounded-2 mr-1" href="/hospital/{{hos_id}}/leito/records/{{bed_id}}" alt="Ver Registro Médico" data-toggle="tooltip" data-placement="top" title="Ver Registro Médico">
+                    <i class="fas fa-notes-medical"></i>
+                  </a>
+                {{/ifEquals}} 
+              </div>
+            </td>              
+            <td class='text-center'>{{Bed_sector.sector_desc}}</td>
             {{#ifEquals bed_status 0 }}
-                <td><i class="fa fa-circle" style="color:green" aria-hidden="true"></i></td>   
+                <td class='text-center'><i class="fa fa-circle" style="color:green" aria-hidden="true" style="width:45px"></i></td>   
             {{/ifEquals}} 
             {{#ifEquals bed_status 1 }}
-                <td><i class="fa fa-circle" style="color:red" aria-hidden="true"></i></td>   
+                <td class='text-center'><i class="fa fa-circle" style="color:red" aria-hidden="true" style="width:45px"></i></td>   
             {{/ifEquals}}         
           <td class="text-center">
               <div class="form-row text-center btn-group btn-group-justified" style="width:45px">
-                <button id={{bed_id}} type="button" class="btn btn-primary btn-sm rounded-2 mr-1" data-toggle="modal"
-          data-target="#BedUpdate{{bed_id}}">
+                <button id={{bed_id}} type="button" class="btn btn-primary btn-sm rounded-2 mr-1" data-toggle="modal" data-target="#BedUpdate{{bed_id}}" alt="Atualizar Leito" data-placement="top" title="Atualizar Leito">
                   <i class="fa fa-edit"></i>
                 </button>
               </div>
               <div class="form-row text-center btn-group btn-group-justified" style="width:45px">
-               <button id={{bed_id}} type="button" class="btn btn-primary btn-sm rounded-2 mr-1" data-toggle="modal"
-                    data-target="#mdDelete{{bed_id}}">
+               <button id={{bed_id}} type="button" class="btn btn-primary btn-sm rounded-2 mr-1" data-toggle="modal" data-target="#mdDelete{{bed_id}}" alt="Deletar Leito" data-placement="top" title="Deletar Leito">
                     <i class="fas fa-trash"></i>
                 </button>
               </div>
@@ -145,9 +151,6 @@
     </div>
   </div>
 </div>
-
-
-
 {{/each}}
 
 
