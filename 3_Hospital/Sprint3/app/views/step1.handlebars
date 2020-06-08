@@ -1,0 +1,89 @@
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div class="container-fluid mt-4">
+  <div class="row justify-content-center">
+      <div class="col-auto mb-3">
+            <div class="card">
+              <div class="card-body">
+                 <h5 class="card-title text-center"><i class="fas fa-user mr-2" aria-hidden="true" style="color:rgb(96, 184, 93)">  </i>Dados do Paciente</h5>
+                <hr>
+                <table class="table table-hover">
+                  <thead>
+                    <tr class="table-success">
+                      <th class='text-center' scope="col">NOME</th>
+                      <th class='text-center' scope="col">CIDADE</th>
+                      <th class='text-center' scope="col">UF</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                      <tr>
+                        <td class='text-center'>{{att.Paciente.Nome}}</td>
+                        <td class='text-center'>{{att.Paciente.Endereco.Cidade}}</td>
+                        <td class='text-center'>{{att.Paciente.Endereco.UF}}</td>
+                      </tr>
+                  </tbody>
+                </table>
+
+              </div>
+            </div>
+      </div>
+  </div>
+</div>
+
+<div class="container-fluid mt-4">
+  <div class="row justify-content-center">
+      <div class="col-auto mb-3">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title text-center"><i class="fa fa-h-square mr-2" aria-hidden="true" style="color:rgb(65, 137, 219)">  </i>Escolha o Hospital que realizará o atendimento:</h5>
+                <hr>
+
+                <table class="table table-hover">
+                  <thead>
+                    <tr class="table-primary">
+                      <th class='text-center' scope="col">NOME</th>
+                      <th class='text-center' scope="col">CIDADE</th>
+                      <th class='text-center' scope="col"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {{#each hos}}
+                      <tr>
+                        <td class='text-center'>{{hos_name}}</td>
+                        <td class='text-center'>{{add_city}}</td>
+                        <td class='text-center'>
+                          <form action="/attendance/step2" method="POST">
+                            <input type="hidden" id="inputHosID" name="inputHosID" value="{{hos_id}}">
+                            <input type="hidden" id="inputHosName" name="inputHosName" value="{{hos_name}}">
+                            <button id="" type="submit" class="btn btn-primary btn-sm rounded-2 mr-2" alt="Escolher Hospital" title="Escolher Hospital">
+                              <i class="fas fa-check"></i>
+                            </button>
+                          </form>
+                          
+                        </td>
+                      </tr>
+                    {{/each}}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+      </div>
+  </div>
+</div>
+
+<div class="container-fluid col-md-8 mt-2">
+  <div class="d-flex flex-row-reverse">
+      <div class="col-auto">
+      <button onclick="goBack()" class="btn btn-secondary mr-2">Voltar</button>
+    </div>
+  </div>  
+</div>
+
+
+<script>
+function goBack() {
+    window.history.back()
+}
+</script>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from 'react-hook-form'
 import {
   Container,
@@ -21,18 +21,35 @@ const Step2 = (props) =>
   
   const { register, handleSubmit, errors, setValue,setError } = useForm();
 
+  useEffect(() => {
+    verifyProps();    
+  }, []);
+
+  const [nome,setnome] = React.useState('');
+  const verifyProps = () =>{
+    if(props.location.state.item)
+    {
+      let dados = props.location.state.item; 
+      setnome(dados.per.perFirstName);
+    }
+  }
+
   const [sintomas,setsintomas] = React.useState({
     febre: false,
     fadiga: false,
     tosse: false,
     anorexia: false,
     dispneia: false,
+    dorpressaopeito: false,
+    perdafalamovimento: false,
     escarro: false,
     mialgias: false,
     dordegarganta: false,
+    conjuntivite: false,
     diarreia: false,
     neuseas: false,
     cefaleia: false,
+    perdapaladar:false,
     tontura: false,
     rinorreia: false,
   });
@@ -44,9 +61,11 @@ const Step2 = (props) =>
   }
 
   const [loading,setloading] = React.useState(false);
-  const onSubmit = data => {
-  
-    props.history.push('/step3')
+  const onSubmit = data => {    
+    props.history.push({
+      pathname: '/step3',
+      state:{item:sintomas}
+    })
   };
 
   const handleVoltar = () =>{
@@ -56,7 +75,6 @@ const Step2 = (props) =>
 return (
   <Container fluid className="main-content-container px-4">
     <br/><br/>
-    {/* Default Light Table */}
     <Row>
       <Col lg="12">
       <Card small className="mb-4">
@@ -69,9 +87,8 @@ return (
               <Col>
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <Row form>
-                    {/* First Name */}
                     <Col md="12" className="form-group">
-                      <label htmlFor="feFirstName">Selecione os sintomas: *</label>
+                      <h5>Olá, {nome}!</h5> <label htmlFor="feFirstName">Informe seus sintomas: *</label>
                       <div>
                         <FormCheckbox
                           checked={sintomas.febre}
@@ -83,7 +100,7 @@ return (
                           checked={sintomas.fadiga}
                           onChange={e => handleChange(e, "fadiga")}
                         >
-                          Fadiga
+                          Fadiga (Cansaço)
                         </FormCheckbox>
                         <FormCheckbox
                           checked={sintomas.tosse}
@@ -101,13 +118,25 @@ return (
                           checked={sintomas.dispneia}
                           onChange={e => handleChange(e, "dispneia")}
                         >
-                          Dispneia
+                          Dispneia (falta de ar)
+                        </FormCheckbox>
+                        <FormCheckbox
+                          checked={sintomas.dorpressaopeito}
+                          onChange={e => handleChange(e, "dorpressaopeito")}
+                        >
+                          Dor ou Pressão no peito
+                        </FormCheckbox>
+                        <FormCheckbox
+                          checked={sintomas.perdafalamovimento}
+                          onChange={e => handleChange(e, "perdafalamovimento")}
+                        >                         
+                         Perda Fala ou Movimento
                         </FormCheckbox>
                         <FormCheckbox
                           checked={sintomas.escarro}
                           onChange={e => handleChange(e, "escarro")}
-                        >
-                          Escarro
+                        > 
+                         Escarro
                         </FormCheckbox>
                         <FormCheckbox
                           checked={sintomas.mialgias}
@@ -120,6 +149,12 @@ return (
                           onChange={e => handleChange(e, "dordegarganta")}
                         >
                           Dor de garganta
+                        </FormCheckbox>
+                        <FormCheckbox
+                          checked={sintomas.conjuntivite}
+                          onChange={e => handleChange(e, "conjuntivite")}
+                        >
+                          Conjuntivite
                         </FormCheckbox>
                         <FormCheckbox
                           checked={sintomas.diarreia}
@@ -137,7 +172,19 @@ return (
                           checked={sintomas.cefaleia}
                           onChange={e => handleChange(e, "cefaleia")}
                         >
-                          Cefaleia
+                          Cefaleia (Dor de Cabeça)
+                        </FormCheckbox>
+                        <FormCheckbox
+                          checked={sintomas.alteracaocoloracao}
+                          onChange={e => handleChange(e, "alteracaocoloracao")}
+                        >
+                          Alteração Coloração da Pele
+                        </FormCheckbox>
+                        <FormCheckbox
+                          checked={sintomas.perdapaladar}
+                          onChange={e => handleChange(e, "perdapaladar")}
+                        >
+                          Perda Paladar ou Olfato
                         </FormCheckbox>
                         <FormCheckbox
                           checked={sintomas.tontura}

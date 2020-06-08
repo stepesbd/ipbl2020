@@ -13,6 +13,6 @@ module.exports = function(app) {
     router.post('/Update/:id/:ProcsUpdate', controller.update); 
     router.get('/Delete/:id', controller.delete);
     router.post('/Update/:id', controller.update);               
-    router.get('/Procs/:hos_med_proc_id', controller.get);      
+    router.get('/Procs/:hos_med_proc_id', controller.get);   
     return router;
 };

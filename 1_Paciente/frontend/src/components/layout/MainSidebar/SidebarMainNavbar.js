@@ -28,15 +28,15 @@ class SidebarMainNavbar extends React.Component {
           <NavbarBrand
             className="w-100 mr-0"
             href="#"
-            style={{ lineHeight: "25px" }}
+            style={{ lineHeight: "35px" }}
           >
             <div className="d-table m-auto">
               <img
                 id="main-logo"
                 className="d-inline-block align-top mr-1"
-                style={{ maxWidth: "25px" }}
-                src={require("../../../images/logo.png")}
-                alt="STEPES-BD - Paciente"
+                style={{ maxWidth: "35px" }}
+                src={require("../../../images/logo.svg")}
+                alt="STEPES-BD"
               />
               {!hideLogoText && (
                 <span className="d-none d-md-inline ml-1">

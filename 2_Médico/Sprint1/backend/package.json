@@ -4,7 +4,8 @@
   "description": "Backend#1-Médicos",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src",
+    "dev": "nodemon src",
+    "start": "node src",
     "test": "jest --forceExit",
     "migrate": "knex migrate:latest"
   },
@@ -17,7 +18,8 @@
     "express": "^4.17.1",
     "express-group-routes": "^1.1.0",
     "knex": "^0.20.13",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "mysql2": "^2.1.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

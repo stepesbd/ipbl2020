@@ -116,17 +116,13 @@ module.exports = (sequelize, DataTypes) => {
 		});
 
 
-		Hospital.hasMany(models.Hospital_employee,{
-			foreignKey: 'hos_id',
-		});
+		Hospital.hasMany(models.Hospital_employee, { foreignKey: 'hos_id' });
 		   
-		Hospital.hasMany(models.Hosp_med_proc,{
-			foreignKey: 'hos_id',
-		   });
+		Hospital.hasMany(models.Hosp_med_proc, { foreignKey: 'hos_id' });
 		   
-		Hospital.hasMany(models.Hospital_contact,{
-			foreignKey: 'hos_id',
-	   	});
+		Hospital.hasMany(models.Hospital_contact,{ foreignKey: 'hos_id' });
+		   
+		Hospital.hasMany(models.Bed, { foreignKey: 'hos_id' });
 
     }
 

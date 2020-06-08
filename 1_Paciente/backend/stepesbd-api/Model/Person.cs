@@ -15,7 +15,8 @@ namespace stepesdb_api
         public string PerLastName { get; set; }
         public DateTime PerBirth { get; set; }
         public string PerEmail { get; set; }
-        public int? PerCpf { get; set; }
+        public string PerCpf { get; set; }
+        public string PerSenha { get; set; }
         public int? AddId { get; set; }
 
         public virtual Address Add { get; set; }

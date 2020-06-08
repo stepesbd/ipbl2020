@@ -58,7 +58,7 @@ export default class NavBarTop extends React.Component {
           <Nav navbar>
             <NavItem>
               <NavLink active href="/patient-list">
-                Lista de Pacientes
+                Admin
               </NavLink>
             </NavItem>
           </Nav>

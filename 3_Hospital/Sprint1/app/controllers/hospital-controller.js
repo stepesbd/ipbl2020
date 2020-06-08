@@ -1,4 +1,5 @@
 'use strict';
+let request = require('async-request');
 const { Address } = require('../models');
 const { Hospital } = require('../models');
 const { Employee } = require('../models');
@@ -10,130 +11,167 @@ const { Hospital_contact } = require('../models');
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-exports.post = (req, res, next) => {
-    var me = req.body;
+exports.post = async (req, res, next) => {
 
-    /*
-        ORDEM DE EXECUÇÃO:
-        CRIA ADDRESS >> CRIA HOSPITAL >> ASSOCIA HOSPITAL-PROCEDIMENTO
-    */
-    Address.create({
-        add_street: me.inputStreet.toUpperCase(),
-        add_number: me.inputNumber,
-        add_city: me.inputCity.toUpperCase(),
-        add_state: me.inputState.toUpperCase(),
-        add_country: me.inputCountry.toUpperCase(),
-        add_zip_code: me.inputZipCode.toUpperCase(),
-    }).then(function(add) {
-        // INVALIDAÇÃO EM CASO DE CNPJ REPETIDO
-        Hospital.findOne({
-            where: { hos_cnpj: me.inputCNPJ }
-        }).then(function(hosCNPJrepeat){
-            if(hosCNPJrepeat == null){
-                // INVALIDAÇÃO EM CASO DE CNES REPETIDO
+    try{
+        var me = req.body;
+
+        /*
+            ORDEM DE EXECUÇÃO:
+            CRIA ADDRESS >> CRIA HOSPITAL >> ASSOCIA HOSPITAL-PROCEDIMENTO
+        */
+
+        var cep = me.inputZipCode.toUpperCase();
+        var lat = "teste";
+        var lon = "teste";
+        if (typeof cep === "number") {
+            cep = cep.toString()
+            cep = parseInt(cep.replace(/[^0-9]/g, ""))
+        }
+        cep = cep.replace(/-/gi, '');
+        console.log(">>>>>>>>>>>>>>> CEP")
+        console.log(cep)
+        await request("https://www.cepaberto.com/api/v3/cep?cep=" + cep, {
+            method: 'GET',
+            headers: {'Authorization': 'Token token=787f1f666961d441fa85f9da7cd84f9d'},
+        }).then((response)=>{
+            response = JSON.parse(response.body)
+            lat = response.latitude
+            lon = response.longitude
+            console.log('latitude: ' + lat)
+            console.log('longitude: ' + lon)
+        }).then(()=>{
+            Address.create({
+                add_street: me.inputStreet.toUpperCase(),
+                add_number: me.inputNumber,
+                add_city: me.inputCity.toUpperCase(),
+                add_state: me.inputState.toUpperCase(),
+                add_country: me.inputCountry.toUpperCase(),
+                add_zip_code: me.inputZipCode.toUpperCase(),
+                add_latitude: lat.toString(),
+                add_longitude: lon.toString(),
+            }).then(function(add) {
+                // INVALIDAÇÃO EM CASO DE CNPJ REPETIDO
                 Hospital.findOne({
-                    where: { hos_cnes_code: me.inputCNES }
-                }).then(function(hosCNESrepeat){
-                    if(hosCNESrepeat == null){
-                        Hospital.create({
-                            hos_cnpj: me.inputCNPJ,
-                            hos_cnes_code: me.inputCNES,
-                            hos_name: me.inputNome.toUpperCase(),
-                            hos_corporate_name: me.inputCorporate.toUpperCase(),
-                            add_id: add.add_id,
-                        }).then(function(hos) {
-                            /*   
-                               ******** ASSOCIAÇÃO DE PROCEDIMENTOS ********
-                            */
-                            var arrayOfProcs = []
-                            var arrayOfValues = []
-            
-                            if(!Array.isArray(me.inputProcID)){
-                                arrayOfProcs.push(me.inputProcID);
-                            }else{
-                                arrayOfProcs = me.inputProcID;
-                            };
-                            if(!Array.isArray(me.inputValue)){
-                                arrayOfValues.push(me.inputValue);
-                            }else{
-                                arrayOfValues = me.inputValue;
-                            };
-            
-                            // CRIANDO A ASSOCIAÇÃO HOSPITAL-PROCEDIMENTO
-                            arrayOfProcs.forEach(function(proc){
-                                // CASO VALIDAÇÃO "REQUIRE" HTML FALHE E ENVIE VALOR VAZIO, NÃO SERÁ FEITA ASSOCIAÇÃO
-                                if(arrayOfValues[0] != null){
-                                    hos.addMedical_procedures(proc,{
-                                        through: {
-                                            hos_med_proc_value: arrayOfValues.shift()
+                    where: { hos_cnpj: me.inputCNPJ }
+                }).then(function(hosCNPJrepeat){
+                    if(hosCNPJrepeat == null){
+                        // INVALIDAÇÃO EM CASO DE CNES REPETIDO
+                        Hospital.findOne({
+                            where: { hos_cnes_code: me.inputCNES }
+                        }).then(function(hosCNESrepeat){
+                            if(hosCNESrepeat == null){
+                                Hospital.create({
+                                    hos_cnpj: me.inputCNPJ,
+                                    hos_cnes_code: me.inputCNES,
+                                    hos_name: me.inputNome.toUpperCase(),
+                                    hos_corporate_name: me.inputCorporate.toUpperCase(),
+                                    add_id: add.add_id,
+                                }).then(function(hos) {
+                                    /*   
+                                    ******** ASSOCIAÇÃO DE PROCEDIMENTOS ********
+                                    */
+                                    var arrayOfProcs = []
+                                    var arrayOfValues = []
+                    
+                                    if(!Array.isArray(me.inputProcID)){
+                                        arrayOfProcs.push(me.inputProcID);
+                                    }else{
+                                        arrayOfProcs = me.inputProcID;
+                                    };
+                                    if(!Array.isArray(me.inputValue)){
+                                        arrayOfValues.push(me.inputValue);
+                                    }else{
+                                        arrayOfValues = me.inputValue;
+                                    };
+                    
+                                    // CRIANDO A ASSOCIAÇÃO HOSPITAL-PROCEDIMENTO
+                                    arrayOfProcs.forEach(function(proc){
+                                        // CASO VALIDAÇÃO "REQUIRE" HTML FALHE E ENVIE VALOR VAZIO, NÃO SERÁ FEITA ASSOCIAÇÃO
+                                        if(arrayOfValues[0] != null){
+                                            hos.addMedical_procedures(proc,{
+                                                through: {
+                                                    hos_med_proc_value: arrayOfValues.shift()
+                                                }
+                                            })
                                         }
                                     })
-                                }
-                            })
-                            
-                            /*   
-                               ******** ASSOCIAÇÃO DE CONTATOS ********
-                            */
-                            if(me.inputContactBox[0] != null){
-                                var arrayOfContactTypes = []
-                                var arrayOfContactBox = []
-                
-                                if(!Array.isArray(me.inputContactType)){
-                                    arrayOfContactTypes.push(me.inputContactType);
-                                }else{
-                                    arrayOfContactTypes = me.inputContactType;
-                                };
-                                if(!Array.isArray(me.inputContactBox)){
-                                    arrayOfContactBox.push(me.inputContactBox);
-                                }else{
-                                    arrayOfContactBox = me.inputContactBox;
-                                };
-                                
-                                arrayOfContactTypes.forEach(function(contactType){
-                                    if(arrayOfContactBox[0].length > 0){
-                                        Contact.create({
-                                            con_type: contactType,
-                                            con_desc: arrayOfContactBox.shift(),
-                                        }).then(function(con){
-                                            con.addHospital(hos);
-                                        }).catch(err => {
-                                            con.destroy();
-                                            var erro = err.message;
-                                            res.render('erro-page', { title: 'Erro', erro: erro} );
-                                        });  
+                                    
+                                    /*   
+                                    ******** ASSOCIAÇÃO DE CONTATOS ********
+                                    */
+                                    if(me.inputContactBox[0] != null){
+                                        var arrayOfContactTypes = []
+                                        var arrayOfContactBox = []
+                        
+                                        if(!Array.isArray(me.inputContactType)){
+                                            arrayOfContactTypes.push(me.inputContactType);
+                                        }else{
+                                            arrayOfContactTypes = me.inputContactType;
+                                        };
+                                        if(!Array.isArray(me.inputContactBox)){
+                                            arrayOfContactBox.push(me.inputContactBox);
+                                        }else{
+                                            arrayOfContactBox = me.inputContactBox;
+                                        };
+                                        
+                                        arrayOfContactTypes.forEach(function(contactType){
+                                            if(arrayOfContactBox[0].length > 0){
+                                                Contact.create({
+                                                    con_type: contactType,
+                                                    con_desc: arrayOfContactBox.shift(),
+                                                }).then(function(con){
+                                                    con.addHospital(hos);
+                                                }).catch(err => {
+                                                    con.destroy();
+                                                    var erro = err.message;
+                                                    res.render('erro-page', { title: 'Erro', erro: erro} );
+                                                });  
+                                            }
+                                        })
                                     }
-                                })
+                                    res.render('success-page', { title: 'Sucesso', success: 'Hospital CRIADO com sucesso! Clique no botão abaixo para ser direcionado à lista de hospitais.', page: '/hospital'} );
+                                }).catch(err => {
+                                    add.destroy();       
+                                    var erro = err.message;
+                                    res.render('erro-page', { title: 'Erro', erro: erro} );
+                                }); 
+                
+                            }else{
+                                add.destroy();       
+                                var erro = 'CNES já cadastrado!';
+                                res.render('erro-page', { title: 'Erro', erro: erro} );
                             }
-                            res.render('success-page', { title: 'Sucesso', success: 'Hospital CRIADO com sucesso! Clique no botão abaixo para ser direcionado à lista de hospitais.', page: '/hospital'} );
-                        }).catch(err => {
-                            add.destroy();       
-                            var erro = err.message;
-                            res.render('erro-page', { title: 'Erro', erro: erro} );
-                        }); 
-        
+                        })
+                    
                     }else{
                         add.destroy();       
-                        var erro = 'CNES já cadastrado!';
+                        var erro = 'CNPJ já cadastrado!';
                         res.render('erro-page', { title: 'Erro', erro: erro} );
                     }
-                })
-               
-            }else{
-                add.destroy();       
-                var erro = 'CNPJ já cadastrado!';
+    
+                }).catch(err => {
+                    add.destroy();       
+                    var erro = err.message;
+                    res.render('erro-page', { title: 'Erro', erro: erro} );
+                }); 
+                    
+            }).catch(errHospCrea => {
+                var erro ='Hospital não pode ser cadastrado, verifique a validade dos dados informados! ' +  errHospCrea.message;
                 res.render('erro-page', { title: 'Erro', erro: erro} );
-            }
+            })  
+        })
 
-        }).catch(err => {
-            add.destroy();       
-            var erro = err.message;
-            res.render('erro-page', { title: 'Erro', erro: erro} );
-        }); 
-            
-    }).catch(errHospCrea => {
+
+    }catch(errHospCrea){
         var erro ='Hospital não pode ser cadastrado, verifique a validade dos dados informados! ' +  errHospCrea.message;
         res.render('erro-page', { title: 'Erro', erro: erro} );
-    })
+    }
+
+    
+
+
+    
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////

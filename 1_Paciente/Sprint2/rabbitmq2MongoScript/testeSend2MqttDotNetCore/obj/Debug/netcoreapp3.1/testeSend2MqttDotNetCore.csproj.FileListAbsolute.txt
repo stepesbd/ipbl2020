@@ -1,0 +1,15 @@
+C:\Users\guilh\Desktop\Projetos\ipbl2020\1_Paciente\Sprint2\rabbitmq2MongoScript\testeSend2MqttDotNetCore\bin\Debug\netcoreapp3.1\testeSend2MqttDotNetCore.exe
+C:\Users\guilh\Desktop\Projetos\ipbl2020\1_Paciente\Sprint2\rabbitmq2MongoScript\testeSend2MqttDotNetCore\bin\Debug\netcoreapp3.1\testeSend2MqttDotNetCore.deps.json
+C:\Users\guilh\Desktop\Projetos\ipbl2020\1_Paciente\Sprint2\rabbitmq2MongoScript\testeSend2MqttDotNetCore\bin\Debug\netcoreapp3.1\testeSend2MqttDotNetCore.runtimeconfig.json
+C:\Users\guilh\Desktop\Projetos\ipbl2020\1_Paciente\Sprint2\rabbitmq2MongoScript\testeSend2MqttDotNetCore\bin\Debug\netcoreapp3.1\testeSend2MqttDotNetCore.runtimeconfig.dev.json
+C:\Users\guilh\Desktop\Projetos\ipbl2020\1_Paciente\Sprint2\rabbitmq2MongoScript\testeSend2MqttDotNetCore\bin\Debug\netcoreapp3.1\testeSend2MqttDotNetCore.dll
+C:\Users\guilh\Desktop\Projetos\ipbl2020\1_Paciente\Sprint2\rabbitmq2MongoScript\testeSend2MqttDotNetCore\bin\Debug\netcoreapp3.1\testeSend2MqttDotNetCore.pdb
+C:\Users\guilh\Desktop\Projetos\ipbl2020\1_Paciente\Sprint2\rabbitmq2MongoScript\testeSend2MqttDotNetCore\bin\Debug\netcoreapp3.1\RabbitMQ.Client.dll
+C:\Users\guilh\Desktop\Projetos\ipbl2020\1_Paciente\Sprint2\rabbitmq2MongoScript\testeSend2MqttDotNetCore\obj\Debug\netcoreapp3.1\testeSend2MqttDotNetCore.csprojAssemblyReference.cache
+C:\Users\guilh\Desktop\Projetos\ipbl2020\1_Paciente\Sprint2\rabbitmq2MongoScript\testeSend2MqttDotNetCore\obj\Debug\netcoreapp3.1\testeSend2MqttDotNetCore.AssemblyInfoInputs.cache
+C:\Users\guilh\Desktop\Projetos\ipbl2020\1_Paciente\Sprint2\rabbitmq2MongoScript\testeSend2MqttDotNetCore\obj\Debug\netcoreapp3.1\testeSend2MqttDotNetCore.AssemblyInfo.cs
+C:\Users\guilh\Desktop\Projetos\ipbl2020\1_Paciente\Sprint2\rabbitmq2MongoScript\testeSend2MqttDotNetCore\obj\Debug\netcoreapp3.1\testeSend2MqttDotNetCore.csproj.CoreCompileInputs.cache
+C:\Users\guilh\Desktop\Projetos\ipbl2020\1_Paciente\Sprint2\rabbitmq2MongoScript\testeSend2MqttDotNetCore\obj\Debug\netcoreapp3.1\testeSend2MqttDotNetCore.csproj.CopyComplete
+C:\Users\guilh\Desktop\Projetos\ipbl2020\1_Paciente\Sprint2\rabbitmq2MongoScript\testeSend2MqttDotNetCore\obj\Debug\netcoreapp3.1\testeSend2MqttDotNetCore.dll
+C:\Users\guilh\Desktop\Projetos\ipbl2020\1_Paciente\Sprint2\rabbitmq2MongoScript\testeSend2MqttDotNetCore\obj\Debug\netcoreapp3.1\testeSend2MqttDotNetCore.pdb
+C:\Users\guilh\Desktop\Projetos\ipbl2020\1_Paciente\Sprint2\rabbitmq2MongoScript\testeSend2MqttDotNetCore\obj\Debug\netcoreapp3.1\testeSend2MqttDotNetCore.genruntimeconfig.cache

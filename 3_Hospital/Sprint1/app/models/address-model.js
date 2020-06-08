@@ -54,6 +54,14 @@ module.exports = (sequelize, DataTypes) => {
 				}
 			}
 		},
+		add_latitude: {
+			type: DataTypes.STRING,
+			allowNull: false,
+		},
+		add_longitude: {
+			type: DataTypes.STRING,
+			allowNull: false,
+		},
 	},{
 		freezeTableName: true,
 		timestamps: false,
