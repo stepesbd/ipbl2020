@@ -38,7 +38,7 @@
 	  function initMap() {
 		map = new google.maps.Map(document.getElementById("map"), {
 		  zoom: 13,
-		  center: {lat: -23.2205624083, lng: -45.8877512673},
+		  center: {lat: -23.2205624083, lng: -45.8877512673}, 
 		  mapTypeId: 'satellite'
 		});
 
@@ -83,28 +83,12 @@
 	  // Heatmap data: 500 Points
 	  function getPoints() {
 		dots = [];
-		
-		/*$(document).ready(function(){
-			console.log('jquery ok')
-			$.ajax({
-				url: "http://localhost:5000/address/api/latlong",
-				method: 'GET',
-				type: 'json',
-				async: false,
-				crossDomain: true,
-				success: function(data) {
-					$(data).each(function(i){
-						dots.push(new google.maps.LatLng(data[i][0], data[i][1]))
-					});
-				}
-			})
-		});*/
 	
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
 				var json = JSON.parse(this.responseText);
-				//console.log(json);
+
 				for (k in json) {
 
 					dots.push(new google.maps.LatLng(json[k][0], json[k][1]))
@@ -113,12 +97,7 @@
 		};
 		xhttp.open("GET", "http://localhost:5000/address/api/latlong", true);
 		xhttp.send();
-	
-		/*dots.push(new google.maps.LatLng(-23.220, -45.887))
-		dots.push(new google.maps.LatLng(-23.220, -45.900))
-		dots.push(new google.maps.LatLng(-23.210, -45.895))
-		dots.push(new google.maps.LatLng(-23.212, -45.895))
-		dots.push(new google.maps.LatLng(-23.212, -46))*/
+
 		console.log(dots)
 		return dots
 	  }
