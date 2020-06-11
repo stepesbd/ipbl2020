@@ -82,8 +82,8 @@ try:
         exit()
 
     i = 0
-    max_transactions_per_commit = 1000
-    max_load_patients = 1000000
+    max_transactions_per_commit = 500
+    max_load_patients = 450000
     conn_mysql.autocommit = False
     while i < max_load_patients:
         i = i+1
@@ -124,5 +124,5 @@ finally:
     print('[' + datetime.now().strftime("%H:%M:%S") + '] Conn is closed')
 
     time_fim = datetime.now()
-    print('FIM DO SCRIPT: ' + str(time_ini))
+    print('FIM DO SCRIPT: ' + str(time_fim))
     print('TIME DIFF (H:M:S:MS): ' + str(time_fim-time_ini))

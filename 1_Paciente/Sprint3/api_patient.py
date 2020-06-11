@@ -15,11 +15,11 @@ conn = mysql.connect()
 cursor = conn.cursor()
 
 
-@app.route('/patient/api/kill', methods=['GET'])
+@app.route('/dashboard/api/obitos/covid', methods=['GET'])
 def get_tasks():
-    cursor.execute("select count(*) qty from patient where pat_id = 1;")
+    cursor.execute("select count(*) qty from patient where causa_mortis = 'COVID';")
     qty = int(cursor.fetchone()[0])
-    return jsonify({'tasks': str(qty) + 'olah'})
+    return jsonify({'obitos': str(qty)}), 201
 
 
 @app.route('/patient/api/kill', methods=['PUT'])
