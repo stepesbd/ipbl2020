@@ -20,10 +20,20 @@ cursor = conn.cursor()
 		
 @app.route('/dashboard/api/obitos/covid', methods=['GET','OPTIONS'])
 def get_tasks():
-	cursor.execute("select count(*) as qty from patient where causa_mortis = %s;", ('COVID',))
+	cursor.execute("select count(*) as qty from patient where causa_mortis = %s;", ('COVID-19',))
 
-	#qty = int(cursor.fetchone()[0])
 	return jsonify({'obitos': cursor.fetchone()[0]}), 201
+
+@app.route('/patient/api/', methods=['GET','OPTIONS'])
+def get_patient():
+	if not request.json or not 'id' in request.json:
+		return jsonify({'message': 'ID not found'}), 400
+
+	cursor.execute("SELECT * FROM patient natural join person where pat_id = %s;", (request.json['id'],))
+	values = cursor.fetchone()
+	field_name = [field[0] for field in cursor.description]
+	row = dict(zip(field_name, values))
+	return jsonify({'patient': row}), 201
 	
 @app.route('/patient/api/kill', methods=['PUT'])
 def create_task():
