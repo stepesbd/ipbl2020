@@ -1,6 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { NavLink } from "react-router-dom";
-import moment from "moment";
 import { Container, Row, Col, Card, CardHeader, CardBody, Button, Alert } from "shards-react";
 import PageTitle from "../../../components/common/PageTitle";
 import { UseGetApi, UseDeleteApi } from "../../../services/apiService";

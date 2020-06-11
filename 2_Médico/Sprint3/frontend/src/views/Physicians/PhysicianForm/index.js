@@ -2,7 +2,6 @@ import React, { Fragment, useState, useEffect } from 'react';
 import moment from "moment";
 import { useForm } from 'react-hook-form'
 import PageTitle from "../../../components/common/PageTitle";
-import { NavLink } from "react-router-dom";
 import {
     Container,
     Card,
@@ -11,8 +10,6 @@ import {
     ListGroupItem,
     Row,
     Col,
-    FormInput,
-    Button
 } from "shards-react";
 import { UsePutApi, UsePostApi } from "../../../services/apiService";
 import ClipLoader from "react-spinners/ClipLoader";

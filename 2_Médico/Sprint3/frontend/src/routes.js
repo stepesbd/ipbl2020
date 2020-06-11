@@ -2,7 +2,7 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 
 // Layout Types
-import { DefaultLayout, Default2Layout } from './layouts';
+import { DefaultLayout, Default2Layout, LoginLayout } from './layouts';
 
 // Route Views
 import Dashboard from './views/Dashboard';
@@ -28,12 +28,21 @@ import Schedule from './views/Scheduling/Schedule';
 import AttendanceForm from './views/Scheduling/AttendanceForm';
 import NewAttendanceForm from './views/Scheduling/NewAttendanceForm';
 
+//Login
+import Login from './views/Login';
+
 export default [
   {
     path: '/',
     exact: true,
     layout: DefaultLayout,
     component: () => <Redirect to="/dashboard" />,
+  },
+  {
+    path: '/login',
+    exact: true,
+    layout: LoginLayout,
+    component: Login,
   },
   {
     path: '/patient-list',
@@ -107,7 +116,7 @@ export default [
   },
   {
     path: '/schedule',
-    layout: Default2Layout,
+    layout: DefaultLayout,
     component: Schedule,
   },
   {
