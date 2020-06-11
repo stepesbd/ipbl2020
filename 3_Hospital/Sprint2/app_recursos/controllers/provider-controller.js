@@ -2,7 +2,7 @@
 const driver = require('bigchaindb-driver')
 const got = require('got');
 const BigchainDB = require( '../config/dbBigchainDB' );
-const BigchainDB_API_PATH = 'http://35.198.33.211:9984/api/v1/'
+const BigchainDB_API_PATH = 'http://' + BigchainDB.IP + ':9984/api/v1/'
 const { Provider } = require('../models/TS03');
 
 exports.get = async (req, res, next) => {

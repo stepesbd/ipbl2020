@@ -1,5 +1,8 @@
 'use strict';
 let request = require('async-request');
+const driver = require('bigchaindb-driver');
+const BigchainDB = require( '../config/dbBigchainDB' );
+const BigchainDB_API_PATH = 'http://' + BigchainDB.IP + ':9984/api/v1/'
 const { Address } = require('../models');
 const { Hospital } = require('../models');
 const { Employee } = require('../models');
@@ -29,8 +32,6 @@ exports.post = async (req, res, next) => {
             cep = parseInt(cep.replace(/[^0-9]/g, ""))
         }
         cep = cep.replace(/-/gi, '');
-        console.log(">>>>>>>>>>>>>>> CEP")
-        console.log(cep)
         await request("https://www.cepaberto.com/api/v3/cep?cep=" + cep, {
             method: 'GET',
             headers: {'Authorization': 'Token token=787f1f666961d441fa85f9da7cd84f9d'},
@@ -38,8 +39,6 @@ exports.post = async (req, res, next) => {
             response = JSON.parse(response.body)
             lat = response.latitude
             lon = response.longitude
-            console.log('latitude: ' + lat)
-            console.log('longitude: ' + lon)
         }).then(()=>{
             Address.create({
                 add_street: me.inputStreet.toUpperCase(),
@@ -61,12 +60,22 @@ exports.post = async (req, res, next) => {
                             where: { hos_cnes_code: me.inputCNES }
                         }).then(function(hosCNESrepeat){
                             if(hosCNESrepeat == null){
+                                 // BUSCANDO CONEXÃO COM MONGODB DA BLOCKCHAIN
+                                const bigchain = BigchainDB.getDb();
+
+                                // ESTABELECENDO CONEXÃO COM API DA BIGCHAINDB
+                                const conn = new driver.Connection(BigchainDB_API_PATH)
+                                // GERANDO CHAVES PARA O HOSPITAL 
+                                const keys = new driver.Ed25519Keypair();
+
                                 Hospital.create({
                                     hos_cnpj: me.inputCNPJ,
                                     hos_cnes_code: me.inputCNES,
                                     hos_name: me.inputNome.toUpperCase(),
                                     hos_corporate_name: me.inputCorporate.toUpperCase(),
                                     add_id: add.add_id,
+                                    hos_publicKey: keys.publicKey,
+                                    hos_privateKey: keys.privateKey
                                 }).then(function(hos) {
                                     /*   
                                     ******** ASSOCIAÇÃO DE PROCEDIMENTOS ********
@@ -167,11 +176,6 @@ exports.post = async (req, res, next) => {
         var erro ='Hospital não pode ser cadastrado, verifique a validade dos dados informados! ' +  errHospCrea.message;
         res.render('erro-page', { title: 'Erro', erro: erro} );
     }
-
-    
-
-
-    
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////

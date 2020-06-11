@@ -1,0 +1,34 @@
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<br />
+<hr>
+    <div class="alert alert-danger" role="alert">
+    <h3>
+        Erro<i class="fa fa-times-circle-o ml-2" aria-hidden="true"></i>  
+    </h3>
+    </div>
+<br>
+<h4 class="text-center">
+    <strong>{{erro}}</strong>
+</h4>
+<hr>
+{{#if msg}}
+    {{#each msg}}
+        <h5 class="text-center">{{text}}</h5>
+    {{/each}}
+{{/if}}
+<hr>
+
+{{#if msg}}
+<form  action="{{page}}" method="GET">
+    <div class="form-row text-center">
+            <button type="submit" class=" btn btn-primary" >Atualizar</button> 
+    </div>  
+</form> 
+{{else}}
+<form  action="/map/positive" action="javascript:history.back()" method="GET">
+    <div class="form-row text-center">
+            <button type="submit" class=" btn btn-primary" >Voltar</button> 
+    </div>  
+</form> 
+{{/if}}
