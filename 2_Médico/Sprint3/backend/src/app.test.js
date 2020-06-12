@@ -4,13 +4,13 @@ const app = require('./app');
 const connection = require('./database');
 
 const testPhysician = {
-  name: "João",
-  crm: "123485",
-  cpf: "45103412302",
-}
+  name: 'João',
+  crm: '123485',
+  cpf: '45103412302',
+};
 const testSpecialty = {
-  name: "specialty123"
-}
+  name: 'specialty123',
+};
 let testPhysicianId;
 let testSpecialtyId;
 
@@ -21,7 +21,7 @@ async function waitForId(pendingId, isToDelete, toDeleteCounter) {
         resolve(pendingId);
         clearInterval(interval);
       } else if (pendingId === null) {
-        reject(new Error("Missing id"));
+        reject(new Error('Missing id'));
       }
     }, 100);
   });
@@ -33,7 +33,7 @@ async function createTestPhysician() {
 }
 
 async function deleteTestPhysician() {
-  await connection('physicians').where('id', testPhysicianId).delete()
+  await connection('physicians').where('id', testPhysicianId).delete();
 }
 
 async function createTestSpecialty() {
@@ -42,19 +42,19 @@ async function createTestSpecialty() {
 }
 
 async function deleteTestSpecialty() {
-  await connection('specialties').where('id', testSpecialtyId).delete()
+  await connection('specialties').where('id', testSpecialtyId).delete();
 }
 
 async function getTestPhysicianId() {
-  return (await connection('physicians')
-    .select('id')
-    .where('cpf', '45103412302'))[0].id;
+  return (
+    await connection('physicians').select('id').where('cpf', '45103412302')
+  )[0].id;
 }
 
 async function getTestSpecialtyId() {
-  return (await connection('specialties')
-    .select('id')
-    .where('name', 'specialty123'))[0].id;
+  return (
+    await connection('specialties').select('id').where('name', 'specialty123')
+  )[0].id;
 }
 
 beforeAll(async () => {
@@ -67,27 +67,22 @@ afterAll(async () => {
   await deleteTestSpecialty();
 });
 
-
 describe('Test physicians routes', () => {
   const newPhysician = {
-    name: "Fulano da Silva",
-    crm: "2313423-24134",
-    cpf: "85303412301",
-  }
+    name: 'Fulano da Silva',
+    crm: '2313423-24134',
+    cpf: '85303412301',
+  };
   let physicianId = undefined;
   let toDeleteCounter = 4;
-  const baseEndpoint = "/api/physicians";
+  const baseEndpoint = '/api/physicians';
 
   test('Creating a new physician', async () => {
-    const response = await request(app)
-      .post(baseEndpoint)
-      .send(newPhysician);
+    const response = await request(app).post(baseEndpoint).send(newPhysician);
     const body = response.body;
 
     expect(response.statusCode).toBe(201);
-    expect(body.msg).toEqual(
-      expect.objectContaining(newPhysician)
-    );
+    expect(body.msg).toEqual(expect.objectContaining(newPhysician));
 
     physicianId = body.msg.id ? body.msg.id : null;
     toDeleteCounter--;
@@ -98,9 +93,7 @@ describe('Test physicians routes', () => {
     const response = await request(app).get(`${baseEndpoint}/${id}`);
     const body = response.body;
     expect(response.statusCode).toBe(200);
-    expect(body.msg).toEqual(
-      expect.objectContaining(newPhysician)
-    );
+    expect(body.msg).toEqual(expect.objectContaining(newPhysician));
 
     toDeleteCounter--;
   });
@@ -108,13 +101,13 @@ describe('Test physicians routes', () => {
   test('Get the physicians', async () => {
     response = await request(app).get(baseEndpoint);
     expect(response.statusCode).toBe(200);
-    response.body.msg.map(item => {
+    response.body.msg.map((item) => {
       expect(item).toEqual({
         id: expect.any(Number),
         name: expect.any(String),
         crm: expect.any(String),
         cpf: expect.any(String),
-      })
+      });
     });
 
     toDeleteCounter--;
@@ -123,10 +116,10 @@ describe('Test physicians routes', () => {
   test('Update the physician', async () => {
     const id = await waitForId(physicianId);
     const updates = {
-      name: "Fulano da Silva Brandão",
-      crm: "23134-2324134",
-      cpf: "85303412301"
-    }
+      name: 'Fulano da Silva Brandão',
+      crm: '23134-2324134',
+      cpf: '85303412301',
+    };
     const response = await request(app)
       .put(`${baseEndpoint}/${id}`)
       .send(updates);
@@ -142,32 +135,26 @@ describe('Test physicians routes', () => {
 
   test('Delete the physician', async () => {
     const id = await waitForId(physicianId, true, toDeleteCounter);
-    const response = await request(app)
-      .delete(`${baseEndpoint}/${id}`);
+    const response = await request(app).delete(`${baseEndpoint}/${id}`);
 
     expect(response.statusCode).toBe(204);
   });
 });
 
-
 describe('Test specialties routes', () => {
   const newSpecialty = {
-    name: "foo",
-  }
+    name: 'foo',
+  };
   let specialtyId = undefined;
   let toDeleteCounter = 4;
-  const baseEndpoint = "/api/specialties";
+  const baseEndpoint = '/api/specialties';
 
   test('Creating a new specialty', async () => {
-    const response = await request(app)
-      .post(baseEndpoint)
-      .send(newSpecialty);
+    const response = await request(app).post(baseEndpoint).send(newSpecialty);
     const body = response.body;
 
     expect(response.statusCode).toBe(201);
-    expect(body.msg).toEqual(
-      expect.objectContaining(newSpecialty)
-    );
+    expect(body.msg).toEqual(expect.objectContaining(newSpecialty));
 
     specialtyId = body.msg.id ? body.msg.id : null;
     toDeleteCounter--;
@@ -178,9 +165,7 @@ describe('Test specialties routes', () => {
     const response = await request(app).get(`${baseEndpoint}/${id}`);
     const body = response.body;
     expect(response.statusCode).toBe(200);
-    expect(body.msg).toEqual(
-      expect.objectContaining(newSpecialty)
-    );
+    expect(body.msg).toEqual(expect.objectContaining(newSpecialty));
 
     toDeleteCounter--;
   });
@@ -188,11 +173,11 @@ describe('Test specialties routes', () => {
   test('Get the specialties', async () => {
     response = await request(app).get(baseEndpoint);
     expect(response.statusCode).toBe(200);
-    response.body.msg.map(item => {
+    response.body.msg.map((item) => {
       expect(item).toEqual({
         id: expect.any(Number),
         name: expect.any(String),
-      })
+      });
     });
 
     toDeleteCounter--;
@@ -201,8 +186,8 @@ describe('Test specialties routes', () => {
   test('Update the specialty', async () => {
     const id = await waitForId(specialtyId);
     const updates = {
-      name: "bar",
-    }
+      name: 'bar',
+    };
     const response = await request(app)
       .put(`${baseEndpoint}/${id}`)
       .send(updates);
@@ -224,11 +209,10 @@ describe('Test specialties routes', () => {
   });
 });
 
-
 describe('Test physician specialty routes', () => {
   let physicianSpecialtyId = undefined;
   let toDeleteCounter = 3;
-  const baseEndpoint = "/api/physicianspecialties";
+  const baseEndpoint = '/api/physicianspecialties';
 
   test('Creating a new physician specialty', async () => {
     const newPhysicianSpecialty = {
@@ -242,9 +226,7 @@ describe('Test physician specialty routes', () => {
     const body = response.body;
 
     expect(response.statusCode).toBe(201);
-    expect(body.msg).toEqual(
-      expect.objectContaining(newPhysicianSpecialty)
-    );
+    expect(body.msg).toEqual(expect.objectContaining(newPhysicianSpecialty));
 
     physicianSpecialtyId = body.msg.id ? body.msg.id : null;
     toDeleteCounter--;
@@ -260,9 +242,7 @@ describe('Test physician specialty routes', () => {
     const body = response.body;
 
     expect(response.statusCode).toBe(200);
-    expect(body.msg).toEqual(
-      expect.objectContaining(newPhysicianSpecialty)
-    );
+    expect(body.msg).toEqual(expect.objectContaining(newPhysicianSpecialty));
 
     toDeleteCounter--;
   });
@@ -270,12 +250,12 @@ describe('Test physician specialty routes', () => {
   test('Get the physician specialties', async () => {
     response = await request(app).get(baseEndpoint);
     expect(response.statusCode).toBe(200);
-    response.body.msg.map(item => {
+    response.body.msg.map((item) => {
       expect(item).toEqual({
         id: expect.any(Number),
         physicianId: expect.any(Number),
         specialtiesId: expect.any(Number),
-      })
+      });
     });
 
     toDeleteCounter--;
@@ -289,32 +269,27 @@ describe('Test physician specialty routes', () => {
   });
 });
 
-
 describe('Test addresses routes', () => {
   let addressId = undefined;
   let toDeleteCounter = 4;
-  const baseEndpoint = "/api/addresses";
+  const baseEndpoint = '/api/addresses';
 
   test('Creating a new address', async () => {
     const newAddress = {
       physicianId: await getTestPhysicianId(),
-      type: "apartament",
-      zipcode: "12228-460",
-      state: "SP",
-      city: "São José dos Campos",
-      district: "DCTA",
-      street: "Rua H8A",
-      number: "133",
+      type: 'apartament',
+      zipcode: '12228-460',
+      state: 'SP',
+      city: 'São José dos Campos',
+      district: 'DCTA',
+      street: 'Rua H8A',
+      number: '133',
     };
-    const response = await request(app)
-      .post(baseEndpoint)
-      .send(newAddress);
+    const response = await request(app).post(baseEndpoint).send(newAddress);
     const body = response.body;
 
     expect(response.statusCode).toBe(201);
-    expect(body.msg).toEqual(
-      expect.objectContaining(newAddress)
-    );
+    expect(body.msg).toEqual(expect.objectContaining(newAddress));
 
     addressId = body.msg.id ? body.msg.id : null;
     toDeleteCounter--;
@@ -323,21 +298,19 @@ describe('Test addresses routes', () => {
   test('Get the created address', async () => {
     const newAddress = {
       physicianId: await getTestPhysicianId(),
-      type: "apartament",
-      zipcode: "12228-460",
-      state: "SP",
-      city: "São José dos Campos",
-      district: "DCTA",
-      street: "Rua H8A",
-      number: "133",
+      type: 'apartament',
+      zipcode: '12228-460',
+      state: 'SP',
+      city: 'São José dos Campos',
+      district: 'DCTA',
+      street: 'Rua H8A',
+      number: '133',
     };
     const id = await waitForId(addressId);
     const response = await request(app).get(`${baseEndpoint}/${id}`);
     const body = response.body;
     expect(response.statusCode).toBe(200);
-    expect(body.msg).toEqual(
-      expect.objectContaining(newAddress)
-    );
+    expect(body.msg).toEqual(expect.objectContaining(newAddress));
 
     toDeleteCounter--;
   });
@@ -345,7 +318,7 @@ describe('Test addresses routes', () => {
   test('Get the addresses', async () => {
     response = await request(app).get(baseEndpoint);
     expect(response.statusCode).toBe(200);
-    response.body.msg.map(item => {
+    response.body.msg.map((item) => {
       expect(item).toEqual({
         id: expect.any(Number),
         physicianId: expect.any(Number),
@@ -356,7 +329,7 @@ describe('Test addresses routes', () => {
         district: expect.any(String),
         street: expect.any(String),
         number: expect.any(String),
-      })
+      });
     });
 
     toDeleteCounter--;
@@ -366,23 +339,23 @@ describe('Test addresses routes', () => {
     const id = await waitForId(addressId);
     const newAddress = {
       physicianId: await getTestPhysicianId(),
-      type: "apartament",
-      zipcode: "12228-460",
-      state: "SP",
-      city: "São José dos Campos",
-      district: "DCTA",
-      street: "Rua H8A",
-      number: "133",
+      type: 'apartament',
+      zipcode: '12228-460',
+      state: 'SP',
+      city: 'São José dos Campos',
+      district: 'DCTA',
+      street: 'Rua H8A',
+      number: '133',
     };
     const updates = {
       physicianId: await getTestPhysicianId(),
-      type: "apartament",
-      zipcode: "12228-461",
-      state: "SP",
-      city: "São José dos Campos",
-      district: "DCTA",
-      street: "Rua H8B",
-      number: "203",
+      type: 'apartament',
+      zipcode: '12228-461',
+      state: 'SP',
+      city: 'São José dos Campos',
+      district: 'DCTA',
+      street: 'Rua H8B',
+      number: '203',
     };
     const response = await request(app)
       .put(`${baseEndpoint}/${id}`)
@@ -405,27 +378,22 @@ describe('Test addresses routes', () => {
   });
 });
 
-
 describe('Test contact routes', () => {
   let addressId = undefined;
   let toDeleteCounter = 4;
-  const baseEndpoint = "/api/contacts";
+  const baseEndpoint = '/api/contacts';
 
   test('Creating a new contact', async () => {
     const newContact = {
       physicianId: await getTestPhysicianId(),
-      type: "test",
-      contact: "test"
+      type: 'test',
+      contact: 'test',
     };
-    const response = await request(app)
-      .post(baseEndpoint)
-      .send(newContact);
+    const response = await request(app).post(baseEndpoint).send(newContact);
     const body = response.body;
 
     expect(response.statusCode).toBe(201);
-    expect(body.msg).toEqual(
-      expect.objectContaining(newContact)
-    );
+    expect(body.msg).toEqual(expect.objectContaining(newContact));
 
     addressId = body.msg.id ? body.msg.id : null;
     toDeleteCounter--;
@@ -434,16 +402,14 @@ describe('Test contact routes', () => {
   test('Get the created contact', async () => {
     const newContact = {
       physicianId: await getTestPhysicianId(),
-      type: "test",
-      contact: "test"
+      type: 'test',
+      contact: 'test',
     };
     const id = await waitForId(addressId);
     const response = await request(app).get(`${baseEndpoint}/${id}`);
     const body = response.body;
     expect(response.statusCode).toBe(200);
-    expect(body.msg).toEqual(
-      expect.objectContaining(newContact)
-    );
+    expect(body.msg).toEqual(expect.objectContaining(newContact));
 
     toDeleteCounter--;
   });
@@ -451,13 +417,13 @@ describe('Test contact routes', () => {
   test('Get the contacts', async () => {
     response = await request(app).get(baseEndpoint);
     expect(response.statusCode).toBe(200);
-    response.body.msg.map(item => {
+    response.body.msg.map((item) => {
       expect(item).toEqual({
         id: expect.any(Number),
         physicianId: expect.any(Number),
         type: expect.any(String),
         contact: expect.any(String),
-      })
+      });
     });
 
     toDeleteCounter--;
@@ -467,13 +433,13 @@ describe('Test contact routes', () => {
     const id = await waitForId(addressId);
     const newContact = {
       physicianId: await getTestPhysicianId(),
-      type: "test",
-      contact: "test"
+      type: 'test',
+      contact: 'test',
     };
     const updates = {
       physicianId: await getTestPhysicianId(),
-      type: "test2",
-      contact: "test2"
+      type: 'test2',
+      contact: 'test2',
     };
     const response = await request(app)
       .put(`${baseEndpoint}/${id}`)
@@ -495,7 +461,6 @@ describe('Test contact routes', () => {
     expect(response.statusCode).toBe(204);
   });
 });
-
 
 /**
  * @todo: add tests for profile routes
