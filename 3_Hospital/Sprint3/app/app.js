@@ -4,29 +4,14 @@
     const bodyParser = require('body-parser')
     const app = express(); //cria e configura a aplicacao
     const path = require('path');
-    const session = require('express-session')
     const flash = require('connect-flash')
     const BigchainDB = require( './config/dbBigchainDB' );
-
 
 // CONEXÃO COM BANCO DE DADOS BLOCKCHAIN
 BigchainDB.connectToServer( function( err, client ) {
   if (err) console.log(err);
 
     // CONFIGURAÇÕES
-        // SESSÃO
-            app.use(session({
-                secret: "stepesbd",
-                resave: true,
-                saveUninitialized: true
-            }))
-            app.use(flash())
-        // MIDDLEWARE
-            app.use((req, res, next) => {
-                res.locals.success_msg = req.flash("success_msg")
-                res.locals.error_msg = req.flash("error_msg")
-                next();
-            })
         // BODY-PARSER
             app.use(bodyParser.urlencoded({extended: false})) //para codificar as urls
             app.use(bodyParser.json()) //todo conteudo deve convertido para json

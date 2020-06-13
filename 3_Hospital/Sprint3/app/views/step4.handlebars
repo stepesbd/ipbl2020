@@ -26,22 +26,30 @@
 <div class="container-fluid mt-4" >
   <div class="row justify-content-center">
       <div class="col-auto mb-3">
+        <a class="btn btn-primary mr-2" href="/map/positive" role="button" alt="Ver mapa de contágio" data-placement="top" title="Ver mapa de contágio"><i class="fas fa-map-marked-alt fa-3x"></i></a>
+      </div>
+  </div>
+</div>
+
+<div class="container-fluid mt-4" >
+  <div class="row justify-content-center">
+      <div class="col-auto mb-3">
         <div>
           
           <div class="container">
-            <img src="/medical_record.png">
+            <img src="/img/medical_record.png">
             <div class="patient">
               <h6>
                 <p class="ex1">
                     Data do atendimento: {{att.Atendimento.Data_atendimento}} <br>
-                    <img src="/line.png">
+                    <img src="/img/line.png">
                     Dados do Paciente: <br>
                     Nome: <strong class="mr-4">{{att.Paciente.Nome}}</strong>
                     Rua: <strong class="mr-2">{{att.Paciente.Endereco.Rua}}, {{att.Paciente.Endereco.Numero}}</strong>
                     Cidade: <strong class="mr-2">{{att.Paciente.Endereco.Cidade}}</strong>  
                     UF: <strong>{{att.Paciente.Endereco.UF}} </strong>
                     <br>
-                    <img src="/line.png">
+                    <img src="/img/line.png">
                     Local de Atendimento: <br>
                     Nome: <strong class="mr-4">{{hospital.hos.hos_name}}</strong>
                     Rua: <strong class="mr-2">{{hospital.add.add_street}}, {{hospital.add.add_number}}</strong>
@@ -52,16 +60,16 @@
                       Setor: <strong class="mr-4">{{att.Atendimento.Hospital.Internacao.Tipo}}</strong> Leito: <strong>{{att.Atendimento.Hospital.Internacao.Leito_nome}}</strong> 
                       <br>
                     {{/if}}
-                    <img src="/line.png">
+                    <img src="/img/line.png">
                     Dados do Médico: <br>
                     Nome: <strong class="mr-4">{{att.Medico.Nome}}</strong>
                     CRM: <strong class="mr-4">{{att.Medico.CRM}}</strong>
                     <br>
-                    <img src="/line.png">
+                    <img src="/img/line.png">
                     Informações de atendimento: <br>
                     <strong class="mr-4">{{att.Atendimento.Comentarios}}</strong>
                     <br>
-                    <img src="/line.png">
+                    <img src="/img/line.png">
                     {{#each att.Atendimento.Hospital.Itens_consumidos}}
                       {{#ifSubstring Name 'COVID'}}
                         Resultado do teste de COVID-19: 
@@ -71,7 +79,7 @@
                           <strong style="color:rgb(58, 177, 37)">{{@root.att.Atendimento.Hospital.Exame_covid.Resultado}}</strong>
                         {{/ifSubstring}}
                         <br>
-                        <img src="/line.png">
+                        <img src="/img/line.png">
                       {{/ifSubstring}}
                     {{/each}}
                     Itens consumidos durante a consulta: <br>

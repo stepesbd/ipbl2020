@@ -1,10 +1,12 @@
-const MongoClient = require( 'mongodb' ).MongoClient;
-const url = "mongodb://35.198.33.211:27017";
+const IP = '34.95.247.150';
 
+const MongoClient = require( 'mongodb' ).MongoClient;
+const url = 'mongodb://stepesbd:stepesbd2020@' + IP + ':27017/?authMechanism=SCRAM-SHA-1&authSource=bigchain';
 var _db;
 
 module.exports = {
 
+  IP: IP,
   connectToServer: function( callback ) {
     MongoClient.connect( url,  { 
 		useNewUrlParser: true, 

@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Heatmaps</title>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 40%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+		color: #FFF;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+    </style>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+	
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js">
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+  </head>
+
+  <body>
+    
+	<div class="col-md-6" id="map"></div>
+	
+	
+	<script>
+		
+	  var map, heatmap;
+
+	  function initMap() {
+		map = new google.maps.Map(document.getElementById("map"), {
+		  zoom: 13,
+		  center: {lat: -23.2205624083, lng: -45.8877512673}, 
+		  mapTypeId: 'satellite'
+		});
+
+		heatmap = new google.maps.visualization.HeatmapLayer({
+		  data: getPoints(),
+		  map: map
+		});
+	  }
+
+	  function toggleHeatmap() {
+		heatmap.setMap(heatmap.getMap() ? null : map);
+	  }
+
+	  function changeGradient() {
+		var gradient = [
+		  'rgba(0, 255, 255, 0)',
+		  'rgba(0, 255, 255, 1)',
+		  'rgba(0, 191, 255, 1)',
+		  'rgba(0, 127, 255, 1)',
+		  'rgba(0, 63, 255, 1)',
+		  'rgba(0, 0, 255, 1)',
+		  'rgba(0, 0, 223, 1)',
+		  'rgba(0, 0, 191, 1)',
+		  'rgba(0, 0, 159, 1)',
+		  'rgba(0, 0, 127, 1)',
+		  'rgba(63, 0, 91, 1)',
+		  'rgba(127, 0, 63, 1)',
+		  'rgba(191, 0, 31, 1)',
+		  'rgba(255, 0, 0, 1)'
+		]
+		heatmap.set('gradient', heatmap.get('gradient') ? null : gradient);
+	  }
+
+	  function changeRadius() {
+		heatmap.set('radius', heatmap.get('radius') ? null : 10);
+	  }
+
+	  function changeOpacity() {
+		heatmap.set('opacity', heatmap.get('opacity') ? null : 0.2);
+	  }
+
+	  // Heatmap data: 500 Points
+	  function getPoints() {
+		dots = [];
+	
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var json = JSON.parse(this.responseText);
+
+				for (k in json) {
+
+					dots.push(new google.maps.LatLng(json[k][0], json[k][1]))
+				}
+			}
+		};
+		xhttp.open("GET", "http://localhost:5000/address/api/latlong", true);
+		xhttp.send();
+
+		console.log(dots)
+		return dots
+	  }
+	  
+    </script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCwM9rO1jJhNM8I6whCVRELSTlZjtKlTWc&libraries=visualization&callback=initMap">
+    </script>
+	
+
+  </body>
+</html> 

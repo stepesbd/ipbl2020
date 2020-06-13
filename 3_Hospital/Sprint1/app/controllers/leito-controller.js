@@ -5,6 +5,7 @@ const { Bed } = require('../models');
 const { Hospital } = require('../models');
 const { Bed_sector} =  require('../models');
 const { Op } = require("sequelize");
+const HOST = require('../config/hostAPP').HOST;
 
 
 //#region  Criando leitos em um hospital
@@ -30,8 +31,7 @@ exports.post = async (req, res, next) => {
                 // CASO AÇÃO SEJA PARA DECLARAR ÓBITO DO PACIENTE QUE ESTÁ NO LEITO
                 var response = {}
                 // SOLICITAÇÃO NA API PARA DECLARAÇÃO DE ÓBITO
-                await request("https://stepesbdmedrecords.herokuapp.com/api/records/" + bed.bed_medical_record + '/death', {          // API: PRODUÇÃO
-                //await request("http://localhost:2000/api/records/" + bed.bed_medical_record + '/death', {                             // API: LOCALHOST
+                await request(HOST + "/api/records/" + bed.bed_medical_record + '/death', {
                     method: 'POST',
                     data: { Causa_mortis: causa_mortis }
                 }).then((res)=>{
@@ -46,8 +46,7 @@ exports.post = async (req, res, next) => {
                 // CASO A AÇÃO SEJA PARA DAR ALTA AO PACIENTE QUE ESTÁ NO LEITO
                 var response = {}
                 // SOLICITAÇÃO NA API PARA DECLARAÇÃO DE ALTA MÉDICA
-                await request("https://stepesbdmedrecords.herokuapp.com/api/records/" + bed.bed_medical_record + '/release', {  // API: PRODUÇÃO
-                //await request("http://localhost:2000/api/records/" + bed.bed_medical_record + '/release', {                      // API: LOCALHOST
+                await request(HOST + "/api/records/" + bed.bed_medical_record + '/release', {
                     method: 'POST',
                 }).then((res)=>{
                     res = JSON.parse(res.body)
@@ -88,10 +87,6 @@ exports.post = async (req, res, next) => {
             }
         });
     }
-    
-        
-    
-    
 };
 //#endregion
 
@@ -119,7 +114,7 @@ exports.get = async (req, res, next) => {
             
             // VERIFICANDO PELA API O REGISTRO MÉDICO
             var response = {}
-            await request("https://stepesbdmedrecords.herokuapp.com/api/records/" + bed.bed_medical_record, {
+            await request(HOST + "/api/records/" + bed.bed_medical_record, {
                 method: 'GET',
             }).then((res)=>{
                 res = JSON.parse(res.body)
@@ -155,11 +150,6 @@ exports.get = async (req, res, next) => {
         var erro ='Hospital não pode ser cadastrado, verifique a validade dos dados informados! ' +  err.message;
         res.render('erro-page', { title: 'Erro', erro: erro} );
     }
-
-    
-
-
-
 };
 //#endregion
 

@@ -4,7 +4,7 @@ const got = require('got');
 const moment = require('moment');
 moment.locale('pt-BR');
 const BigchainDB = require( '../config/dbBigchainDB' );
-const BigchainDB_API_PATH = 'http://35.198.33.211:9984/api/v1/'
+const BigchainDB_API_PATH = 'http://' + BigchainDB.IP + ':9984/api/v1/'
 const { Hospital } = require('../models/TS03');
 const { Provider } = require('../models/TS03');
 const { Order } = require('../models/TS03');
@@ -112,7 +112,6 @@ exports.get = async (req, res, next) => {
                     }).catch(err=>{console.log(err)});
                     // CONCATENANDO AS INFORMAÇÕES DO ASSET EM UM OBJETO
                     const asset_info = { asset_id, asset, quantidade, assetHistory }
-                    console.log(asset_info)
                     
                     // EMPILHANDO O HISTÓRICO
                     userAssets.push(asset_info);
@@ -155,7 +154,7 @@ exports.get = async (req, res, next) => {
                                         const asset_info = { provider, unit_price, asset, quantidade, transaction_id }
                                         providerAssets.push(asset_info);
                                     }else if(transaction.operation == 'TRANSFER'){
-                                        const assetFullString = await got('http://35.198.33.211:9984/api/v1/assets/?search=' + transaction.asset.id);
+                                        const assetFullString = await got('http://' +  BigchainDB.IP  + ':9984/api/v1/assets/?search=' + transaction.asset.id);
                                         const assetFullObj = JSON.parse(assetFullString.body);
                                         const asset = assetFullObj[0].data
                                         const quantidade = output.amount
@@ -308,7 +307,6 @@ exports.post = async (req, res, next) => {
            
             // DEFININDO OS OUTPUTS DA TRRANSAÇÃO A PARTIR DA QUANTIDADE COMPRADA
             var outputs = []
-            console.log(req.body.inputQty)
             if(remainQuantity == 0){
                 // CASO COMPRE TODO O ESTOQUE DO VENDEDOR
                 outputs = [ driver.Transaction.makeOutput(driver.Transaction.makeEd25519Condition(consumer_publicKey), req.body.inputQty)]

@@ -39,7 +39,8 @@
                 <div class="col">
                   <div class="form-group">
                      <label for="inputStatus">Status de Leito</label>
-                          <select class="form-control" name="inputStatus">                                                        
+                          <input type="hidden" name="inputStatus" value="0">
+                          <select class="form-control" name="inputStatus" disabled>                                                        
                               <option value="0">Disponível</option>
                               <option value="1">Ocupado</option>                              
                           </select>                                      
@@ -50,7 +51,7 @@
     </div>
     <div class="form-row text-center">
         <button type="submit" class="btn btn-success mr-2">Cadastrar</button> 
-        <a class=" btn btn-danger" href="/Hospital/{{hosp.hos_id}}/leito/sts/{{hosp.hos_id}}" role="button">Cancelar</a>
+        <a class=" btn btn-danger" href="/Hospital/{{hosp.hos_id}}/leito/list" role="button">Cancelar</a>
     </div>
     <br>
 </form>

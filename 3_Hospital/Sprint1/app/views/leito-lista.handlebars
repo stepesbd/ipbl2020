@@ -47,10 +47,10 @@
             </td>              
             <td class='text-center'>{{Bed_sector.sector_desc}}</td>
             {{#ifEquals bed_status 0 }}
-                <td class='text-center'><i class="fa fa-circle" style="color:green" aria-hidden="true" style="width:45px"></i></td>   
+                <td class='text-center'><i class="fa fa-circle" style="color:green" aria-hidden="true" style="width:45px"></i><input type="hidden" value="0" name="STATUSLEITO0"></td>   
             {{/ifEquals}} 
             {{#ifEquals bed_status 1 }}
-                <td class='text-center'><i class="fa fa-circle" style="color:red" aria-hidden="true" style="width:45px"></i></td>   
+                <td class='text-center'><i class="fa fa-circle" style="color:red" aria-hidden="true" style="width:45px"></i><input type="hidden" value="0" name="STATUSLEITO0"></td>   
             {{/ifEquals}}         
           <td class="text-center">
               <div class="form-row text-center btn-group btn-group-justified" style="width:45px">
@@ -104,6 +104,7 @@
                 </div>
             </div>  
             <div class="row">
+              <!--
                 <div class="col">
                   <div class="form-group">
                      <label for="inputStatus">Status de Leito</label>
@@ -113,6 +114,7 @@
                           </select>                                      
                   </div>
                 </div>
+              -->
             </div>  
           <!--  FIM FORM ATUALIZACAO  --->
           <div class="modal-footer">
@@ -164,6 +166,7 @@
                          { responsivePriority: 2, targets: -1 },
                          { responsivePriority: 3, targets: 3 },
                          { responsivePriority: 4, targets: 4 },],
+            //"order": [[ 1, "desc" ]],
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Portuguese-Brasil.json",
                 decimal: ',',
