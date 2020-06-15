@@ -1,0 +1,107 @@
+<style>
+       #map {
+        height: 100%;
+      }
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+</style>
+
+<div class="mb-4">
+  <h3>
+    <i class="fas fa-map-marked-alt mr-2"></i>
+    Mapa de Hospitais
+  </h3>
+</div>
+
+<div id="map">
+</div>
+
+<form action="/" method="GET">
+  <div class="form-row text-center mt-4">
+          <button type="submit" class=" btn btn-primary" href="/" >Voltar</button> 
+  </div>  
+</form>
+
+<script>
+      var hos = {{{json hos}}}
+      var markers = [];
+      
+      var map, infoWindow;
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: -23.2205624083, lng: -45.8877512673},
+          zoom: 13
+        });
+        infoWindow = new google.maps.InfoWindow;
+
+
+        for (var i = 0; i < hos.length; i++) {
+            var unit = {
+              "title": hos[i].hos_name,
+              "lat": hos[i].add_latitude,
+              "lng": hos[i].add_longitude,
+              "description": hos[i].hos_name + ' ( Número de vagas: ' + hos[i].qty_vacancy + ' )'}
+            markers.push(unit)
+        }
+        
+        // Try HTML5 geolocation.
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+
+            infoWindow.setPosition(pos);
+            infoWindow.setContent('Você está aqui.');
+            infoWindow.open(map);
+            map.setCenter(pos);
+          }, function() {
+            handleLocationError(true, infoWindow, map.getCenter());
+          });
+        } else {
+          // Browser doesn't support Geolocation
+          handleLocationError(false, infoWindow, map.getCenter());
+        }
+      }
+
+      function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(browserHasGeolocation ?
+                              'Erro: Serviço de localização falhou.' :
+                              'Error: Seu browser não suporta geolocalização.');
+        infoWindow.open(map);
+      }
+        window.onload = function () {
+          var i = 0;
+          var interval = setInterval(function () {
+              var data = markers[i]
+              var myLatlng = new google.maps.LatLng(data.lat, data.lng);
+              var marker = new google.maps.Marker({
+                  position: myLatlng,
+                  map: map,
+                  icon: '/hos_pin.png',
+                  title: data.title,
+                  animation: google.maps.Animation.DROP,
+              });
+              (function (marker, data) {
+                  google.maps.event.addListener(marker, "click", function (e) {
+                      infoWindow.setContent(data.description);
+                      infoWindow.open(map, marker);
+                  });
+              })(marker, data);
+              i++;
+              if (i == markers.length) {
+                  clearInterval(interval);
+              }
+          }, 200);
+        }
+    </script>
+</script>
+
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHa1KVp_6wozWWyXGKxIHpfScYuNhqaoU&callback=initMap">
+    </script>

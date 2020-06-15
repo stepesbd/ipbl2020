@@ -4,22 +4,23 @@
 
 <style>
   .container {
-    position: relative;
     color: black;
   }
   p.ex1 {
-    margin: 10px 73px;
+    margin: 10px 90px;
   }
   .patient {
     position: absolute;
     text-align: left;
-    top: 280px;
+    top: 275px;
     left: 0px;
   }
   .assinatura_medico {
     position: absolute;
-    bottom: 111px;
-    right: 80px;
+    top: 896px;
+    left: 368px;
+    width: 449px;
+    text-align: center;
   }
 </style>
 
@@ -41,51 +42,68 @@
             <div class="patient">
               <h6>
                 <p class="ex1">
-                    Data do atendimento: {{att.Atendimento.Data_atendimento}} <br>
+                    <u>ID:</u>  <strong><small>{{id}}</small></strong> <br> 
+                    <u>Data do atendimento:</u> {{att.Atendimento.Data_atendimento}} <br>
                     <img src="/img/line.png">
-                    Dados do Paciente: <br>
-                    Nome: <strong class="mr-4">{{att.Paciente.Nome}}</strong>
-                    Rua: <strong class="mr-2">{{att.Paciente.Endereco.Rua}}, {{att.Paciente.Endereco.Numero}}</strong>
-                    Cidade: <strong class="mr-2">{{att.Paciente.Endereco.Cidade}}</strong>  
-                    UF: <strong>{{att.Paciente.Endereco.UF}} </strong>
+                    <i class="fas fa-user"></i><i class="ml-2">Dados do Paciente:</i>  <br>
+                    <u>Nome:</u> <strong class="mr-2">{{att.Paciente.Nome}}</strong>
+                    <u>Tipo Sanguíneo:</u> <strong class="mr-2">{{att.Paciente.GrupoSanguineo}}{{att.Paciente.FatorRH}}</strong>
+                    <u>Data de nascimento:</u> <strong class="mr-2">{{att.Paciente.Nascimento}}</strong> <br>
+                    <u>Rua:</u> <strong class="mr-2">{{att.Paciente.Endereco.Rua}}, {{att.Paciente.Endereco.Numero}}</strong>
+                    <u>Cidade:</u> <strong class="mr-2">{{att.Paciente.Endereco.Cidade}}</strong>  
+                    <u>UF:</u> <strong>{{att.Paciente.Endereco.UF}} </strong>
                     <br>
                     <img src="/img/line.png">
-                    Local de Atendimento: <br>
-                    Nome: <strong class="mr-4">{{hospital.hos.hos_name}}</strong>
-                    Rua: <strong class="mr-2">{{hospital.add.add_street}}, {{hospital.add.add_number}}</strong>
-                    Cidade: <strong class="mr-2">{{hospital.add.add_city}}</strong>  
-                    UF: <strong>{{hospital.add.add_state}} </strong> <br>
+                    <i class="fas fa-h-square"></i><i class="ml-2">Local de Atendimento:</i> <br>
+                    <u>Nome:</u> <strong class="mr-2">{{hospital.hos.hos_name}}</strong>
+                    <u>Rua:</u> <strong class="mr-2">{{hospital.add.add_street}}, {{hospital.add.add_number}}</strong>
+                    <u>Cidade:</u> <strong class="mr-2">{{hospital.add.add_city}}</strong>  
+                    <u>UF:</u> <strong>{{hospital.add.add_state}} </strong> 
                     {{#if att.Atendimento.Hospital.Internacao}}
-                      <strong style="color:rgb(221, 24, 24)">Paciente internado</strong> <br>
-                      Setor: <strong class="mr-4">{{att.Atendimento.Hospital.Internacao.Tipo}}</strong> Leito: <strong>{{att.Atendimento.Hospital.Internacao.Leito_nome}}</strong> 
+                      <br>
+                      <strong style="color:rgb(221, 24, 24)">PACIENTE INTERNADO</strong>
+                      <u class="ml-4">Setor:</u> <strong class="mr-2">{{att.Atendimento.Hospital.Internacao.Tipo}}</strong> 
+                      <u>Leito:</u> <strong>{{att.Atendimento.Hospital.Internacao.Leito_nome}}</strong> 
                       <br>
                     {{/if}}
                     <img src="/img/line.png">
-                    Dados do Médico: <br>
-                    Nome: <strong class="mr-4">{{att.Medico.Nome}}</strong>
-                    CRM: <strong class="mr-4">{{att.Medico.CRM}}</strong>
+                    <i class="fas fa-user-md"></i><i class="ml-2">Dados do Médico:</i> <br>
+                    <u>Nome:</u> <strong class="mr-4">{{att.Medico.Nome}}</strong>
+                    <u>CRM:</u> <strong class="mr-4">{{att.Medico.CRM}}</strong>
                     <br>
                     <img src="/img/line.png">
-                    Informações de atendimento: <br>
-                    <strong class="mr-4">{{att.Atendimento.Comentarios}}</strong>
+                    <i class="fas fa-notes-medical"></i><i class="ml-2">Informações de atendimento:</i> <br>
+                    <u>Sintomas:</u> 
+                    {{#if att.Atendimento.Sintomas}}
+                      <u>Sintomas:</u> 
+                      {{#each att.Atendimento.Sintomas}}
+                        <strong class="mr-2">{{this}}</strong>
+                      {{/each}}
+                      <br>
+                    {{/if}}
+                    <u>Estado:</u> 
+                    <strong>{{att.Atendimento.Estado}}</strong>
                     <br>
-                    <img src="/img/line.png">
-                    {{#each att.Atendimento.Hospital.Itens_consumidos}}
-                      {{#ifSubstring Name 'COVID'}}
-                        Resultado do teste de COVID-19: 
-                        {{#ifSubstring @root.att.Atendimento.Hospital.Exame_covid.Resultado 'POSITIVO'}}
-                          <strong style="color:rgb(221, 24, 24)">{{@root.att.Atendimento.Hospital.Exame_covid.Resultado}}</strong>
-                        {{else}}
-                          <strong style="color:rgb(58, 177, 37)">{{@root.att.Atendimento.Hospital.Exame_covid.Resultado}}</strong>
+                    <u>Diagnóstico:</u> 
+                    <small>{{att.Atendimento.Comentarios}}</small>
+                    <br>
+                    {{#if att.Atendimento.Hospital.Itens_consumidos}}
+                      {{#each att.Atendimento.Hospital.Itens_consumidos}}
+                        {{#ifSubstring Name 'COVID'}}
+                          <u>Resultado do teste de COVID-19:</u>  
+                          {{#ifSubstring @root.att.Atendimento.Hospital.Exame_covid.Resultado 'POSITIVO'}}
+                            <strong style="color:rgb(221, 24, 24)">{{@root.att.Atendimento.Hospital.Exame_covid.Resultado}}</strong>
+                          {{else}}
+                            <strong style="color:rgb(58, 177, 37)">{{@root.att.Atendimento.Hospital.Exame_covid.Resultado}}</strong>
+                          {{/ifSubstring}}
+                          <br>
                         {{/ifSubstring}}
-                        <br>
-                        <img src="/img/line.png">
-                      {{/ifSubstring}}
-                    {{/each}}
-                    Itens consumidos durante a consulta: <br>
-                    {{#each att.Atendimento.Hospital.Itens_consumidos}}
-                      <strong class="mr-4">{{Name}}</strong> 
-                    {{/each}}
+                      {{/each}}
+                      <u>Itens consumidos durante a consulta:</u>
+                      {{#each att.Atendimento.Hospital.Itens_consumidos}}
+                        <strong class="mr-4">{{Name}}</strong> 
+                      {{/each}}
+                    {{/if}}
                 </p>
               </h6>
             </div>

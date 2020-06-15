@@ -25,8 +25,8 @@ exports.post = async (req, res, next) => {
         */
 
         var cep = me.inputZipCode.toUpperCase();
-        var lat = "teste";
-        var lon = "teste";
+        var lat = "";
+        var lon = "";
         if (typeof cep === "number") {
             cep = cep.toString()
             cep = parseInt(cep.replace(/[^0-9]/g, ""))
@@ -40,6 +40,8 @@ exports.post = async (req, res, next) => {
             lat = response.latitude
             lon = response.longitude
         }).then(()=>{
+            if(lat == undefined || lon == undefined)
+                return res.render('erro-page', { title: 'Erro', erro: 'CEP inválido, tente novamente outro CEP.'} );
             Address.create({
                 add_street: me.inputStreet.toUpperCase(),
                 add_number: me.inputNumber,
@@ -289,100 +291,124 @@ exports.update =  (req, res) => {
         // ATALIZAÇÃO DO HOSPITAL
         Hospital.findOne({ 
            where: {hos_id: req.params.id}
-        }).then(function (hos){
-            Address.update({
-                    add_street: me.inputStreet.toUpperCase(),
-                    add_number: me.inputNumber
-                },{
-                    returning: true, 
-                    where: {add_id: hos.add_id} 
-                }).then(()=>{
-                    // VERIFICANDO SE HÁ OUTRO HOSPITAL COM MESMO CNPJ - VALIDATION   
-                    Hospital.findOne({
-                        where: { hos_cnpj: me.inputCNPJ }
-                    }).then(function(hosCNPJcheck){
-                        if( (hosCNPJcheck == null) || (hosCNPJcheck.hos_cnpj.localeCompare(hos.hos_cnpj) === 0) ){
-                            // VERIFICANDO SE HÁ OUTRO HOSPITAL COM MESMO CNES CODE - VALIDATION  
-                            Hospital.findOne({
-                                where: { hos_cnes_code: me.inputCNES }
-                            }).then(function(hosCNEScheck){
-                                if( (hosCNEScheck == null) || (hosCNEScheck.hos_cnes_code.localeCompare(hos.hos_cnes_code) === 0) ){
-                                    Hospital.update({
-                                        hos_cnpj: me.inputCNPJ,
-                                        hos_cnes_code: me.inputCNES,
-                                        hos_name: me.inputNome.toUpperCase(),
-                                        hos_corporate_name: me.inputCorporate.toUpperCase(),
-                                    },{
-                                        returning: true, 
-                                        where: {hos_id: req.params.id} 
-                                    }).then(()=>{
-                                        Contact.findAll({
-                                            raw: true,
-                                            include: [{
-                                                model: Hospital_contact,
-                                                where: { hos_id: req.params.id }
-                                            }]
-                                        }).then(function (old_contacs) {
-                                            // REMOVENDO TODAS ASSOCIAÇÕES ANTERIORES
-                                            old_contacs.forEach(function(old_con){
-                                                Contact.destroy({ where: { con_id: old_con.con_id } })
-                                            });
-                                            // NECESSÁRIO PARA EVITAR BUG DE PROCEDIMENTO UNIÁRIO VINDO COMO STRING AO INVÉS DE ARRAY
-                                            if(me.inputContactBox[0] != null){
-                                                
-                                                var arrayOfContactTypes = []
-                                                var arrayOfContactBox = []
-                                
-                                                if(!Array.isArray(me.inputContactType)){
-                                                    arrayOfContactTypes.push(me.inputContactType);
-                                                }else{
-                                                    arrayOfContactTypes = me.inputContactType;
-                                                };
-                                                if(!Array.isArray(me.inputContactBox)){
-                                                    arrayOfContactBox.push(me.inputContactBox);
-                                                }else{
-                                                    arrayOfContactBox = me.inputContactBox;
-                                                };
-                    
-                                                arrayOfContactTypes.forEach(function(contactType){
-                                                    if(arrayOfContactBox[0].length > 0){
-                                                        console.log(contactType)
-                                                        
-                                                        Contact.create({
-                                                            con_type: contactType,
-                                                            con_desc: arrayOfContactBox.shift(),
-                                                        }).then(function(con){
-                                                            con.addHospital(hos);
-                                                        }).catch(err => {
-                                                            con.destroy();
-                                                            var erro = err.message;
-                                                            res.render('erro-page', { title: 'Erro', erro: erro} );
-                                                        });  
-                                                    }
-                                                })
-                                            }
-                                            res.render('success-page', { title: 'Sucesso', success: 'Hospital ATUALIZADO com sucesso! Clique no botão abaixo para ser direcionado à lista de hospitais.', page: '/hospital'} );
+        }).then(async function (hos){
+            var cep = me.inputZipCode.toUpperCase();
+            var lat = "";
+            var lon = "";
+            if (typeof cep === "number") {
+                cep = cep.toString()
+                cep = parseInt(cep.replace(/[^0-9]/g, ""))
+            }
+            cep = cep.replace(/-/gi, '');
+            await request("https://www.cepaberto.com/api/v3/cep?cep=" + cep, {
+                method: 'GET',
+                headers: {'Authorization': 'Token token=787f1f666961d441fa85f9da7cd84f9d'},
+            }).then((response)=>{
+                response = JSON.parse(response.body)
+                lat = response.latitude
+                lon = response.longitude
+            }).then(()=>{
+                if(lat == undefined || lon == undefined)
+                        return res.render('erro-page', { title: 'Erro', erro: 'CEP inválido, tente novamente outro CEP.'} );
+                Address.update({
+                        add_street: me.inputStreet.toUpperCase(),
+                        add_number: me.inputNumber,
+                        add_city: me.inputCity.toUpperCase(),
+                        add_state: me.inputState.toUpperCase(),
+                        add_country: me.inputCountry.toUpperCase(),
+                        add_zip_code: me.inputZipCode.toUpperCase(),
+                        add_latitude: lat.toString(),
+                        add_longitude: lon.toString(),
+                    },{
+                        returning: true, 
+                        where: {add_id: hos.add_id} 
+                    }).then(()=>{
+                        // VERIFICANDO SE HÁ OUTRO HOSPITAL COM MESMO CNPJ - VALIDATION   
+                        Hospital.findOne({
+                            where: { hos_cnpj: me.inputCNPJ }
+                        }).then(function(hosCNPJcheck){
+                            if( (hosCNPJcheck == null) || (hosCNPJcheck.hos_cnpj.localeCompare(hos.hos_cnpj) === 0) ){
+                                // VERIFICANDO SE HÁ OUTRO HOSPITAL COM MESMO CNES CODE - VALIDATION  
+                                Hospital.findOne({
+                                    where: { hos_cnes_code: me.inputCNES }
+                                }).then(function(hosCNEScheck){
+                                    if( (hosCNEScheck == null) || (hosCNEScheck.hos_cnes_code.localeCompare(hos.hos_cnes_code) === 0) ){
+                                        Hospital.update({
+                                            hos_cnpj: me.inputCNPJ,
+                                            hos_cnes_code: me.inputCNES,
+                                            hos_name: me.inputNome.toUpperCase(),
+                                            hos_corporate_name: me.inputCorporate.toUpperCase(),
+                                        },{
+                                            returning: true, 
+                                            where: {hos_id: req.params.id} 
+                                        }).then(()=>{
+                                            Contact.findAll({
+                                                raw: true,
+                                                include: [{
+                                                    model: Hospital_contact,
+                                                    where: { hos_id: req.params.id }
+                                                }]
+                                            }).then(function (old_contacs) {
+                                                // REMOVENDO TODAS ASSOCIAÇÕES ANTERIORES
+                                                old_contacs.forEach(function(old_con){
+                                                    Contact.destroy({ where: { con_id: old_con.con_id } })
+                                                });
+                                                // NECESSÁRIO PARA EVITAR BUG DE PROCEDIMENTO UNIÁRIO VINDO COMO STRING AO INVÉS DE ARRAY
+                                                if(me.inputContactBox[0] != null){
+                                                    
+                                                    var arrayOfContactTypes = []
+                                                    var arrayOfContactBox = []
+                                    
+                                                    if(!Array.isArray(me.inputContactType)){
+                                                        arrayOfContactTypes.push(me.inputContactType);
+                                                    }else{
+                                                        arrayOfContactTypes = me.inputContactType;
+                                                    };
+                                                    if(!Array.isArray(me.inputContactBox)){
+                                                        arrayOfContactBox.push(me.inputContactBox);
+                                                    }else{
+                                                        arrayOfContactBox = me.inputContactBox;
+                                                    };
+                        
+                                                    arrayOfContactTypes.forEach(function(contactType){
+                                                        if(arrayOfContactBox[0].length > 0){
+                                                            console.log(contactType)
+                                                            
+                                                            Contact.create({
+                                                                con_type: contactType,
+                                                                con_desc: arrayOfContactBox.shift(),
+                                                            }).then(function(con){
+                                                                con.addHospital(hos);
+                                                            }).catch(err => {
+                                                                con.destroy();
+                                                                var erro = err.message;
+                                                                res.render('erro-page', { title: 'Erro', erro: erro} );
+                                                            });  
+                                                        }
+                                                    })
+                                                }
+                                                res.render('success-page', { title: 'Sucesso', success: 'Hospital ATUALIZADO com sucesso! Clique no botão abaixo para ser direcionado à lista de hospitais.', page: '/hospital'} );
+                                            }).catch(err => {
+                                                var erro = err.message;
+                                                res.render('erro-page', { title: 'Erro', erro: erro} );
+                                            }); 
                                         }).catch(err => {
                                             var erro = err.message;
                                             res.render('erro-page', { title: 'Erro', erro: erro} );
                                         }); 
-                                    }).catch(err => {
-                                        var erro = err.message;
+                                    }else{
+                                        var erro = 'Código CNES já cadastrado!';
                                         res.render('erro-page', { title: 'Erro', erro: erro} );
-                                    }); 
-                                }else{
-                                    var erro = 'Código CNES já cadastrado!';
-                                    res.render('erro-page', { title: 'Erro', erro: erro} );
-                                }
-                            })
-                            
-                        }else{
-                            var erro = 'CNPJ já cadastrado!';
-                            res.render('erro-page', { title: 'Erro', erro: erro} );
-                        }
-                    })
-                    
-                })               
+                                    }
+                                })
+                                
+                            }else{
+                                var erro = 'CNPJ já cadastrado!';
+                                res.render('erro-page', { title: 'Erro', erro: erro} );
+                            }
+                        })
+                    })    
+            });           
         }).catch(err => {
             var erro = err.message;
             res.render('erro-page', { title: 'Erro', erro: erro} );

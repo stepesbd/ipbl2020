@@ -35,19 +35,32 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="/map/hospital">
+                <i class="fas fa-map-marked-alt" aria-hidden="true"></i>  
+                Mapa de Hospitais
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="/api">
                 <i class="fas fa-code" aria-hidden="true"></i>   
                 API
                 </a>
             </li>
+
+            
             </ul>
         </div>
     </nav>
-    
+    {{#ifEquals map 'hospital'}}
+    <main role="main" style="height: 80%;">
+        <div class="container mt-3" style="height: 80%;">
+    {{else}}
     <main role="main">
         <div class="container mt-3">
+    {{/ifEquals}}        
             {{{body}}}
         </div>
+
         
         <div class="container">
             <div class="form-row">

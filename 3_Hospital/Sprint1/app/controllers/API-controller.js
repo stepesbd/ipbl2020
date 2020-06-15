@@ -66,7 +66,13 @@ exports.get = async (req, res, next) => {
                     'Numero_de_casos_positivos_COVID-19': 'https://stepesbdmedrecords.herokuapp.com/api/positive/amount',
                     'Casos_recuperados_COVID-19': 'https://stepesbdmedrecords.herokuapp.com/api/release',
                     'Numero_de_casos_recuperados_COVID-19': 'https://stepesbdmedrecords.herokuapp.com/api/release/amount',
+                    'Casos_obitos_COVID-19': 'https://stepesbdmedrecords.herokuapp.com/api/death',
+                    'Numero_de_casos_obitos_COVID-19': 'https://stepesbdmedrecords.herokuapp.com/api/death/amount',
                     'Lista_de_hospitais': 'https://stepesbdhospital.herokuapp.com/api/hosp-list',
+                    'Geracao_de_chaves_blockchain': 'https://stepesbdmedrecords.herokuapp.com/api/keypair',
+                    'Comunicacao_de_obitos': ' https://stepesbd.ddns.net:5000/patient/api',
+                    'Contagem_de_obitos': 'https://stepesbd.ddns.net:5000/dashboard/api/obitos/covid',
+                    'Simulacao_de_atendimento': 'https://stepesbd.ddns.net:5000/simulation/api/attendance'
                 },
                 'Versao': '1.0'
             })

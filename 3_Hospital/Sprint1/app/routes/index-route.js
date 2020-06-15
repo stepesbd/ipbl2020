@@ -7,6 +7,7 @@ const controllerAPI = require('../controllers/API-controller')
 
 module.exports = function(app) {
     router.get('/', controller.get);
+    router.get('/map/:hospital', controller.get);
     router.get('/api', controllerAPI.get);
     router.get('/api/:hosp_list', controllerAPI.get);
     return router;

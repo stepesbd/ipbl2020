@@ -1,7 +1,8 @@
 'use strict';
+var request = require('request');
+var requestAsync = require('async-request');
 const fs = require("fs")
 const fsPromise = require('fs').promises;
-let request = require('async-request');
 const sequelize = require('sequelize');
 const driver = require('bigchaindb-driver');
 const moment = require('moment');
@@ -95,7 +96,6 @@ exports.get = async (req, res, next) => {
             const all = {qty: (uti.qty + ambulatorio.qty) }
             // ENCAPSULANDO TUDO EM UM OBJETO
             const beds = {uti, ambulatorio, all}
-
 
             return res.render('step2', { title: 'Atendimento Presencial', att: attObj, beds: beds})
         }
@@ -245,36 +245,19 @@ exports.get = async (req, res, next) => {
                                 var metadata = {};
                                 if(AssetCheckTestCovid.data.Product.Description.toUpperCase().includes("COVID")){
                                     // GERANDO RESULTADO RANDÔMICO PARA TESTE COVID
-                                    var result = Math.random() >= 0.1;
+                                    //var result = Math.random() >= 0.1;
+                                    var result = true;
                                     var result_test = '';
                                     // CASO TESTE POSITIVO
                                     if(result){
                                         result_test = 'POSITIVO';
-                                        // BUSCAR LAT LONG DO PACIENTE INFECTADO PARA CONSTAR NO ATENDIMENTO
-                                        var cep = attObj.Paciente.Endereco.CEP;
-                                        var lat = "";
-                                        var lon = "";
-                                        if (typeof cep === "number") {
-                                            cep = cep.toString()
-                                            cep = parseInt(cep.replace(/[^0-9]/g, ""))
-                                        }
-                                        cep = cep.replace(/-/gi, '');
-                                        // CONSULTA NA API DO CEP-ABERTO
-                                        await request("https://www.cepaberto.com/api/v3/cep?cep=" + cep, {
-                                            method: 'GET',
-                                            headers: {'Authorization': 'Token token=787f1f666961d441fa85f9da7cd84f9d'},
-                                        }).then((response)=>{
-                                            response = JSON.parse(response.body)
-                                            lat = response.latitude
-                                            lon = response.longitude
-                                        });
                                         // ACRESCENTANDO INFORMAÇÃO DE EXAME NO ATENDIMENTO PARA CASOS POSITIVOS DE COVID
                                         attObj.Atendimento.Hospital = { ...attObj.Atendimento.Hospital, 
                                             Exame_covid: {
                                                 Paciente: attObj.Paciente.Id, 
                                                 Resultado: result_test,
-                                                Latitude: lat,
-                                                Longitude: lon,
+                                                Latitude: attObj.Paciente.Endereco.Latitude.toString(),
+                                                Longitude: attObj.Paciente.Endereco.Longitude.toString(),
                                                 Data: moment(new Date()).format('L'),
                                                 Unix_time: parseInt((new Date().getTime() / 1000).toFixed(0))
                                             }
@@ -431,7 +414,7 @@ exports.get = async (req, res, next) => {
                         }
                         
                         // REDIRECIONANDO PARA VISUALIZAÇÃO DO REGISTRO MÉDICO APÓS AS TRANSAÇÕES DE ITENS USADOS
-                        res.render('step4', { title: 'Atendimento Presencial', hospital: hospital, att: attObj})
+                        return res.render('step4', { title: 'Atendimento Presencial', hospital: hospital, att: attObj, id: retrievedTx.id})
                     }).catch((err)=>{console.log(err); throw err})
                 }).catch((err)=>{console.log(err); throw err})
             }
@@ -461,52 +444,34 @@ exports.get = async (req, res, next) => {
 
 exports.post = async (req, res, next) => {
 
-    // PASSANDO OS DADOS JSON PARA A VARIÁVEL GLOBAL
-    attObj = req.body;
+         request({
+            url: "http://stepesbd.ddns.net:5000/simulation/api/attendance",
+            method: "GET",
+        }, function (error, response, body){
+            if(error)throw error; 
 
-    try{
-        return res.render('index', { title: 'Atendimento Presencial'})
-    }catch(err){
-        console.log(err);
-        var erro ='Ocorreu um erro: ' +  err.message;
-        return res.render('erro-page', { title: 'Erro', erro: erro} );
-    }
+
+            try {
+                attObj = JSON.parse(body)
+                return res.render('index', { title: 'Atendimento Presencial'})
+            } catch (error) {
+                try {
+                    if(error)throw error; 
+                    request({
+                        url: "http://stepesbd.ddns.net:5000/simulation/api/attendance",
+                        method: "GET",
+                    }, function (error, response, body){
+                        if(error)throw error; 
+                        attObj = JSON.parse(body)
+                        return res.render('index', { title: 'Atendimento Presencial'})
+                    });
+                } catch (err) {
+                    console.log(err);
+                    var erro ='Ocorreu um erro: ' +  err.message;
+                    return res.render('erro-page', { title: 'Erro', erro: erro} );
+                }
+            }
+        });
+
 
 };
-
-
-/*
-
-                                    // REDIRECIONANDO APÓS A TRANSAÇÃO
-                                    // IDENTIFICANDO O HOSPITAL NO BANCO RELACIONAL
-                                    const add = await Address.findOne({ 
-                                        include: [{
-                                            model: Hospital,
-                                            where: { add_id: hos.add_id },
-                                            required: true
-                                        }], 
-                                        raw: true 
-                                    });
-                                    const hospital = { hos, add }
-
-*/
-
-/*
-
-                            if(AssetCheckTestCovid.data.Product.Description.toUpperCase().includes("COVID")){
-                                var result = Math.random() >= 0.5;
-                                var result_test = '';
-                                if(result)
-                                    result_test = 'POSITIVO'
-                                else
-                                    result_test = 'NEGATIVO'
-                                metadata = {
-                                        'COVID_result_test': result_test,
-                                        'Transaction_date': new Date()
-                                }
-                            }else{
-                                metadata = {
-                                        'Transaction_date': new Date()
-                                }
-                            }
-*/

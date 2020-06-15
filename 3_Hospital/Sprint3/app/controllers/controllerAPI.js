@@ -37,7 +37,13 @@ exports.get = async (req, res, next) => {
                     'Numero_de_casos_positivos_COVID-19': 'https://stepesbdmedrecords.herokuapp.com/api/positive/amount',
                     'Casos_recuperados_COVID-19': 'https://stepesbdmedrecords.herokuapp.com/api/release',
                     'Numero_de_casos_recuperados_COVID-19': 'https://stepesbdmedrecords.herokuapp.com/api/release/amount',
+                    'Casos_obitos_COVID-19': 'https://stepesbdmedrecords.herokuapp.com/api/death',
+                    'Numero_de_casos_obitos_COVID-19': 'https://stepesbdmedrecords.herokuapp.com/api/death/amount',
                     'Lista_de_hospitais': 'https://stepesbdhospital.herokuapp.com/api/hosp-list',
+                    'Geracao_de_chaves_blockchain': 'https://stepesbdmedrecords.herokuapp.com/api/keypair',
+                    'Comunicacao_de_obitos': ' https://stepesbd.ddns.net:5000/patient/api',
+                    'Contagem_de_obitos': 'https://stepesbd.ddns.net:5000/dashboard/api/obitos/covid',
+                    'Simulacao_de_atendimento': 'https://stepesbd.ddns.net:5000/simulation/api/attendance'
                 },
                 'Versao': '1.0'
             })
@@ -52,21 +58,9 @@ exports.get = async (req, res, next) => {
                     // ENCONTRAR O REGISTRO MÉDICO NA BLOCKCHAIN PARA DEPOIS ENCONTRAR A UNSPENT TRANSACTION
                     const medicalRecord = await await bigchain.collection('assets').findOne({ id: req.params.id1 });
 
-                    // BUSCAR TODOS ATENDIMENTOS DO PACIENTE
-                    const userAllTransfers = await conn.listOutputs(medicalRecord.data.Paciente.PublicKey, false)
-
-                    // MAPEAR TODAS OS ATENDIMENTOS E FILTRAR PELO ID BUSCADO
-                    var transferOwnerPaciente = {};
-                    await Promise.all(userAllTransfers.map(async transfer=>{
-                        const transaction = await conn.getTransaction(transfer.transaction_id)
-                        if(transaction.asset.id == medicalRecord.id){
-                            transferOwnerPaciente = transaction;
-                        }
-                    }));
-
                     // CASO NÃO HAJA OPÇÃO DEFINIDA, APENAS EXIBE O REGISTRO MÉDICO 
                     // CONFIGURANDO O OBJETO-RESPOSTA
-                    response = {MedicalRecord: medicalRecord.data} 
+                    response = {MedicalRecord: medicalRecord.data, Id: medicalRecord.id} 
 
                     // ENVIA COMO RESPONSE
                     return res.json(response)
@@ -95,6 +89,24 @@ exports.get = async (req, res, next) => {
                 else
                     releaseList = await bigchain.collection('metadata').find( {'metadata.Type': 'COVID-19-RELEASE'}).project({'metadata':true}).toArray()
                 return res.json(releaseList);
+            }else if(API_type == 'DEATH'){
+                 // BUSCAR CASOS DE RECUPERADOS DE COVID-19
+                 var API_id1;
+                 var releaseList;
+                 if(req.params.id1)
+                     API_id1 = req.params.id1.toUpperCase();
+                 if(API_id1 == 'AMOUNT')
+                     releaseList = await bigchain.collection('metadata').find( {'metadata.Causa_mortis': 'COVID-19'}).count()
+                 else
+                     releaseList = await bigchain.collection('metadata').find( {'metadata.Causa_mortis': 'COVID-19'}).project({'metadata':true}).toArray()
+                 return res.json(releaseList);
+            }else if(API_type == 'KEYPAIR'){
+                // FORNECER NOVAS CHAVES PUBLICKEY E PRIVATEKEY PELA API
+                const keys = new driver.Ed25519Keypair();
+                return res.json({
+                    'PublicKey': keys.publicKey,
+                    'PrivateKey': keys.privateKey
+                });
             }
                 
         }
@@ -257,17 +269,18 @@ exports.post = async (req, res, next) => {
                         // ENVIANDO DADOS PARA TIME PACIENTES REALIZAR ATUALIZAÇÃO DE FALECIMENTO
                         const id = paciente_id.toString();
                         const data_obito = parseInt((new Date().getTime() / 1000).toFixed(0)).toString();
+                        const message = {
+                            "id": id,
+                            "causa_mortis": causa_mortis,
+                            "data_obito": data_obito,
+                            "certidao_obito_id": txTransferReleaseSigned.id
+                        }
                         request({
                             url: "http://stepesbd.ddns.net:5000/patient/api/kill",
                             method: "PUT",
                             json: true,   // <--Very important!!!
-                            body: {
-                                "id": id,
-                                "causa_mortis": causa_mortis,
-                                "data_obito": data_obito,
-                                "certidao_obito_id": txTransferReleaseSigned.id
-                            }
-                        }, function (error, response, body){if(error)throw error});
+                            body: message
+                        }, function (error, response, body){if(error)throw error; /*console.log(body); console.log(message)*/ });
 
                         const responseMetadata = {Death: txTransferReleaseSigned.metadata}
                         const MedicalRecord = medicalRecord.data
