@@ -7,7 +7,7 @@
 
 <div class="mb-4">
     <h3>
-        <i class="fa fa-user-md" aria-hidden="true"></i>
+        <i class="fa fas fa-procedures" aria-hidden="true"></i>
         Cadastro de Leito
     </h3>
     <h5>{{hosp.hos_name}}</h5>
@@ -24,11 +24,34 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col">
+                  <div class="form-group">
+                     <label for="inputSetor">Setor</label>
+                          <select class="form-control" name="inputSetor">                                                        
+                              <option value="1">UTI </option>
+                              <option value="2">AMBULATORIO</option>                              
+                          </select>                                      
+                  </div>
+                </div>
+            </div>  
+            <div class="row">
+                <div class="col">
+                  <div class="form-group">
+                     <label for="inputStatus">Status de Leito</label>
+                          <input type="hidden" name="inputStatus" value="0">
+                          <select class="form-control" name="inputStatus" disabled>                                                        
+                              <option value="0">Disponível</option>
+                              <option value="1">Ocupado</option>                              
+                          </select>                                      
+                  </div>
+                </div>
+            </div>  
         </div>
     </div>
     <div class="form-row text-center">
         <button type="submit" class="btn btn-success mr-2">Cadastrar</button> 
-        <a class=" btn btn-danger" href="/Hospital/{{hosp.hos_id}}/leito/sts/{{hosp.hos_id}}" role="button">Cancelar</a>
+        <a class=" btn btn-danger" href="/Hospital/{{hosp.hos_id}}/leito/list" role="button">Cancelar</a>
     </div>
     <br>
 </form>

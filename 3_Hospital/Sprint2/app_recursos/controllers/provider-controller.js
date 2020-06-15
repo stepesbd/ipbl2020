@@ -2,7 +2,7 @@
 const driver = require('bigchaindb-driver')
 const got = require('got');
 const BigchainDB = require( '../config/dbBigchainDB' );
-const BigchainDB_API_PATH = 'http://35.247.236.106:9984/api/v1/'
+const BigchainDB_API_PATH = 'http://' + BigchainDB.IP + ':9984/api/v1/'
 const { Provider } = require('../models/TS03');
 
 exports.get = async (req, res, next) => {
@@ -19,8 +19,6 @@ exports.get = async (req, res, next) => {
                 const providerAssets = [];
                 if(pro.pro_publicKey){
                     const userAllTransfers = await conn.listOutputs(pro.pro_publicKey, false)
-
-                    
                     
                     await Promise.all(userAllTransfers.map(async oneTransfer => {
                         const transaction_id = oneTransfer.transaction_id
@@ -68,6 +66,7 @@ exports.post = async (req, res, next) => {
             const Pro = await Provider.findOne({ where: {pro_id: req.params.user_id}, raw: true });
                 // GERANDO CHAVES PARA O FORNECEDOR CASO NÃO TENHA AINDA
                 if(Pro.pro_privateKey == null){
+                    console.log("GERANDO NOVAS CHAVES..............")
                     const keys = new driver.Ed25519Keypair();
                     // ASSOCIANDO PAR DE CHAVES PARA FORNECEDOR
                     Pro.pro_publicKey = keys.publicKey,

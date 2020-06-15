@@ -81,7 +81,7 @@ export default function Register (props){
   }
 
   const sendToStep2 = (data) =>{
-    console.log(data)
+    //console.log(data)
     props.history.push({
       pathname: '/step2',
       state:{item:data}

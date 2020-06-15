@@ -35,8 +35,13 @@ module.exports = (sequelize, DataTypes) => {
         },
         hos_id:{
             type: DataTypes.INTEGER,
+            allowNull: false,
+            foreignKey: true
+        },
+        sector_id:{
+            type: DataTypes.INTEGER,
             allowNull: false
-        }
+        },
     },{
         freezeTableName: true,
         underscored: true,
@@ -44,27 +49,19 @@ module.exports = (sequelize, DataTypes) => {
 	});
 
     Bed.associate = function(models){
-        Bed.belongsToMany(models.Hospital, 
-        {
-            through: 'Hospital',
-            foreignKey: 'hos_id', 
-            onDelete: 'CASCADE', 
-            hooks: true,
-            otherKey: 'hos_id',
-        });
-/*
-        Bed.hasOne(models.Address,
-        {
-            foreignKey: 'add_id',
-            targetKey: 'add_id',
-            onDelete: 'CASCADE',
-            hooks: true
-        });
-*/
+        //Bed.belongsToMany(models.Hospital, 
+        //{
+        //    through: 'Hospital',
+        //    foreignKey: 'hos_id', 
+        //    onDelete: 'CASCADE', 
+        //    hooks: true,
+        //    otherKey: 'hos_id',
+        //});
 
-      Bed.hasMany(models.Hospital,{
-           foreignKey: 'hos_id',
-      });
+        Bed.hasMany(models.Hospital,{
+            foreignKey: 'hos_id',
+        });
+       
 
     }
 

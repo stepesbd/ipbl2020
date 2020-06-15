@@ -34,7 +34,7 @@ namespace stepesdb_api
                 options.AddPolicy(MyAllowSpecificOrigins,
                 builder =>
                 {
-                    builder.WithOrigins("http://localhost:3000","http://localhost:3001");
+                    builder.WithOrigins("http://localhost:3000","http://localhost:3001","https://stepesbd.herokuapp.com");
                     builder.AllowAnyHeader();
                     builder.AllowAnyMethod();
                     builder.WithExposedHeaders("X-Pagination");

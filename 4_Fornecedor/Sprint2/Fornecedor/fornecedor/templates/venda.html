@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %} Fornecedores - Lista{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-8">
+      <h1>Solicitação de Compra </h1>
+    </div>
+    <div class="col-md-4">
+    </div>
+  </div>
+
+
+<div class="row2">
+    <table class="table">
+      <thead>
+        <td>Número do pedido</td>
+        <td>Cnpj Solicitante</td>
+        <td>Razão Social</td>
+        <td>Responsável</td>
+      </thead>
+      <tbody>
+      <tr>
+
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="row">
+    <table class="table">
+      <thead>
+        <td>Código do Item</td>
+        <td>Item</td>
+        <td>Especificações</td>
+        <td>Número de série</td>
+        <td>Lote</td>
+        <td>Quantidade</td>
+        <td>Preço Unitário</td>
+        <td>Preço Total</td>
+      </thead>
+      <tbody>
+        {% for pedido in pedidos %}
+          <tr>
+            <td>
+              {{ pedido.ord_id }}
+            </td>
+            <td>
+              {{ pedido.ord_quantity }}
+            </td>
+            <td>
+              {{ pedido.ord_id }}
+            </td>
+            <td>
+              {{ pedido.ord_quantity }}
+            </td>
+            <td>
+              {{ pedido.ord_id }}
+            </td>
+            <td>
+              {{ pedido.ord_quantity }}
+            </td>
+            <td>
+              {{ pedido.ord_id }}
+            </td>
+            <td>
+              {{ pedido.ord_quantity }}
+            </td>
+
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+
+
+
+
+{% endblock %}

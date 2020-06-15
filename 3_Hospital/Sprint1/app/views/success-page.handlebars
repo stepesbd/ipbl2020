@@ -1,19 +1,80 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+  .container {
+    position: relative;
+    color: black;
+    display: contents;
+  }
+  .assinatura_medico {
+    position: absolute;
+    bottom: 90px;
+    left: 587px;
+  }
+  .id {
+    position: absolute;
+    top: 80px;
+    left: 110px;
+  }
+  .center-text{
+    position: absolute;
+    top: 335px;
+    text-align: center;
+    width: 1000px;
+  }
+</style>
 <br />
-<hr>
-    <div class="alert alert-success" role="alert">
-    <h3>
-        Sucesso<i class="fa fa-check-circle-o ml-2" aria-hidden="true"></i>  
-    </h3>
-    </div>
+<hr style="margin-left: 50px; margin-right:50px;">
+<div class="alert alert-success" role="alert" style="margin-left: 50px; margin-right: 50px;">
+  <h3>
+      Sucesso<i class="fa fa-check-circle-o ml-2" aria-hidden="true"></i>  
+  </h3>
+</div>
 <br>
-<h5>
+<h5 style="margin-left: 50px; margin-right: 50px; text-align: center;">
     {{success}}
 </h5>
-<hr>
+<br>
+
+{{#if obito}}
+<div class="container-fluid mt-4" >
+  <div class="row justify-content-center">
+      <div class="col-auto mb-3">
+        <div>
+          
+          <div class="container">
+            <div>
+              <img src="/death_record.png">
+              <div class="id">
+                <small>{{obito.record_id}}</small> 
+              </div>
+              <div class="center-text">
+                <h6>
+                  <p>
+                      Nome: <strong class="mr-4">{{obito.MedicalRecord.Paciente.Nome}}</strong> 
+                      Local de Falecimento: <strong class="mr-4">{{obito.MedicalRecord.Atendimento.Hospital.Nome}}</strong> 
+                      <br>
+                      Médico: <strong class="mr-2">{{obito.MedicalRecord.Medico.Nome}}</strong>
+                      CRM: <strong class="mr-4">{{obito.MedicalRecord.Medico.CRM}}</strong>
+                      <br>
+                      Causa Mortis: <strong class="mr-2">{{obito.responseMetadata.Death.Causa_mortis}}</strong>
+                      Data do Óbito: <strong class="mr-4">{{obito.responseMetadata.Death.Death_date}}</strong>
+                  </p>
+                </h6>
+              </div>
+            </div>
+            
+            
+            <div class="assinatura_medico"><small><strong>{{obito.MedicalRecord.Medico.PublicKey}}</strong></small> </div>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
+{{/if}}
+<hr style="margin-left: 50px; margin-right:50px;">
 <form action="{{page}}" method="GET">
-<div class="form-row text-center">
-        <button type="submit" class=" btn btn-primary" >Prosseguir</button> 
-</div>  
+  <div class="form-row text-center" style="margin-left: 50px;;">
+      <button type="submit" class=" btn btn-primary" >Prosseguir</button> 
+  </div>  
 </form>

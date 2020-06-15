@@ -50,5 +50,19 @@ class Stock(models.Model):
     def __str__(self):
         return self.STK_PRODUCT
 
+class Order(models.Model):
+    ord_id = models.AutoField(primary_key=True)
+    ord_asset_id = models.CharField(max_length=255)
+    ord_date = models.DateField(blank=True, null=True)
+    ord_quantity = models.IntegerField()
+    ord_status = models.CharField(max_length=50, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'Order'
+        app_label = 'hospital'
+
+
+
 
 

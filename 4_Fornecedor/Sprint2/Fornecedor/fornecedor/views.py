@@ -1,8 +1,9 @@
 from django.urls import reverse_lazy
-from fornecedor.models import Provider,Representative,Product,Stock
+from fornecedor.models import Provider,Representative,Product,Stock, Order
 from django.views.generic.edit import UpdateView, CreateView, DeleteView, View
 from django.views import generic
 from django.db.models import F
+from django.shortcuts import render_to_response
 
 # Lista Provider
 
@@ -110,10 +111,31 @@ class StockUpdateView(UpdateView):
     context_object_name = 'estoque'
     success_url = reverse_lazy('fornecedor:listar_estoque')
     paginate_by = 5
+ ###########################################################################################
+
+class OrderListView(generic.ListView):
+    model = Order
+    template_name = 'pedido.html'
+    context_object_name = 'pedidos'
+    paginate_by = 5
+
+class OrderUpdateView(UpdateView):
+    model = Stock
+    template_name = 'venda.html'
+    fields = '__all__'
+    context_object_name = 'pedidos'
+    success_url = reverse_lazy('fornecedor:venda')
+    paginate_by = 5
+
+class SellListView(generic.ListView):
+    model = Order
+    template_name = 'venda.html'
+    context_object_name = 'vendas'
+    paginate_by = 5
 
 
+#def RequestListView(request):
+#   return render_to_response('pedido.html')
 
-        ###########################################################################################
-
-
-
+#def SellListView(request):
+#   return render_to_response('venda.html')

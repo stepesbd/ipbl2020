@@ -1,0 +1,227 @@
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+  .container {
+    color: black;
+  }
+  p.ex1 {
+    margin: 10px 90px;
+  }
+  .patient {
+    position: absolute;
+    text-align: left;
+    top: 280px;
+    left: 0px;
+  }
+  .assinatura_medico {
+    position: absolute;
+    top: 875px;
+    left: 459px;
+  }
+</style>
+
+<div class="container-fluid mt-4" >
+  <div class="row justify-content-center">
+      <div class="col-auto mb-3">
+        <a class="btn btn-primary mr-2" href="/hospital/{{hospital.hos.hos_id}}/leito/list" role="button" alt="Voltar" data-placement="top" title="Voltar"><i class="fas fa-step-backward fa-3x"></i></a>
+        <button class="btn btn-success mr-2" id='Release' type="button" class="btn btn-primary btn-sm rounded-2 mr-1" data-toggle="modal" data-target="#mdRelease" alt="Alta" data-placement="top" title="Alta">
+            <i class="fas fa-book-medical fa-3x"></i>
+        </button>
+        <button class="btn btn-dark  mr-2" id='Death' type="button" class="btn btn-primary btn-sm rounded-2 mr-1" data-toggle="modal" data-target="#mdDeath" alt="Óbito" data-placement="top" title="Óbito">
+            <i class="fas fa-book-dead fa-3x"></i>
+        </button>
+      </div>
+  </div>
+</div>
+
+<div class="container-fluid mt-4" >
+  <div class="row justify-content-center">
+      <div class="col-auto mb-3">
+        <div>
+          
+          <div class="container">
+            <img src="/medical_record.png">
+            <div class="patient">
+              <h6>
+                <p class="ex1">
+                    Data do atendimento: {{att.Atendimento.Data_atendimento}} <br>
+                    <img src="/line.png">
+                    Dados do Paciente: <br>
+                    Nome: <strong class="mr-4">{{att.Paciente.Nome}}</strong>
+                    Rua: <strong class="mr-2">{{att.Paciente.Endereco.Rua}}, {{att.Paciente.Endereco.Numero}}</strong>
+                    Cidade: <strong class="mr-2">{{att.Paciente.Endereco.Cidade}}</strong>  
+                    UF: <strong>{{att.Paciente.Endereco.UF}} </strong>
+                    <br>
+                    <img src="/line.png">
+                    Local de Atendimento: <br>
+                    Nome: <strong class="mr-4">{{hospital.hos.hos_name}}</strong>
+                    Rua: <strong class="mr-2">{{hospital.add.add_street}}, {{hospital.add.add_number}}</strong>
+                    Cidade: <strong class="mr-2">{{hospital.add.add_city}}</strong>  
+                    UF: <strong>{{hospital.add.add_state}} </strong> <br>
+                    {{#if att.Atendimento.Hospital.Internacao}}
+                      <strong style="color:rgb(221, 24, 24)">Paciente internado</strong> <br>
+                      Setor: <strong class="mr-4">{{att.Atendimento.Hospital.Internacao.Tipo}}</strong> Leito: <strong>{{att.Atendimento.Hospital.Internacao.Leito_nome}}</strong> 
+                      <br>
+                    {{/if}}
+                    <img src="/line.png">
+                    Dados do Médico: <br>
+                    Nome: <strong class="mr-4">{{att.Medico.Nome}}</strong>
+                    CRM: <strong class="mr-4">{{att.Medico.CRM}}</strong>
+                    <br>
+                    <img src="/line.png">
+                    Informações de atendimento: <br>
+                    <strong class="mr-4">{{att.Atendimento.Comentarios}}</strong>
+                    <br>
+                    <img src="/line.png">
+                    {{#each att.Atendimento.Hospital.Itens_consumidos}}
+                      {{#ifSubstring Name 'COVID'}}
+                        Resultado do teste de COVID-19: 
+                        {{#ifSubstring @root.att.Atendimento.Hospital.Exame_covid.Resultado 'POSITIVO'}}
+                          <strong style="color:rgb(221, 24, 24)">{{@root.att.Atendimento.Hospital.Exame_covid.Resultado}}</strong>
+                        {{else}}
+                          <strong style="color:rgb(58, 177, 37)">{{@root.att.Atendimento.Hospital.Exame_covid.Resultado}}</strong>
+                        {{/ifSubstring}}
+                        <br>
+                        <img src="/line.png">
+                      {{/ifSubstring}}
+                    {{/each}}
+                    Itens consumidos durante a consulta: <br>
+                    {{#each att.Atendimento.Hospital.Itens_consumidos}}
+                      <strong class="mr-4">{{Name}}</strong> 
+                    {{/each}}
+                </p>
+              </h6>
+            </div>
+            <div class="assinatura_medico"><small><strong>{{att.Medico.PublicKey}}</strong></small> </div>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
+
+<!-- Modal Death-->
+<div class="modal fade bd-example-modal-lg" id="mdDeath" tabindex="-1" role="dialog" aria-labelledby="DeathModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="DeathModalLabel">Declaração de <strong>óbito</strong> </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="/hospital/{{hospital.hos.hos_id}}/leito/records/{{att.Atendimento.Hospital.Internacao.Leito_id}}/death" method="POST">
+        <div class="modal-body">
+          {{#ifSubstring att.Atendimento.Hospital.Exame_covid.Resultado 'POSITIVO'}}
+            <table class="table">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col" class="text-center">CAUSA MORTIS</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div class="custom-control custom-checkbox text-center">
+                      <div class="text-left">
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="inputCausaMortis" id="inputCausaMortis1" value="COVID-19" required>
+                          <label class="form-check-label" for="inputCausaMortis1">
+                            <h6>COVID-19</h6> 
+                          </label>
+                        </div>
+                        <br>
+                        <div class="form-check">
+                          <input type="radio" class="checkme form-check-input" id="inputCausaMortis2" name="inputCausaMortis" value="Outros" data-rel="content1">
+                          <label class="form-check-label" for="inputCausaMortis2">
+                            <h6>Outros</h6>
+                          </label>
+                      </div>
+                      <div id="content1" style="display:none" class="text-left">
+                            <div class="form-group mx-sm-3 mb-2">
+                              <input type="text" class="form-control" id="inputCausaMortisText" name="inputCausaMortisText" placeholder="Escreva aqui a causa mortis." required>
+                            </div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          {{else}}
+            <table class="table">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col" class="text-center">CAUSA MORTIS</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <input type="hidden" name="inputCausaMortis" id="inputCausaMortis" value="Outro">
+                    <input type="text" class="form-control" id="inputCausaMortisText" name="inputCausaMortisText" placeholder="Escreva aqui a causa mortis." required>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          {{/ifSubstring}}
+          Deseja declarar o <strong>óbito</strong> do paciente?
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Não</button>
+            <button type="submit" class="btn btn-danger">Sim</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Release-->
+<div class="modal fade bd-example-modal-lg" id="mdRelease" tabindex="-1" role="dialog" aria-labelledby="ReleaseModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ReleaseModalLabel">Declaração de <strong>Alta Médica</strong></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="/hospital/{{hospital.hos.hos_id}}/leito/records/{{att.Atendimento.Hospital.Internacao.Leito_id}}/release" method="POST">
+        <div class="modal-body">
+          Deseja dar <strong>alta</strong> para o paciente?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Não</button>
+          <button type="submit" class="btn btn-success">Sim</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+
+var elems = document.getElementsByName('inputCausaMortis');
+
+for (var i=elems.length; i--;) {
+    if (elems[i].addEventListener) {
+        elems[i].addEventListener ('change',fn,false);
+    }else if (elems[i].attachEvent) {
+        elems[i].attachEvent ('onchange',fn); 
+    }
+}
+
+function fn() {
+    var rel   = this.getAttribute('data-rel');
+    
+    for (var i=elems.length; i--;) {
+        if (elems[i] != this) elems[i].checked = false;
+        var id = elems[i].getAttribute('data-rel');
+        document.getElementById(id).style.display = elems[i].checked ? 'block' : 'none';
+        document.getElementById("inputCausaMortisText").required = elems[i].checked ? true : false;
+    }
+}
+
+
+</script>

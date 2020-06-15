@@ -1,0 +1,152 @@
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/fixedcolumns/3.3.0/js/dataTables.fixedColumns.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+
+
+<div class="container-fluid mt-4">
+  <div class="row justify-content-center">
+      <div class="col-auto">
+            <div class="card">
+              <div class="card-body">
+                 <h5 class="card-title text-center"><i class="fas fa-user mr-2" aria-hidden="true" style="color:rgb(96, 184, 93)">  </i>Dados do Paciente</h5>
+                <table class="table table-hover">
+                  <thead>
+                    <tr class="table-success">
+                      <th class='text-center' scope="col">NOME</th>
+                      <th class='text-center' scope="col">CIDADE</th>
+                      <th class='text-center' scope="col">UF</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                      <tr>
+                        <td class='text-center'>{{att.Paciente.Nome}}</td>
+                        <td class='text-center'>{{att.Paciente.Endereco.Cidade}}</td>
+                        <td class='text-center'>{{att.Paciente.Endereco.UF}}</td>
+                      </tr>
+                  </tbody>
+                </table>
+
+              </div>
+            </div>
+      </div>
+  </div>
+</div>
+
+<div class="container-fluid mt-4">
+  <div class="row justify-content-center">
+      <div class="col-auto">
+            <div class="card">
+              <div class="card-body">
+                 <h5 class="card-title text-center"><i class="fa fa-h-square mr-2" aria-hidden="true" style="color:rgb(65, 137, 219)">  </i>Local de atendimento</h5>
+                 <hr>
+                 <div class="text-center">{{att.Atendimento.Hospital.Nome}}</div>
+                 
+              </div>
+            </div>
+      </div>
+  </div>
+</div>
+
+<form action="/attendance/step3" method="POST">
+  <div class="container-fluid mt-4">
+    <div class="row justify-content-center">
+        <div class="col-auto">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title text-center"><i class="fa fas fa-procedures mr-2" aria-hidden="true" style="color:rgb(65, 137, 219)">  </i>Internação</h5>
+                  <table class="table table-hover mt-2">
+                    <thead>
+                      <tr class="text-center">
+                        Este hospital possui <strong>{{beds.all.qty}}</strong> leitos disponíveis.
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                          <td class='text-left'>UTI</td>
+                          <td class='text-center'>{{beds.uti.qty}}</td>
+                        </tr>
+                        <tr>
+                          <td class='text-left'>Ambulatório</td>
+                          <td class='text-center'>{{beds.ambulatorio.qty}}</td>
+                        </tr>
+                    </tbody>
+                  </table>
+                  <hr>
+                  Deseja realizar a internação do paciente?
+                  <div class="custom-control custom-checkbox text-center">
+                      <h6><p><input type="checkbox" class="checkme custom-control-input" id="checkbox_{{id}}" name="inputInternacaoYES" value="YES" data-rel="content1" {{#ifEquals beds.all.qty 0}} disabled {{/ifEquals}}>
+                      <label class="custom-control-label" for="checkbox_{{id}}">Sim, desejo interná-lo(a).</label></p></h6>
+
+                      <div id="content1" style="display:none" class="text-left">
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="radioLeitos" id="radioLeitos1" value="UTI" {{#ifEquals beds.uti.qty 0}} disabled {{/ifEquals}}>
+                          <label class="form-check-label" for="radioLeitos1">
+                            UTI
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="radioLeitos" id="radioLeitos2" value="Ambulatorio" {{#ifEquals beds.ambulatorio.qty 0}} disabled {{/ifEquals}}>
+                          <label class="form-check-label" for="radioLeitos2">
+                            Ambulatório
+                          </label>
+                        </div>
+                      </div>
+                  </div>
+                </div>    
+              </div>
+        </div>
+    </div>
+  </div>
+
+  <div class="container-fluid col-md-6 mt-2">
+    <div class="d-flex flex-row-reverse">
+        <div class="col-auto">
+         
+        <button type="submit" class="btn btn-primary mr-4">Continuar</button>  
+      </div>
+    </div>  
+  </div>
+</form>
+  <div class="container-fluid col-md-6 mt-2">
+    <div class="d-flex flex-row-reverse">
+        <div class="col-auto">
+          <button onclick="goBack()" class="btn btn-secondary mr-4">Voltar</button>
+      </div>
+    </div>  
+  </div>
+
+
+<script>
+function goBack() {
+    window.history.back()
+}
+
+var elems = document.getElementsByName('inputInternacaoYES');
+
+for (var i=elems.length; i--;) {
+    if (elems[i].addEventListener) {
+        elems[i].addEventListener ('change',fn,false);
+    }else if (elems[i].attachEvent) {
+        elems[i].attachEvent ('onchange',fn); 
+    }
+}
+
+function fn() {
+    var rel   = this.getAttribute('data-rel');
+    
+    for (var i=elems.length; i--;) {
+        if (elems[i] != this) elems[i].checked = false;
+        var id = elems[i].getAttribute('data-rel');
+        document.getElementById(id).style.display = elems[i].checked ? 'block' : 'none';
+        document.getElementById("radioLeitos1").required = elems[i].checked ? true : false;
+    }
+}
+
+
+</script>

@@ -1,0 +1,35 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Backend#1-Médicos",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src",
+    "start": "node src",
+    "test": "jest --forceExit",
+    "migrate": "knex migrate:latest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "amqplib": "^0.5.6",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-group-routes": "^1.1.0",
+    "knex": "^0.20.13",
+    "mongoose": "^5.9.16",
+    "mqtt": "^4.1.0",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.1.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "jest": "^25.3.0",
+    "nodemon": "^2.0.2",
+    "superagent": "^5.2.2",
+    "supertest": "^4.0.2"
+  }
+}

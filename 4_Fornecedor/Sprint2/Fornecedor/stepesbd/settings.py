@@ -83,12 +83,32 @@ WSGI_APPLICATION = 'stepesbd.wsgi.application'
 #    }
 #}
 
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.mysql',
+#        'NAME': 'fornecedor',
+#        'USER': 'root',
+#        'PASSWORD': 'root',
+#        'PORT': 3306
+#    }
+#}
+
+DATABASE_ROUTERS = ['fornecedor.routers.HospitalRouter']
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'fornecedor',
         'USER': 'root',
         'PASSWORD': 'root',
+        'PORT': 3306
+    },
+    'hospital': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'stepesbd',
+        'USER': 'stepesbd-mysql',
+        'HOST': '34.95.187.96',
+        'PASSWORD': 'stepesbd-mysql',
         'PORT': 3306
     }
 }

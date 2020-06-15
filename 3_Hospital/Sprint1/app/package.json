@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "alert-node": "^1.2.3",
+    "async-request": "^1.2.0",
+    "bigchaindb-driver": "^4.1.2",
     "body-parser": "^1.18.3",
     "connect-flash": "^0.1.1",
     "cookie-parser": "~1.4.3",
@@ -17,11 +19,14 @@
     "debug": "~2.6.9",
     "express": "~4.16.0",
     "express-handlebars": "^3.0.2",
+    "got": "^11.2.0",
     "http-errors": "~1.6.2",
     "moment": "^2.24.0",
+    "mongodb": "^3.5.8",
     "morgan": "~1.9.0",
     "mysql2": "^1.6.5",
     "nodemon": "^1.18.10",
+    "request": "^2.88.2",
     "sequelize": "^5.2.12",
     "sequelize-mysql-timestamp": "^1.4.0"
   },

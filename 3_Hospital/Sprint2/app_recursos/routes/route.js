@@ -3,8 +3,11 @@ const express = require('express');
 const router = express.Router();
 const controllerHospital = require('../controllers/hospital-controller')
 const controllerProvider = require('../controllers/provider-controller')
+const controllerTeste = require('../controllers/teste-controller')
 
 module.exports = function(app) {
+    router.get('/', controllerTeste.get);
+
     router.get('/hospital/:user_id', controllerHospital.get);
     router.get('/hospital/:user_id/:page/', controllerHospital.get);
     router.get('/hospital/:user_id/:page/:mode', controllerHospital.get);

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>{{title}}</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/ff9959466d.js"></script>
+	<link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' />
+    <link rel="shortcut icon" href="/img/favicon/favicon.ico" />
+</head>
+<body style="background-color: rgb(251, 250, 250)">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href=""> 
+            <img class="card-img-top" src="/img/iconMIN.png" alt="STEPES" style="width: 2rem;">           
+            STEPES-BD
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="collapse navbar-collapse" id="navbarNav">
+
+            </div>
+            <ul class="navbar-nav">
+                {{#if map}}
+                    {{#ifEquals map 'positive'}}
+                        <li class="nav-item">
+                            <h5><a class="nav-link disabled text-white" href="">
+                            <i class="fas fa-map-marked-alt mr-2"></i>
+                            Mapa de Contágio COVID-19</a></h5>
+                        </li>
+                    {{/ifEquals}}
+                    {{#ifEquals map 'release'}}
+                        <li class="nav-item">
+                            <h5><a class="nav-link disabled text-white" href="">
+                            <i class="fas fa-map-marked-alt mr-2"></i>
+                            Mapa de recuperados de COVID-19</a></h5>
+                        </li>
+                    {{/ifEquals}}
+                {{else}}
+                    <li class="nav-item">
+                        <h5><a class="nav-link disabled text-white" href="">
+                        <i class="fas fa-notes-medical"></i>
+                        Atendimento Presencial</a></h5>
+                    </li>
+                {{/if}}
+
+            </ul>
+        </div>
+    </nav>
+    
+    <main role="main" style="height: 80%;">
+        <div class="container mt-3" style="height: 80%;">
+            {{{body}}}
+        </div>
+         
+        <div class="container">
+            <div class="form-row">
+                <hr>
+            </div>
+        </div>
+    </main>
+    <div class="container">
+        <hr>
+    </div>
+    <footer class="container">
+        <label>
+            <div class="row marcador align-items-right">
+                <div class="col mx-auto text-right">
+                    <img class="img-responsive" src="https://logodownload.org/wp-content/uploads/2018/01/ita-logo-7.png" alt="Instituto Tecnolígico de Aeronáutica" title="Instituto Tecnolígico de Aeronáutica">
+                </div>
+            </div>
+        </label>
+        <label class="ml-4">
+            <p>STEPES - BD</p>
+        </label>
+    </footer>
+</body>
+</html>

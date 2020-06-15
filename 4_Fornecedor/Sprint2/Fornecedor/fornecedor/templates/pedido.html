@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %} Fornecedores - Lista{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-8">
+      <h1>Entrada de Pedido </h1>
+    </div>
+    <div class="col-md-4">
+    </div>
+  </div>
+  <div class="row">
+    <table class="table">
+      <thead>
+        <td>ID do Pedido</td>
+        <td>Quantidade</td>
+        <td>Status</td>
+      </thead>
+      <tbody>
+        {% for pedido in pedidos %}
+          <tr>
+            <td>
+              {{ pedido.ord_id }}
+            </td>
+            <td>
+              {{ pedido.ord_quantity }}
+            </td>
+            <td>
+              {{ pedido.ord_status }}
+            </td>
+            <td>
+              <td><a href="{% url 'fornecedor:venda' %}"class="btn btn-default" role="button">Abrir</a>
+            </td>
+
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+
+
+
+{% endblock %}
