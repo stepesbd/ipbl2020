@@ -2,44 +2,54 @@
 
 <div id="map"></div>
 
-<script src="/js/gmaps_load.js"></script>
-
 <script>
-var map;
+  var map, heatmap;
 
-function initMap() {
-  map = new google.maps.Map(document.getElementById('map'), {
-    center: { lat: -23.213361, lng: -45.887588 },
-    zoom: 13,
-    streetViewControl: false
-  });
-  
-  
   var markers = {{{json cases}}}
 
-  for (var i = 0; i < markers.length; i++) {
-    let patientName = markers[i].data.Atendimento.Hospital.Exame_covid.Paciente;
-    let latitude = parseFloat(markers[i].data.Atendimento.Hospital.Exame_covid.Latitude);
-    let longitude = parseFloat(markers[i].data.Atendimento.Hospital.Exame_covid.Longitude);
-    dropMarker(latitude, longitude, patientName);
-  }
-}
+  function initMap() {
+    map = new google.maps.Map(document.getElementById("map"), {
+      zoom: 13,
+      center: {lat: -23.2205624083, lng: -45.8877512673}, 
+      //mapTypeId: 'satellite'
+    });
 
-function dropMarker(lat, lng, patientName) {
-  var location = { lat: lat, lng: lng };
-  var contentString = "<h6>" + patientName + "</h6>";
-  var infowindow = new google.maps.InfoWindow({
-    content: contentString
-  })
-  var marker = new google.maps.Marker({
-    position: location,
-    map: map,
-    title: patientName
-  });
-  marker.addListener('click', function () {
-    infowindow.open(map, marker);
-  });
-}
+    heatmap = new google.maps.visualization.HeatmapLayer({
+      data: getPoints(),
+      map: map
+    });
+    heatmap.set('radius', 0.003);
+    heatmap.set('opacity', 0.4);
+    heatmap.set('dissipating', false);
+    heatmap.set('maxIntensity', 10)
+  }
+
+  function toggleHeatmap() {
+    heatmap.setMap(map);
+  }
+
+  // Heatmap data: 500 Points
+  function getPoints() {
+    
+
+    dots = [];
+    const latMax = -23.223529;
+    const latMin = -23.223875;
+    const lonMax = -45.901003;
+    const lonMin = -45.900802;
+    for (var i = 0; i < markers.length; i++) {
+      if(markers[i].data.Atendimento.Hospital.Exame_covid.Latitude != "" && markers[i].data.Atendimento.Hospital.Exame_covid.Longitude != ""){
+        var lat = parseFloat(markers[i].data.Atendimento.Hospital.Exame_covid.Latitude);
+        var lon = parseFloat(markers[i].data.Atendimento.Hospital.Exame_covid.Longitude);
+          dots.push(new google.maps.LatLng(lat,lon))
+      }
+    }
+
+    return dots
+  }
+
 </script>
 
-
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHa1KVp_6wozWWyXGKxIHpfScYuNhqaoU&libraries=visualization&callback=initMap">
+    </script>

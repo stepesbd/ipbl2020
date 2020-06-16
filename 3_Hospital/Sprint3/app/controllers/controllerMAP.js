@@ -25,7 +25,10 @@ exports.get = async (req, res, next) => {
             action = req.params.action.toUpperCase();
         if(request == 'POSITIVE'){
             const result = await bigchain.collection('assets').find( {'data.Atendimento.Hospital.Exame_covid.Resultado': 'POSITIVO'}).project({'data.Atendimento.Hospital.Exame_covid':true}).toArray()
-            return res.render('googleMap', { title: 'Mapa de Contágio', map: 'positive', cases: result})
+            
+            const qtyCases = result.length;
+
+            return res.render('googleMap', { title: 'Mapa de Contágio', map: 'positive', cases: result, qtyCases:qtyCases })
         }else{
             return res.render('erro-page',  {    title: 'Erro', 
                                                         erro: '404',
