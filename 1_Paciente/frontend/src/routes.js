@@ -1,22 +1,22 @@
-import React from "react";
-import { Redirect } from "react-router-dom";
+import React from 'react';
+import { Redirect } from 'react-router-dom';
 
 // Layout Types
-import { DefaultLayout, Default2Layout } from "./layouts";
+import { DefaultLayout, Default2Layout } from './layouts';
 
 // Route Views
-import Dashboard from "./views/Dashboard";
-import UserProfile from "./views/UserProfile";
-import Errors from "./views/Help/Errors";
-import ComponentsOverview from "./views/Help/ComponentsOverview";
-import Tables from "./views/Help/Tables";
-import Step1 from "./views/Attendance/Step1";
-import Step2 from "./views/Attendance/Step2";
-import Step3 from "./views/Attendance/Step3";
-import Register from "./views/Attendance/Register";
+import Dashboard from './views/Dashboard';
+import UserProfile from './views/UserProfile';
+import Errors from './views/Help/Errors';
+import ComponentsOverview from './views/Help/ComponentsOverview';
+import Tables from './views/Help/Tables';
+import Step1 from './views/Attendance/Step1';
+import Step2 from './views/Attendance/Step2';
+import Step3 from './views/Attendance/Step3';
+import Register from './views/Attendance/Register';
 
-import PatientList from "./views/Registration/PatientList";
-import PatientForm from "./views/Registration/PatientForm";
+import PatientList from './views/Registration/PatientList';
+import PatientForm from './views/Registration/PatientForm';
 
 //Physicians
 import PhysicianList from './views/Physicians/PhysicianList';
@@ -24,100 +24,100 @@ import PhysicianForm from './views/Physicians/PhysicianForm';
 import SpecialtyList from './views/Specialties/SpecialtyList';
 
 //Scheduling
-import Schedule from './views/Scheduling/Schedule'
-import AttendanceForm from './views/Scheduling/AttendanceForm'
-import NewAttendanceForm from './views/Scheduling/NewAttendanceForm'
+import Schedule from './views/Scheduling/Schedule';
+import AttendanceForm from './views/Scheduling/AttendanceForm';
+import NewAttendanceForm from './views/Scheduling/NewAttendanceForm';
 
 export default [
   {
-    path: "/",
+    path: '/',
     exact: true,
     layout: DefaultLayout,
-    component: () => <Redirect to="/patient-list" />
+    component: () => <Redirect to="/dashboard" />,
   },
   {
-    path: "/patient-list",
+    path: '/patient-list',
     layout: DefaultLayout,
-    component: PatientList
+    component: PatientList,
   },
   {
-    path: "/patient-form",
+    path: '/patient-form',
     layout: DefaultLayout,
-    component: PatientForm
+    component: PatientForm,
   },
   {
-    path: "/physician-list",
+    path: '/physician-list',
     layout: DefaultLayout,
-    component: PhysicianList
+    component: PhysicianList,
   },
   {
-    path: "/physician-form",
+    path: '/physician-form',
     layout: DefaultLayout,
-    component: PhysicianForm
+    component: PhysicianForm,
   },
   {
-    path: "/specialties",
+    path: '/specialties',
     layout: DefaultLayout,
-    component: SpecialtyList
+    component: SpecialtyList,
   },
   {
-    path: "/dashboard",
+    path: '/dashboard',
     layout: DefaultLayout,
-    component: Dashboard
+    component: Dashboard,
   },
   {
-    path: "/user-profile",
+    path: '/user-profile',
     layout: DefaultLayout,
-    component: UserProfile
+    component: UserProfile,
   },
   {
-    path: "/errors",
+    path: '/errors',
     layout: DefaultLayout,
-    component: Errors
+    component: Errors,
   },
   {
-    path: "/components-overview",
+    path: '/components-overview',
     layout: DefaultLayout,
-    component: ComponentsOverview
+    component: ComponentsOverview,
   },
   {
-    path: "/tables",
+    path: '/tables',
     layout: DefaultLayout,
-    component: Tables
+    component: Tables,
   },
   {
-    path: "/step1",
+    path: '/step1',
     layout: Default2Layout,
-    component: Step1
+    component: Step1,
   },
   {
-    path: "/step2",
+    path: '/step2',
     layout: Default2Layout,
-    component: Step2
+    component: Step2,
   },
   {
-    path: "/step3",
+    path: '/step3',
     layout: Default2Layout,
-    component: Step3
+    component: Step3,
   },
   {
-    path: "/register",
+    path: '/register',
     layout: Default2Layout,
-    component: Register
+    component: Register,
   },
   {
-    path: "/schedule",
+    path: '/schedule',
     layout: Default2Layout,
-    component: Schedule
+    component: Schedule,
   },
   {
-    path: "/new-attendance",
+    path: '/new-attendance',
     layout: DefaultLayout,
-    component: NewAttendanceForm
+    component: NewAttendanceForm,
   },
   {
-    path: "/attendance-form",
+    path: '/attendance-form',
     layout: Default2Layout,
-    component: AttendanceForm
-  }
+    component: AttendanceForm,
+  },
 ];
