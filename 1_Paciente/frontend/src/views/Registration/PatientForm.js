@@ -14,7 +14,7 @@ import {
   FormInput,
   Button
 } from "shards-react";
-import { UsePutApi,UsePostApi } from "../../services/apiService";
+import { UsePutApi,UsePostApi,UseGetApiCEP } from "../../services/apiService";
 import ClipLoader from "react-spinners/ClipLoader";
 import SweetAlert from "react-bootstrap-sweetalert";
 
@@ -45,7 +45,9 @@ export default function PatientForm (props){
       setValue("bairro",dados.per.add.addNeighborhood); 
       setValue("cidade",dados.per.add.addCity);
       setValue("estado",dados.per.add.addState);  
-      setValue("pais",dados.per.add.addCountry);  
+      setValue("pais",dados.per.add.addCountry); 
+      setValue("lat",dados.per.add.addLatitude);  
+      setValue("long",dados.per.add.addLongitude);   
     }
   }
 
@@ -81,6 +83,8 @@ export default function PatientForm (props){
       item.per.add.addNeighborhood = data.bairro;
       item.per.add.addCountry = data.pais;
       item.per.add.addZipcode = data.cep;
+      item.per.add.addLatitude = data.lat;
+      item.per.add.addLongitude = data.long;
 
       console.log(item)
       UsePutApi('P',endPoint,item.patId,item).then(result => {
@@ -116,7 +120,9 @@ export default function PatientForm (props){
                 addState:data.estado,
                 addNeighborhood:data.bairro,
                 addCountry:data.pais,
-                addZipcode:data.cep
+                addZipcode:data.cep,
+                addLatitude:data.lat,
+                addLongitude:data.long
               }
           }
         };
@@ -135,6 +141,50 @@ export default function PatientForm (props){
   const [salert,setsalert] = React.useState();
   const hideAlert = () =>{
     setsalert(null);
+  }
+
+  const handleCepChange = (e) =>{
+    let value = e;
+    value = value.replace("-","");
+
+    setloading(true);
+    UseGetApiCEP(value).then(result => {
+      if (result.status !== 200) {
+        setsalert(<SweetAlert warning title={result.message} onConfirm={hideAlert} />);             
+        clearEndereco();
+        setloading(false);
+        return false;
+      }
+      //console.log(result.data);  
+      if(result.data.logradouro)  
+      {  
+        setValue("rua",result.data.logradouro); 
+        setValue("bairro",result.data.bairro); 
+        setValue("cidade",result.data.cidade.nome); 
+        setValue("estado",result.data.estado.sigla); 
+        setValue("lat",result.data.latitude);  
+        setValue("long",result.data.longitude); 
+        setValue("numero","");  
+        setValue("pais",""); 
+      }
+      else
+      {
+        clearEndereco();
+      }
+      setloading(false);
+      return true;
+    });
+  }
+  
+  const clearEndereco = () =>{
+    setValue("rua","");
+    setValue("bairro","");
+    setValue("cidade",""); 
+    setValue("estado",""); 
+    setValue("lat","");  
+    setValue("long","");
+    setValue("numero","");  
+    setValue("pais","");
   }
 
 return (
@@ -232,7 +282,18 @@ return (
                       <FormInput
                       name="cep"
                       invalid={errors.cep}
-                      innerRef={register({ required: true })}
+                      innerRef={register({ required: true })}                      
+                      onBlur={e => handleCepChange(e.target.value)}
+                    />
+                    <FormInput
+                    name="lat"
+                    innerRef={register()}                    
+                    style={{display:'none'}}                     
+                    />
+                    <FormInput
+                    name="long"
+                    innerRef={register()}                      
+                    style={{display:'none'}}
                     />
                     {errors.cep && <span class="obg">Obrigátorio</span>}
                     </Col>
