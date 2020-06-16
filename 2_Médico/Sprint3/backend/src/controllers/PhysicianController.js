@@ -1,5 +1,4 @@
 const connection = require('../database');
-const faker = require('faker/locale/pt_BR');
 
 function escolherIndex(vector) {
   return Math.floor(Math.random() * vector.length);
@@ -60,7 +59,7 @@ module.exports = {
   async rand(request, response) {
     const physicians = [];
     for (i = 0; i < 5; i++) {
-      const aux = await connection('physicians').select('*');
+      const aux = await connection('physicians').select('*').limit();
       physicians.push(aux[escolherIndex(aux)]);
     }
     return response.json(physicians);
