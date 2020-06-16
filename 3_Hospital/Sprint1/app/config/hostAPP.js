@@ -1,5 +1,5 @@
 
-const production = 'https://stepesbdmedrecords.herokuapp.com';
+const production = 'http://stepesbdmedrecords.herokuapp.com';
 
 const local = 'http://localhost:2000';
 

@@ -1,5 +1,6 @@
 'use strict';
 let request = require('async-request');
+var request_ = require('request');
 const { Address } = require('../models');
 const { Bed } = require('../models');
 const { Hospital } = require('../models');
@@ -37,7 +38,7 @@ exports.post = async (req, res, next) => {
                 }).then((res)=>{
                     res = JSON.parse(res.body)
                     response = res;
-                });
+                }).catch(err=>{console.log(err)});
                 if(response.Error)
                     return res.render('erro-page', { title: 'Erro', erro: response.Error} );
                 else
@@ -51,7 +52,7 @@ exports.post = async (req, res, next) => {
                 }).then((res)=>{
                     res = JSON.parse(res.body)
                     response = res;
-                });
+                }).catch(err=>{console.log(err)});
                 if(response.Error)
                     return res.render('erro-page', { title: 'Erro', erro: response.Error} );
                 else{
@@ -113,16 +114,16 @@ exports.get = async (req, res, next) => {
             const hospital = { hos, add }
             
             // VERIFICANDO PELA API O REGISTRO MÉDICO
-            var response = {}
-            await request(HOST + "/api/records/" + bed.bed_medical_record, {
-                method: 'GET',
-            }).then((res)=>{
-                res = JSON.parse(res.body)
-                response = res;
+            request_({
+                url: HOST + "/api/records/" + bed.bed_medical_record, 
+                method: "GET",
+                json: true,   // <--Very important!!!
+            }, function (error, response, body){
+                if(error)throw error; 
+                /*console.log(body); console.log(message)*/ 
+                //return res.json(response.body)
+                return res.render('medical_record', { title: 'Registro Médico', hospital: hospital, att: response.body.MedicalRecord, id: response.body.Id})
             });
-            //return res.json(response.MedicalRecord);
-            // REDIRECIONANDO PARA VISUALIZAÇÃO DO REGISTRO MÉDICO 
-            res.render('medical_record', { title: 'Registro Médico', hospital: hospital, att: response.MedicalRecord})
         }else{
             // LISTA DE LEITOS DO HOSPITAL
             Bed.belongsTo(Bed_sector,   {foreignKey: 'sector_id'});

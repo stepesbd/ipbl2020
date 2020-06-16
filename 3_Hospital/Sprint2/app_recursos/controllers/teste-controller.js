@@ -1,6 +1,8 @@
 'use strict';
 var request = require('request');
 const HOST = require('../config/hostAPP').HOST;
+const atendimentoData = require('../public/json/atendimento.json')
+const atendimentoSemPaciente = require('../public/json/atendimento-sem-paciente.json')
 
 exports.get = async (req, res, next) => {
 
@@ -31,21 +33,20 @@ exports.get = async (req, res, next) => {
         ]
         
 
-        let randomCEP = ceps[Math.floor(Math.random() * ceps.length)];
-        let randomNomes = nomes[Math.floor(Math.random() * nomes.length)];
-            
-        var myJSONString = '{"Medico": {"Nome": "Dr. Fulano de Tal","CRM": "5146196","PrivateKey": "2aMh4yfiuJvKS5QrAqm6kLZzQYWZeWxQXgpLaqALtbez","PublicKey": "3VFpHzbEpsK8NP78gS9AsXjNwecXAFoBgyGLBLcRBfQG"},"Paciente": {"Id": "1","Nome": ' + randomNomes + ',"PrivateKey": "FgHiBw18sKDui8NyyBNqcvDrcyUbwwJDTfJQhhUSdgX","PublicKey": "vQxxTQ5nniK1yeDQt6PwwRDAmgifFXz9vara8M8PCSG","Endereco": {' + randomCEP + '}},"Atendimento": {"Sintomas": ["Tosse","Pigarro","Diarréia"],"Estado": "Grave","Comentarios": "Aqui o médico faz os demais comentários que ele acha pertinente da consulta para que fique registrado...  Ex.: Medicamentos que deve tomar, deve ou não internar, etc..."}}';
-        var myJSONObject = JSON.parse(myJSONString);
+        //let randomCEP = ceps[Math.floor(Math.random() * ceps.length)];
+        //let randomNomes = nomes[Math.floor(Math.random() * nomes.length)];
+        //    
+        //var myJSONString = '{"Medico": {"Nome": "Dr. Fulano de Tal","CRM": "5146196","PrivateKey": "2aMh4yfiuJvKS5QrAqm6kLZzQYWZeWxQXgpLaqALtbez","PublicKey": "3VFpHzbEpsK8NP78gS9AsXjNwecXAFoBgyGLBLcRBfQG"},"Paciente": {"Id": "1","Nome": ' + randomNomes + ',"PrivateKey": "FgHiBw18sKDui8NyyBNqcvDrcyUbwwJDTfJQhhUSdgX","PublicKey": "vQxxTQ5nniK1yeDQt6PwwRDAmgifFXz9vara8M8PCSG","Endereco": {' + randomCEP + '}},"Atendimento": {"Sintomas": ["Tosse","Pigarro","Diarréia"],"Estado": "Grave","Comentarios": "Aqui o médico faz os demais comentários que ele acha pertinente da consulta para que fique registrado...  Ex.: Medicamentos que deve tomar, deve ou não internar, etc..."}}';
+        //var myJSONObject = JSON.parse(myJSONString);
 
-        //console.log(myJSONObject)
-        
         request({
             url: HOST,
             method: "POST",
             json: true,   // <--Very important!!!
-            body: myJSONObject
+            //body: myJSONObject
+            body: atendimentoData
         }, function (error, response, body){
-            res.redirect(HOST,);
+            res.redirect(HOST);
         });
 
         

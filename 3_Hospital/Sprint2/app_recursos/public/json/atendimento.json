@@ -1,0 +1,30 @@
+{
+    "Medico": 
+    {
+        "Nome": "Dr. Fulano de Tal",
+        "CRM": "5146196",
+        "PrivateKey": "2aMh4yfiuJvKS5QrAqm6kLZzQYWZeWxQXgpLaqALtbez",
+        "PublicKey": "3VFpHzbEpsK8NP78gS9AsXjNwecXAFoBgyGLBLcRBfQG"
+    },
+    "Paciente": 
+    {
+        "Id": "1",
+        "Nome": "Algusto José",
+        "PrivateKey": "FgHiBw18sKDui8NyyBNqcvDrcyUbwwJDTfJQhhUSdgX",
+        "PublicKey": "vQxxTQ5nniK1yeDQt6PwwRDAmgifFXz9vara8M8PCSG",
+        "Endereco": {
+            "Rua": "Rua Francisco Rafael",
+            "Numero": 95,
+            "Bairro": "DEF",
+            "Cidade": "São José dos Campos",
+            "UF": "SP",
+            "CEP": "12210-060"
+        }
+    },
+    "Atendimento": 
+    {
+        "Sintomas": ["Tosse","Pigarro","Diarréia"],
+        "Estado": "Grave",
+        "Comentarios": "Aqui o médico faz os demais comentários que ele acha pertinente da consulta para que fique registrado...  Ex.: Medicamentos que deve tomar, deve ou não internar, etc..."
+    }
+}

@@ -1,57 +1,66 @@
-const connection = require('../database')
+const connection = require('../database');
+const faker = require('faker/locale/pt_BR');
 
 module.exports = {
-    async index(request, response) {
-        const physicians = await connection('physicians').select('*')
+  async index(request, response) {
+    const physicians = await connection('physicians').select('*');
 
-        return response.json({ msg: physicians });
-    },
-    async show(request, response) {
-        const { id } = request.params
+    return response.json({ msg: physicians });
+  },
+  async show(request, response) {
+    const { id } = request.params;
 
-        const [physician] = await connection('physicians').where('id', id).select()
+    const [physician] = await connection('physicians').where('id', id).select();
 
-        return response.status(200).json({ msg: physician })
-    },
-    async store(request, response) {
-        const { name, crm, cpf } = request.body;
+    return response.status(200).json({ msg: physician });
+  },
+  async store(request, response) {
+    const { name, crm, cpf } = request.body;
 
-        const [id] = await connection('physicians').insert({
-            name,
-            crm,
-            cpf
-        })
+    const [id] = await connection('physicians').insert({
+      name,
+      crm,
+      cpf,
+    });
 
-        return response.status(201).json({ msg: { id, name, crm, cpf } })
-    },
-    async update(request, response) {
-        const { id } = request.params
+    return response.status(201).json({ msg: { id, name, crm, cpf } });
+  },
+  async update(request, response) {
+    const { id } = request.params;
 
-        const { name, crm, cpf } = request.body;
+    const { name, crm, cpf } = request.body;
 
-        const physician = await connection('physicians')
-            .where('id', id)
-            .update({
-                name,
-                crm,
-                cpf
-            })
+    const physician = await connection('physicians').where('id', id).update({
+      name,
+      crm,
+      cpf,
+    });
 
-        if (physician === 0) {
-            return response.status(406).json({ error: 'Physician not updated!' })
-        }
-
-        return response.status(200).json({ msg: { id, name, crm, cpf } })
-    },
-    async destroy(request, response) {
-        const { id } = request.params
-
-        const physician = await connection('physicians').where('id', id).delete()
-
-        if (physician === 0) {
-            return response.status(406).json({ error: 'Physician not found!' })
-        }
-
-        return response.status(204).send()
+    if (physician === 0) {
+      return response.status(406).json({ error: 'Physician not updated!' });
     }
-}
+
+    return response.status(200).json({ msg: { id, name, crm, cpf } });
+  },
+  async destroy(request, response) {
+    const { id } = request.params;
+
+    const physician = await connection('physicians').where('id', id).delete();
+
+    if (physician === 0) {
+      return response.status(406).json({ error: 'Physician not found!' });
+    }
+
+    return response.status(204).send();
+  },
+  async create(request, response) {
+    return response.json({
+      name: faker.name.findName(),
+      crm: `${faker.random.number()}-${faker.address.stateAbbr()}`,
+      cpf: faker.random.number({
+        min: 10000000000,
+        max: 99999999999,
+      }),
+    });
+  },
+};

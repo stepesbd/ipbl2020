@@ -1,4 +1,4 @@
-const IP = '34.95.247.150';
+const IP = '34.95.128.187';
 
 const MongoClient = require( 'mongodb' ).MongoClient;
 const url = 'mongodb://stepesbd:stepesbd2020@' + IP + ':27017/?authMechanism=SCRAM-SHA-1&authSource=bigchain';
