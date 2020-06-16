@@ -28,7 +28,7 @@ routes.group('/api', (router) => {
 
   //Physicians's routes
   router.get('/physicians', PhysicianController.index);
-  router.get('/create', PhysicianController.create);
+  router.get('/rand', PhysicianController.rand);
   router.get('/physicians/:id', PhysicianController.show);
   router.post('/physicians', PhysicianController.store);
   router.put('/physicians/:id', PhysicianController.update);
