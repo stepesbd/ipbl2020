@@ -19,6 +19,8 @@ namespace stepesdb_api
         public string AddNeighborhood { get; set; }
         public string AddCountry { get; set; }
         public string AddZipcode { get; set; }
+        public string AddLatitude { get; set; }
+        public string AddLongitude { get; set; }
 
         public virtual ICollection<Person> Person { get; set; }
     }

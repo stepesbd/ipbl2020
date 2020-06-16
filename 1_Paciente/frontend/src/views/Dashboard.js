@@ -46,17 +46,6 @@ const Dashboard = ({ smallStats }) => (
         <UsersByDevice />
       </Col>
 
-      <Col lg="4" md="6" sm="12" className="mb-4">
-        <NewDraft />
-      </Col>
-
-      <Col lg="5" md="12" sm="12" className="mb-4">
-        <Discussions />
-      </Col>
-
-      <Col lg="3" md="12" sm="12" className="mb-4">
-        <TopReferrals />
-      </Col>
     </Row>
   </Container>
 );
@@ -71,10 +60,10 @@ Dashboard.propTypes = {
 Dashboard.defaultProps = {
   smallStats: [
     {
-      label: "Indicador 1",
+      label: "Total de Pacientes",
       value: "2,390",
-      percentage: "4.7%",
-      increase: true,
+      percentage: "",
+      increase: null,
       chartLabels: [null, null, null, null, null, null, null],
       attrs: { md: "6", sm: "6" },
       datasets: [
@@ -89,7 +78,7 @@ Dashboard.defaultProps = {
       ]
     },
     {
-      label: "Indicador 2",
+      label: "Recuperados",
       value: "182",
       percentage: "12.4",
       increase: true,
@@ -102,12 +91,12 @@ Dashboard.defaultProps = {
           borderWidth: 1.5,
           backgroundColor: "rgba(23,198,113,0.1)",
           borderColor: "rgb(23,198,113)",
-          data: [1, 2, 3, 3, 3, 4, 4]
+          data: [1, 2, 3, 2, 2, 4, 4]
         }
       ]
     },
     {
-      label: "Indicador 3",
+      label: "Testados Positivos",
       value: "8,147",
       percentage: "3.8%",
       increase: false,
@@ -126,7 +115,7 @@ Dashboard.defaultProps = {
       ]
     },
     {
-      label: "Indicador 4",
+      label: "Óbitos",
       value: "29",
       percentage: "2.71%",
       increase: false,
@@ -145,7 +134,26 @@ Dashboard.defaultProps = {
       ]
     },
     {
-      label: "Indicador 5",
+      label: "Pacientes com Sintomas",
+      value: "17,281",
+      percentage: "2.4%",
+      increase: false,
+      decrease: true,
+      chartLabels: [null, null, null, null, null, null, null],
+      attrs: { md: "4", sm: "6" },
+      datasets: [
+        {
+          label: "Today",
+          fill: "start",
+          borderWidth: 1.5,
+          backgroundColor: "rgb(0,123,255,0.1)",
+          borderColor: "rgb(0,123,255)",
+          data: [3, 2, 3, 2, 4, 5, 4]
+        }
+      ]
+    },
+    {
+      label: "Leitos Disponíveis",
       value: "17,281",
       percentage: "2.4%",
       increase: false,

@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using stepesdb_api;
 
+using System.IO;
+using System.Net;
+using System.Web;
+
 namespace stepesdb_api.Controllers
 {    
     [ApiController]
@@ -66,6 +70,33 @@ namespace stepesdb_api.Controllers
             return Ok(new Ok("Editado com sucesso"));
         }
 
+        public List<String> GetLatLongbyCep(string cep)
+        {
+            List<String> latlong = new List<String>();
+
+            HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(string.Format("https://www.cepaberto.com/api/v3/cep?cep={0}", cep));
+
+            request.Method = "GET";
+            request.Headers.Add("Authorization", "Token token=ed3c65f56f6e7ff359d039cd7118de57");
+            request.Timeout = 120000;
+
+            var result = "";
+
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            {
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    using (StreamReader streamReader = new StreamReader(response.GetResponseStream()))
+                    {
+                        result = streamReader.ReadToEnd();
+                    }
+
+                    //profissionais = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ProfissionalAgendaBeakt>>(result.ToString());                
+                }
+            }
+            return latlong;
+        }
+
         // POST: api/Patient
         [HttpPost]
         public async Task<ActionResult<Patient>> Post(Patient patient)
@@ -73,6 +104,11 @@ namespace stepesdb_api.Controllers
             if (patient is null)
                 return BadRequest(new BadRequest("O objeto patient é obrigatório"));
 
+            //List<String> latlong = GetLatLongbyCep(patient.Per.Add.AddZipcode);
+            //patient.Per.Add.AddLatitude = latlong[0];
+            //patient.Per.Add.AddLongitude = latlong[1];
+            //return null;
+            
             try
             {
                 _context.Patient.Add(patient);

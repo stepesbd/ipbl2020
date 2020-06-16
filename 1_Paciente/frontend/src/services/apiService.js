@@ -186,8 +186,109 @@ const UseDeleteApi = (url, endpoint, id) => {
     }    
 };
 
+const UseGetApiCEP = (cep) => {          
+  
+  try 
+  {
+      const urlComplete = "https://cors-anywhere.herokuapp.com/https://www.cepaberto.com/api/v3/cep?cep="+cep;  
+      //return axios.get(urlComplete)                               
+      return axios.get(urlComplete, {
+        headers: {'Authorization': `Token token=ed3c65f56f6e7ff359d039cd7118de57`}
+      })
+      .then(result => {          
+        var newResult = {
+          status: result.status,
+          data: result.data,
+          headers: result.headers
+        }  
+        return newResult;
+      })
+      .catch(function (error) {
+        if (error.response) {
+          
+          var message = "";
+          if(error.response.data.message)
+            message = error.response.data.message;
+          else
+            message = "Erro inesperado";
+
+          var newError = {
+            status: error.response.data.status,
+            message:message
+          }   
+          return newError;
+        }
+        else
+        {
+          var result = {
+            status: 500,
+            message:"Erro ao conectar com api."
+          }           
+          return result;
+        } 
+      });
+    
+  } catch (error) {
+    var result = {
+      status: 500,
+      message:"Erro."
+    }           
+    return result;
+  }  
+};
+
+const UseGetApiURL = (endpointComplete) => {          
+  
+  try 
+  {
+      return axios.get(endpointComplete)
+      .then(result => {          
+        var newResult = {
+          status: result.status,
+          data: result.data,
+          headers: result.headers
+        }  
+        return newResult;
+      })
+      .catch(function (error) {
+        if (error.response) {
+          
+          var message = "";
+          if(error.response.data.message)
+            message = error.response.data.message;
+          else
+            message = "Erro inesperado";
+
+          var newError = {
+            status: error.response.data.status,
+            message:message
+          }   
+          return newError;
+        }
+        else
+        {
+          var result = {
+            status: 500,
+            message:"Erro ao conectar com api."
+          }           
+          return result;
+        } 
+      });
+    
+  } catch (error) {
+    var result = {
+      status: 500,
+      message:"Erro."
+    }           
+    return result;
+  }  
+};
+
+
 export {
 UseGetApi,
 UsePostApi,
 UsePutApi,
-UseDeleteApi};
+UseDeleteApi,
+UseGetApiCEP,
+UseGetApiURL};
