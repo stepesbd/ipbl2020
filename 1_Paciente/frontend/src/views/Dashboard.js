@@ -8,6 +8,9 @@ import SmallStats from './../components/common/SmallStats';
 import UsersOverview from './../components/blog/UsersOverview';
 import UsersByDevice from './../components/blog/UsersByDevice';
 
+import InfectedPatients from '../components/dashboard/infectedPatients';
+import Maps from '../components/dashboard/Maps';
+
 //const Dashboard = ({ smallStats }) => (
 export default function Dashboard() {
   useEffect(() => {
@@ -242,7 +245,13 @@ export default function Dashboard() {
         </Col>
 
         <Col lg="4" md="6" sm="12" className="mb-4">
-          <UsersByDevice />
+          <InfectedPatients />
+        </Col>
+      </Row>
+
+      <Row>
+        <Col className="col-lg mb-4">
+          <Maps />
         </Col>
       </Row>
     </Container>

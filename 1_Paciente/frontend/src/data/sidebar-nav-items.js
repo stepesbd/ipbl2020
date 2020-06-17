@@ -1,53 +1,53 @@
-export default function () {
+export default function() {
   return [
     {
-      title: "Lista de Pacientes",
-      to: "/patient-list",
-      htmlBefore: '<i class="material-icons">list</i>',
-      htmlAfter: ""
+      title: 'Dashboard',
+      to: '/dashboard',
+      htmlBefore: '<i class="material-icons">home</i>',
+      htmlAfter: '',
     },
     {
-      title: "Cadastro de Pacientes",
-      to: "/patient-form",
+      title: 'Lista de Pacientes',
+      to: '/patient-list',
+      htmlBefore: '<i class="material-icons">list</i>',
+      htmlAfter: '',
+    },
+    {
+      title: 'Cadastro de Pacientes',
+      to: '/patient-form',
       htmlBefore: '<i class="material-icons">assignment_ind</i>',
-      htmlAfter: ""
+      htmlAfter: '',
     },
     {
-      title: "Lista de Médicos",
-      to: "/physician-list",
+      title: 'Lista de Médicos',
+      to: '/physician-list',
       htmlBefore: '<i class="material-icons">list</i>',
-      htmlAfter: ""
+      htmlAfter: '',
     },
     {
-      title: "Cadastro de Médicos",
-      to: "/physician-form",
+      title: 'Cadastro de Médicos',
+      to: '/physician-form',
       htmlBefore: '<i class="material-icons">healing</i>',
-      htmlAfter: ""
+      htmlAfter: '',
     },
     {
-      title: "Especicalidades",
-      to: "/specialties",
+      title: 'Especicalidades',
+      to: '/specialties',
       htmlBefore: '<i class="material-icons">folder_special</i>',
-      htmlAfter: ""
+      htmlAfter: '',
     },
     {
-      title: "Atendimento",
-      to: "/step1",
+      title: 'Atendimento',
+      to: '/step1',
       htmlBefore: '<i class="material-icons">add_to_home_screen</i>',
-      htmlAfter: ""
+      htmlAfter: '',
     },
     {
-      title: "Agenda Médica",
-      to: "/schedule",
-      htmlBefore: '<i class="material-icons">assignment_turned_in</i>'
+      title: 'Agenda Médica',
+      to: '/schedule',
+      htmlBefore: '<i class="material-icons">assignment_turned_in</i>',
     },
-     {
-       title: "Dashboard",
-       to: "/dashboard",
-       htmlBefore: '<i class="material-icons">home</i>',
-       htmlAfter: ""
-     },
-     /*{
+    /*{
        title: "Forms & Componentes",
        htmlBefore: '<i class="material-icons">view_module</i>',
        to: "/components-overview",
