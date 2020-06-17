@@ -1,14 +1,23 @@
 version: "3.8"
 
+networks:
+  spark:
+    ipam:
+      config:
+        - subnet: 10.0.20.0/24
+
 services:
   spark-master:
     image: stepesbd/spark:latest
     ports:
-      - 8080-8090:8080-8090
-      - 18080-18090:18080-18090
+      - 8080:8080
+      - 18080:18080
       - 7077:7077
+    environment:
+      - "SPARK_LOCAL_IP=10.0.20.2"
     networks:
-      - spark
+      spark:
+        ipv4_address: 10.0.20.2
     restart: always
 
   spark-slave:
@@ -16,12 +25,12 @@ services:
     depends_on:
       - spark-master
     ports:
-      - 4040-4050:4040-4050
+      - 4040:4040
+    environment:
+      - "SPARK_LOCAL_IP=10.0.20.3"
     command: ["org.apache.spark.deploy.worker.Worker", "spark://spark-master:7077"] 
     networks:
-      - spark
+      spark:
+        ipv4_address: 10.0.20.3
     restart: always
-
-networks:
-  spark:
 
