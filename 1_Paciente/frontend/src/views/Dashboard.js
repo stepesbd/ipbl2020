@@ -1,75 +1,27 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect } from 'react';
 import { Container, Row, Col } from 'shards-react';
+import { UseGetApiURL } from '../services/apiService';
+import SweetAlert from 'react-bootstrap-sweetalert';
 
 import PageTitle from './../components/common/PageTitle';
 import SmallStats from './../components/common/SmallStats';
 import UsersOverview from './../components/blog/UsersOverview';
 import UsersByDevice from './../components/blog/UsersByDevice';
-import NewDraft from './../components/blog/NewDraft';
-import Discussions from './../components/blog/Discussions';
-import TopReferrals from './../components/common/TopReferrals';
 
-const Dashboard = ({ smallStats }) => (
-  <Container fluid className="main-content-container px-4">
-    {/* Page Header */}
-    <Row noGutters className="page-header py-4">
-      <PageTitle
-        title="Indicadores"
-        subtitle="Dashboard"
-        className="text-sm-left mb-3"
-      />
-    </Row>
+//const Dashboard = ({ smallStats }) => (
+export default function Dashboard() {
+  useEffect(() => {
+    loadTotalPacientes();
+    loadTotalRecuperados();
+    loadTotalObitos();
+  }, []);
 
-    {/* Small Stats Blocks */}
-    <Row>
-      {smallStats.map((stats, idx) => (
-        <Col className="col-lg mb-4" key={idx} {...stats.attrs}>
-          <SmallStats
-            id={`small-stats-${idx}`}
-            variation="1"
-            chartData={stats.datasets}
-            chartLabels={stats.chartLabels}
-            label={stats.label}
-            value={stats.value}
-            percentage={stats.percentage}
-            increase={stats.increase}
-            decrease={stats.decrease}
-          />
-        </Col>
-      ))}
-    </Row>
-
-    <Row>
-      <Col lg="8" md="12" sm="12" className="mb-4">
-        <UsersOverview />
-      </Col>
-
-      <Col lg="4" md="6" sm="12" className="mb-4">
-        <UsersByDevice />
-      </Col>
-
-      <Col lg="4" md="6" sm="12" className="mb-4">
-        <NewDraft />
-      </Col>
-    </Row>
-  </Container>
-);
-
-Dashboard.propTypes = {
-  /**
-   * The small stats dataset.
-   */
-  smallStats: PropTypes.array,
-};
-
-Dashboard.defaultProps = {
-  smallStats: [
+  const [smallStats, setsmallStats] = React.useState([
     {
-      label: 'Indicador 1',
-      value: '2,390',
-      percentage: '4.7%',
-      increase: true,
+      label: 'Total de Pacientes',
+      value: 0,
+      percentage: '',
+      increase: null,
       chartLabels: [null, null, null, null, null, null, null],
       attrs: { md: '6', sm: '6' },
       datasets: [
@@ -84,9 +36,9 @@ Dashboard.defaultProps = {
       ],
     },
     {
-      label: 'Indicador 2',
-      value: '182',
-      percentage: '12.4',
+      label: 'Recuperados',
+      value: 0,
+      percentage: 0,
       increase: true,
       chartLabels: [null, null, null, null, null, null, null],
       attrs: { md: '6', sm: '6' },
@@ -97,14 +49,14 @@ Dashboard.defaultProps = {
           borderWidth: 1.5,
           backgroundColor: 'rgba(23,198,113,0.1)',
           borderColor: 'rgb(23,198,113)',
-          data: [1, 2, 3, 3, 3, 4, 4],
+          data: [1, 2, 3, 2, 2, 4, 4],
         },
       ],
     },
     {
-      label: 'Indicador 3',
-      value: '8,147',
-      percentage: '3.8%',
+      label: 'Testados Positivos',
+      value: 0,
+      percentage: 0,
       increase: false,
       decrease: true,
       chartLabels: [null, null, null, null, null, null, null],
@@ -121,9 +73,9 @@ Dashboard.defaultProps = {
       ],
     },
     {
-      label: 'Indicador 4',
-      value: '29',
-      percentage: '2.71%',
+      label: 'Óbitos',
+      value: 0,
+      percentage: 0,
       increase: false,
       decrease: true,
       chartLabels: [null, null, null, null, null, null, null],
@@ -140,9 +92,9 @@ Dashboard.defaultProps = {
       ],
     },
     {
-      label: 'Indicador 5',
-      value: '17,281',
-      percentage: '2.4%',
+      label: 'Pacientes com Sintomas',
+      value: 0,
+      percentage: 0,
       increase: false,
       decrease: true,
       chartLabels: [null, null, null, null, null, null, null],
@@ -158,7 +110,141 @@ Dashboard.defaultProps = {
         },
       ],
     },
-  ],
-};
+    {
+      label: 'Leitos Disponíveis',
+      value: 0,
+      percentage: 0,
+      increase: false,
+      decrease: true,
+      chartLabels: [null, null, null, null, null, null, null],
+      attrs: { md: '4', sm: '6' },
+      datasets: [
+        {
+          label: 'Today',
+          fill: 'start',
+          borderWidth: 1.5,
+          backgroundColor: 'rgb(0,123,255,0.1)',
+          borderColor: 'rgb(0,123,255)',
+          data: [3, 2, 3, 2, 4, 5, 4],
+        },
+      ],
+    },
+  ]);
 
-export default Dashboard;
+  const [loadingT, setloadingT] = React.useState(false);
+  const [totalPacientes, settotalPacientes] = React.useState(0);
+  const loadTotalPacientes = () => {
+    setloadingT(true);
+    let endPointComplete =
+      'https://cors-anywhere.herokuapp.com/https://stepesbdmedrecords.herokuapp.com/api/positive/amount';
+    UseGetApiURL(endPointComplete).then((result) => {
+      if (result.status !== 200) {
+        setsalert(
+          <SweetAlert warning title={result.message} onConfirm={hideAlert} />
+        );
+        setloadingT(false);
+        return false;
+      }
+      setloadingT(false);
+      settotalPacientes(result.data);
+      return true;
+    });
+  };
+
+  const [totalRecuperados, settotalRecuperados] = React.useState(0);
+  const loadTotalRecuperados = () => {
+    setloadingT(true);
+    let endPointComplete =
+      'https://cors-anywhere.herokuapp.com/https://stepesbdmedrecords.herokuapp.com/api/release/amount';
+    UseGetApiURL(endPointComplete).then((result) => {
+      if (result.status !== 200) {
+        setsalert(
+          <SweetAlert warning title={result.message} onConfirm={hideAlert} />
+        );
+        setloadingT(false);
+        return false;
+      }
+      setloadingT(false);
+      settotalRecuperados(result.data);
+      return true;
+    });
+  };
+
+  const [totalObitos, settotalObitos] = React.useState(0);
+  const loadTotalObitos = () => {
+    setloadingT(true);
+    let endPointComplete =
+      'https://cors-anywhere.herokuapp.com/https://stepesbdmedrecords.herokuapp.com/api/death/amount';
+    UseGetApiURL(endPointComplete).then((result) => {
+      if (result.status !== 200) {
+        setsalert(
+          <SweetAlert warning title={result.message} onConfirm={hideAlert} />
+        );
+        setloadingT(false);
+        return false;
+      }
+      setloadingT(false);
+      settotalObitos(result.data);
+      return true;
+    });
+  };
+
+  const [salert, setsalert] = React.useState();
+  const hideAlert = () => {
+    setsalert(null);
+  };
+
+  return (
+    <Container fluid className="main-content-container px-4">
+      {/* Page Header */}
+
+      {salert}
+      <Row noGutters className="page-header py-4">
+        <PageTitle
+          title="Indicadores"
+          subtitle="Dashboard"
+          className="text-sm-left mb-3"
+        />
+      </Row>
+
+      {/* Small Stats Blocks */}
+      <Row>
+        {smallStats.map((stats, idx) => (
+          <Col className="col-lg mb-4" key={idx} {...stats.attrs}>
+            <SmallStats
+              id={`small-stats-${idx}`}
+              variation="1"
+              chartData={stats.datasets}
+              chartLabels={stats.chartLabels}
+              label={stats.label}
+              value={
+                idx === 0
+                  ? totalPacientes
+                  : idx === 1
+                  ? totalRecuperados
+                  : idx === 2
+                  ? totalPacientes
+                  : idx === 3
+                  ? totalObitos
+                  : stats.value
+              }
+              percentage={stats.percentage}
+              increase={stats.increase}
+              decrease={stats.decrease}
+            />
+          </Col>
+        ))}
+      </Row>
+
+      <Row>
+        <Col lg="8" md="12" sm="12" className="mb-4">
+          <UsersOverview />
+        </Col>
+
+        <Col lg="4" md="6" sm="12" className="mb-4">
+          <UsersByDevice />
+        </Col>
+      </Row>
+    </Container>
+  );
+}

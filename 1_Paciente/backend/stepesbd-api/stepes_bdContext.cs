@@ -102,6 +102,20 @@ namespace stepesdb_api
                     .HasColumnType("varchar(45)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
+                    
+                entity.Property(e => e.AddLatitude)
+                    .IsRequired()
+                    .HasColumnName("add_latitude")
+                    .HasColumnType("varchar(30)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+                    
+                entity.Property(e => e.AddLongitude)
+                    .IsRequired()
+                    .HasColumnName("add_longitude")
+                    .HasColumnType("varchar(30)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
             });
 
             modelBuilder.Entity<Addresses>(entity =>

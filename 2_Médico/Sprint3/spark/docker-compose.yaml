@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  spark-master:
+    image: stepesbd/spark:latest
+    ports:
+      - 8080-8090:8080-8090
+      - 18080-18090:18080-18090
+      - 7077:7077
+    networks:
+      - spark
+    restart: always
+
+  spark-slave:
+    image: stepesbd/spark:latest
+    depends_on:
+      - spark-master
+    ports:
+      - 4040-4050:4040-4050
+    command: ["org.apache.spark.deploy.worker.Worker", "spark://spark-master:7077"] 
+    networks:
+      - spark
+    restart: always
+
+networks:
+  spark:
+
