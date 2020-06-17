@@ -31,6 +31,7 @@ namespace stepesdb_api.Controllers
             List<Patient> pacientes = await _context.Patient
             .Include(x=>x.Per)
                 .ThenInclude(d=>d.Add)
+            .Take(100)
             .ToListAsync();    
             
             List<Patient> pacientes2 = new List<Patient>();
