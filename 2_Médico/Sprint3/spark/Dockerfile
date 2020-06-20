@@ -8,6 +8,15 @@ RUN apt install -y procps
 
 RUN mkdir /tmp/spark-events
 
+RUN apt update && \
+  apt install -y python-pip && \
+  pip install --upgrade pip && \
+  pip install numpy && \
+  pip install pyspark
+
+# Add future pip packages here
+# RUN pip install foo bar baz
+
 ENV PATH="/opt/spark/bin:/opt/spark/sbin:${PATH}"
 ENV SPARK_HOME="/opt/spark"
 ENV SPARK_LOCAL_IP="0.0.0.0"

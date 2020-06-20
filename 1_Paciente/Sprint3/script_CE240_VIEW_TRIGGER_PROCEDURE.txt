@@ -1,0 +1,63 @@
+View pessoas mortas:
+
+CREATE VIEW DEATH_PERSONS AS SELECT 
+	stepes_bd.person.per_first_name, 
+	stepes_bd.person.per_last_name,
+	stepes_bd.patient.pat_death_date,
+	stepes_bd.patient.causa_mortis,
+	stepes_bd.patient.pat_death_certificate
+FROM stepes_bd.person
+inner join  stepes_bd.patient
+on stepes_bd.person.per_id = stepes_bd.patient.per_id
+where stepes_bd.patient.pat_death_date IS NOT NULL
+order by stepes_bd.patient.pat_death_date
+
+==========================================================================================================================
+Trigger ao criar person cria um patient:
+
+DROP TRIGGER IF EXISTS `stepes_bd`.`person_AFTER_INSERT`;
+DELIMITER $$
+USE `stepes_bd`$$
+CREATE DEFINER=`root`@`%` TRIGGER `person_AFTER_INSERT` AFTER INSERT ON `person` FOR EACH ROW BEGIN
+insert into stepes_bd.patient(pat_inclusion_date, pat_status, per_id)
+values(CURDATE(),1,NEW.per_id);
+END$$
+DELIMITER ;
+
+
+==========================================================================================================================
+trigger ao inserir person cria um nickname:
+
+DROP TRIGGER IF EXISTS `stepes_bd`.`person_BEFORE_INSERT`;
+
+DELIMITER $$
+USE `stepes_bd`$$
+CREATE DEFINER = CURRENT_USER TRIGGER `stepes_bd`.`person_BEFORE_INSERT` BEFORE INSERT ON `person` FOR EACH ROW
+BEGIN
+SET NEW.per_nickname = lower(CONCAT(
+											SUBSTRING(NEW.per_last_name,1,1),
+											NEW.per_first_name,
+                                            "_",
+                                            NEW.per_id)); 
+END$$
+DELIMITER ;
+
+
+==========================================================================================================================
+PROCEDURE para gerar nicknames que ainda estão nulos:
+
+CREATE DEFINER=`root`@`%` PROCEDURE `generate_nicknames_procedure`()
+BEGIN
+UPDATE stepes_bd.person SET per_nickname = lower(CONCAT(
+											SUBSTRING(per_last_name,1,1),
+											per_first_name,
+                                            "_",
+                                            per_id)) 
+where per_nickname IS NULL;
+END
+
+
+
+
+
+
