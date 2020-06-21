@@ -245,7 +245,11 @@ export default function Dashboard() {
         </Col>
 
         <Col lg="4" md="6" sm="12" className="mb-4">
-          <InfectedPatients />
+          <InfectedPatients
+            recuperados={totalRecuperados}
+            obitos={totalObitos}
+            contaminados={totalPacientes}
+          />
         </Col>
       </Row>
 

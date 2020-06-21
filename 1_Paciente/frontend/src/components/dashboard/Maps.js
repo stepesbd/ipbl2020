@@ -1,22 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { Card, CardHeader, CardBody } from "shards-react";
-import { TileLayer, Marker } from "react-leaflet";
-import MarkerClusterGroup from "react-leaflet-markercluster";
-import { MapStyled } from "./styles";
-import { UseGetApiURL } from "../../services/apiService";
+import React, { useState, useEffect } from 'react';
+import { Card, CardHeader, CardBody } from 'shards-react';
+import { TileLayer, Marker } from 'react-leaflet';
+import MarkerClusterGroup from 'react-leaflet-markercluster';
+import { MapStyled } from './styles';
+import { UseGetApiURL } from '../../services/apiService';
 
 function Map() {
   const [positives, setPositives] = useState([]);
 
   useEffect(() => {
     let endPointComplete =
-      "https://cors-anywhere.herokuapp.com/https://stepesbdmedrecords.herokuapp.com/api/positive";
-    UseGetApiURL(endPointComplete).then(result => {
-      result.data.map(positive => {
-        const data = positive.data.Atendimento.Hospital.Exame_covid;
-        console.log(data.Latitude);
-        console.log(data.Longitude);
-      });
+      'https://cors-anywhere.herokuapp.com/https://stepesbdmedrecords.herokuapp.com/api/positive';
+    UseGetApiURL(endPointComplete).then((result) => {
       setPositives(result.data);
     });
   }, []);
@@ -33,11 +28,12 @@ function Map() {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           <MarkerClusterGroup>
-            {positives.map(positive => (
+            {positives.map((positive) => (
               <Marker
+                key={positive._id}
                 position={[
                   positive.data.Atendimento.Hospital.Exame_covid.Latitude,
-                  positive.data.Atendimento.Hospital.Exame_covid.Longitude
+                  positive.data.Atendimento.Hospital.Exame_covid.Longitude,
                 ]}
               />
             ))}
