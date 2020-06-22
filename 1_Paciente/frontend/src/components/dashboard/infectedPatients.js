@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {
   Row,
   Col,
@@ -24,22 +23,19 @@ class UsersByDevice extends React.Component {
       type: 'pie',
       data: this.props.chartData,
       options: {
-        ...{
-          legend: {
-            position: 'bottom',
-            labels: {
-              padding: 25,
-              boxWidth: 20,
-            },
-          },
-          cutoutPercentage: 0,
-          tooltips: {
-            custom: false,
-            mode: 'index',
-            position: 'nearest',
+        legend: {
+          position: 'bottom',
+          labels: {
+            padding: 25,
+            boxWidth: 20,
           },
         },
-        ...this.props.chartOptions,
+        cutoutPercentage: 0,
+        tooltips: {
+          custom: false,
+          mode: 'index',
+          position: 'nearest',
+        },
       },
     };
 
@@ -85,42 +81,5 @@ class UsersByDevice extends React.Component {
     );
   }
 }
-
-UsersByDevice.propTypes = {
-  /**
-   * The component's title.
-   */
-  title: PropTypes.string,
-  /**
-   * The chart config object.
-   */
-  chartConfig: PropTypes.object,
-  /**
-   * The Chart.js options.
-   */
-  chartOptions: PropTypes.object,
-  /**
-   * The chart data.
-   */
-  chartData: PropTypes.object,
-};
-
-UsersByDevice.defaultProps = {
-  title: 'Grupos de Registros',
-  chartData: {
-    datasets: [
-      {
-        hoverBorderColor: '#ffffff',
-        data: [68.3, 24.2, 7.5],
-        backgroundColor: [
-          'rgba(0,123,255,0.9)',
-          'rgba(0,123,255,0.5)',
-          'rgba(0,123,255,0.3)',
-        ],
-      },
-    ],
-    labels: ['Contaminado', 'Recuperado', 'Óbito'],
-  },
-};
 
 export default UsersByDevice;

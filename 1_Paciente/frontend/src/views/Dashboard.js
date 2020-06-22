@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Row, Col } from 'shards-react';
 import { UseGetApiURL } from '../services/apiService';
 import SweetAlert from 'react-bootstrap-sweetalert';
@@ -134,6 +134,21 @@ export default function Dashboard() {
     },
   ]);
 
+  const [infectedPatients, setInfectedPatients] = useState({
+    datasets: [
+      {
+        hoverBorderColor: '#ffffff',
+        data: [2045, 1399, 72],
+        backgroundColor: [
+          'rgb(255,180,0)',
+          'rgb(23,198,113)',
+          'rgb(255,65,105)',
+        ],
+      },
+    ],
+    labels: ['Contaminados', 'Recuperados', 'Óbitos'],
+  });
+
   const [loadingT, setloadingT] = React.useState(false);
   const [totalPacientes, settotalPacientes] = React.useState(0);
   const loadTotalPacientes = () => {
@@ -246,9 +261,8 @@ export default function Dashboard() {
 
         <Col lg="4" md="6" sm="12" className="mb-4">
           <InfectedPatients
-            recuperados={totalRecuperados}
-            obitos={totalObitos}
-            contaminados={totalPacientes}
+            title="Comparativo de Pacientes Infectados"
+            chartData={infectedPatients}
           />
         </Col>
       </Row>
