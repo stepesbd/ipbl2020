@@ -41,8 +41,9 @@ exports.post = async (req, res, next) => {
                 }).catch(err=>{console.log(err)});
                 if(response.Error)
                     return res.render('erro-page', { title: 'Erro', erro: response.Error} );
-                else
+                else{
                     return res.render('success-page', { title: 'Declaração de Óbito', success: 'Realizada a Declaração de Óbito do paciente. Clique no botão abaixo para retornar à página de leitos.', obito: response, page: '/Hospital/' + hos_id + '/leito/list'} );
+                } 
             }else if(action == 'RELEASE'){
                 // CASO A AÇÃO SEJA PARA DAR ALTA AO PACIENTE QUE ESTÁ NO LEITO
                 var response = {}
