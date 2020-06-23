@@ -25,24 +25,11 @@ function Schedule(props) {
     color: 'info',
   });
 
-  const [patients, setPatients] = useState([]);
   const [attendances, setAttendances] = useState([]);
 
   useEffect(() => {
-    loadPatients();
     loadAttendances();
   }, []);
-
-  const loadPatients = () => {
-    let endPoint = 'patient';
-    UseGetApi('P', endPoint).then((result) => {
-      if (result.status !== 200) {
-        return false;
-      }
-      setPatients(result.data);
-      return true;
-    });
-  };
 
   const loadAttendances = () => {
     let endPoint = 'attendances';
@@ -70,13 +57,16 @@ function Schedule(props) {
   };
 
   function getName(id) {
-    let patient = patients.find((patient) => patient.perId == id);
-    patients.map((patient) => {
-      console.log(patient.perId);
+    let patient = '';
+    let endPoint = `patients/${id}`;
+    UseGetApi('D', endPoint).then((result) => {
+      if (result.status !== 200) {
+        return false;
+      }
+      patient = result.data.msg;
     });
-    if (patient !== undefined) {
-      return patient.per.perFirstName + ' ' + patient.per.perLastName;
-    }
+    console.log(patient);
+    return id;
   }
 
   return (
