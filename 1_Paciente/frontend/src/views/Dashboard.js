@@ -5,10 +5,8 @@ import SweetAlert from 'react-bootstrap-sweetalert';
 
 import PageTitle from './../components/common/PageTitle';
 import SmallStats from './../components/common/SmallStats';
-import UsersOverview from './../components/blog/UsersOverview';
-import UsersByDevice from './../components/blog/UsersByDevice';
-
 import InfectedPatients from '../components/dashboard/infectedPatients';
+import CasesNumber from '../components/dashboard/CasesNumber';
 import Maps from '../components/dashboard/Maps';
 
 //const Dashboard = ({ smallStats }) => (
@@ -256,7 +254,7 @@ export default function Dashboard() {
 
       <Row>
         <Col lg="8" md="12" sm="12" className="mb-4">
-          <UsersOverview />
+          <CasesNumber />
         </Col>
 
         <Col lg="4" md="6" sm="12" className="mb-4">
@@ -269,7 +267,7 @@ export default function Dashboard() {
 
       <Row>
         <Col className="col-lg mb-4">
-          <Maps />
+          {/*<Maps />*/}
         </Col>
       </Row>
     </Container>
