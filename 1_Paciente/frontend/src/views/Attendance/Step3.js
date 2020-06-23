@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import moment from "moment";
 import { useForm } from 'react-hook-form'
 import {
   Container,
@@ -17,19 +18,13 @@ import {
 } from "shards-react";
 import ClipLoader from "react-spinners/ClipLoader";
 import PageTitle from "../../components/common/PageTitle";
-import { UseGetApi,UseGetApiURL } from "../../services/apiService";
+import { UseGetApi,UseGetApiURL, UsePostApi } from "../../services/apiService";
 import SweetAlert from "react-bootstrap-sweetalert";
 
 const Step3 = (props) => 
 {
   
   const { register, handleSubmit, errors, setValue,setError } = useForm();
-
-  const [loading,setloading] = React.useState(false);
-  const onSubmit = data => {
-  
-    //props.history.push('/')
-  };
 
   const handleVoltar = () =>{
     props.history.push('/step1')
@@ -53,7 +48,7 @@ const Step3 = (props) =>
       s = props.location.state.item; 
       setsintomas(s);
       setpaciente(props.location.state.pac);
-      //console.log(s);
+      //console.log(props.location.state.pac);
 
       loadHospitals(props.location.state.pac);
 
@@ -151,7 +146,6 @@ const Step3 = (props) =>
     setsalert(null);
   }
 
-  
 
   function distanceTo(lat1, lon1, lat2, lon2) {
     var rlat1 = Math.PI * lat1/180
@@ -166,7 +160,88 @@ const Step3 = (props) =>
     dist = dist * 60 * 1.1515
     dist = dist * 1.609344
     return Math.round(dist, 2);
-}
+  }
+
+  const [loading,setloading] = React.useState(false);
+  const onSubmit = data => {
+      
+      if (data.dataatendimento!==""&&!moment(data.dataatendimento, 'DD/MM/YYYY',true).isValid()) {
+        setError("dataatendimento", "invaliddate", "Data Inválida")
+        return false;
+      }
+  
+      setloading(true);
+      let endPoint = "attendance/"
+      let dtA = null;
+  
+      if(data.dataatendimento)
+        dtA = moment(data.dataatendimento, 'DD/MM/YYYY').toDate()
+      
+      let sint = "";
+      if(sintomas.febre)
+        sint = "febre,";
+      if(sintomas.fadiga)
+        sint = sint+ "fadiga,";
+      if(sintomas.tosse)
+        sint = sint+ "tosse,";
+      if(sintomas.anorexia)
+        sint = sint+ "anorexia,";
+      if(sintomas.dispneia)
+        sint = sint+ "dispneia,";
+      if(sintomas.dorpressaopeito)
+        sint = sint+ "dorpressaopeito,";
+      if(sintomas.perdafalamovimento)
+        sint = sint+ "perdafalamovimento,";
+      if(sintomas.mialgias)
+        sint = sint+ "mialgias,";
+      if(sintomas.dordegarganta)
+        sint = sint+ "dordegarganta,";
+      if(sintomas.conjuntivite)
+        sint = sint+ "conjuntivite,";
+      if(sintomas.diarreia)
+        sint = sint+ "diarreia,";
+      if(sintomas.neuseas)
+        sint = sint+ "neuseas,";
+      if(sintomas.cefaleia)
+        sint = sint+ "cefaleia,";
+      if(sintomas.perdapaladar)
+        sint = sint+ "perdapaladar,";        
+      if(sintomas.tontura)
+        sint = sint+ "tontura,";
+      if(sintomas.rinorreia)
+        sint = sint+ "rinorreia,";     
+  
+
+      //Inserir
+      let obj = {
+        attDate: dtA,
+        attPreSymptoms: sint,
+        attDescription: data.obs,
+        hosId: hospitalSelected,
+        medId: doctorSelected,
+        perId: paciente.perId
+      }
+
+      UsePostApi('P',endPoint,obj).then(result => {
+        console.log(result)
+        if (result.status !== 201) {
+          setsalert(<SweetAlert warning title={result.message} onConfirm={hideAlert} />);
+          setloading(false);
+          return false;
+        }
+        setloading(false);
+        setsalert(<SweetAlert success title="Agendamento Realizado com Sucesso!" onConfirm={() => sendToStep1()} />);
+        return true;
+      });
+      
+    }
+
+    const sendToStep1 = () =>{
+      props.history.push({
+        pathname: '/step1'
+      })
+    }
+
 return (
   <Container fluid className="main-content-container px-4">
   <br/><br/>
@@ -208,8 +283,12 @@ return (
                         </Badge></center>
                         
                         <h6>Hospitais:</h6>
-                        <center><Badge outline theme="success"><label htmlFor="feFirstName">Selecionamos os hospitais mais proximos do seu endereço.</label>
+
+                        <center><Badge outline theme="success">
+                          Selecionamos os hospitais mais proximos do seu endereço.
                         </Badge></center>
+                        <br/>
+
                         {listHospitals.length > 0 &&
                           <div style={{
                             background:'rgb(239, 239, 239)',

@@ -27,7 +27,7 @@ const Step1 = (props) => {
       cpf: data.cpf,
       senha: data.senha
     };
-    let endPoint = 'attendance';
+    let endPoint = 'attendance/login';
     setloading(true);
 
     UsePostApi('P', endPoint, obj).then(result => {

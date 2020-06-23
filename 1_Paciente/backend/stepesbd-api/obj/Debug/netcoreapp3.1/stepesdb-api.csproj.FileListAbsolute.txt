@@ -455,3 +455,4 @@ D:\ITA\ipbl2020\1_Paciente\backend\stepesbd-api\obj\Debug\netcoreapp3.1\stepesdb
 D:\ITA\ipbl2020\1_Paciente\backend\stepesbd-api\obj\Debug\netcoreapp3.1\stepesdb-api.pdb
 D:\ITA\ipbl2020\1_Paciente\backend\stepesbd-api\obj\Debug\netcoreapp3.1\stepesdb-api.genruntimeconfig.cache
 D:\ITA\ipbl2020\1_Paciente\backend\stepesbd-api\bin\Debug\netcoreapp3.1\GeoCoordinate.NetCore.dll
+C:\GIT\ipbl2020\1_Paciente\backend\stepesbd-api\bin\Debug\netcoreapp3.1\GeoCoordinate.NetCore.dll
