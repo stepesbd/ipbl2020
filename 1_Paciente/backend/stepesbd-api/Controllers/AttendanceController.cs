@@ -21,7 +21,8 @@ namespace stepesdb_api.Controllers
             _context = context;         
         }
 
-        // POST: api/Attendance
+        // POST: api/Attendance/login
+        [Route("login")]
         [HttpPost]
         public async Task<ActionResult<Patient>> Post(Login login)
         {
@@ -43,6 +44,39 @@ namespace stepesdb_api.Controllers
             .FirstOrDefaultAsync();
 
             return pa;
+        }  
+
+        // GET: api/Attendance
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Attendance>>> Get()
+        {
+            List<Attendance> list = await _context.Attendance
+            .Take(100)
+            .ToListAsync();    
+            
+
+            return list;
+        }
+
+
+        // POST: api/Attendance
+        [HttpPost]
+        public async Task<ActionResult<Attendance>> Post(Attendance attendance)
+        {
+            if (attendance is null)
+                return BadRequest(new BadRequest("O objeto attendance é obrigatório"));
+            
+            try
+            {
+                _context.Attendance.Add(attendance);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500,new InternalServerError(ex.Message));
+            }
+
+            return CreatedAtAction("Get", new { id = attendance.AttId }, attendance);
         }        
     }
 }

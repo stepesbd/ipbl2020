@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import moment from "moment";
 import { useForm } from 'react-hook-form'
 import {
   Container,
@@ -17,19 +18,13 @@ import {
 } from "shards-react";
 import ClipLoader from "react-spinners/ClipLoader";
 import PageTitle from "../../components/common/PageTitle";
-import { UseGetApi,UseGetApiURL } from "../../services/apiService";
+import { UseGetApi,UseGetApiURL, UsePostApi } from "../../services/apiService";
 import SweetAlert from "react-bootstrap-sweetalert";
 
 const Step3 = (props) => 
 {
   
   const { register, handleSubmit, errors, setValue,setError } = useForm();
-
-  const [loading,setloading] = React.useState(false);
-  const onSubmit = data => {
-  
-    //props.history.push('/')
-  };
 
   const handleVoltar = () =>{
     props.history.push('/step1')
@@ -38,18 +33,24 @@ const Step3 = (props) =>
   useEffect(() => {
     verifyProps();   
     loadMedicos(); 
-    loadHospitals();
+
   }, []);
 
+  const [paciente,setpaciente] = React.useState({});
   const [sintomas,setsintomas] = React.useState('');
   const [showAgendamento,setshowAgendamento] = React.useState(false);
   const verifyProps = () =>{
     if(props.location.state.item)
     {
+  
+
       let s = [];
       s = props.location.state.item; 
       setsintomas(s);
-      console.log(s);
+      setpaciente(props.location.state.pac);
+      //console.log(props.location.state.pac);
+
+      loadHospitals(props.location.state.pac);
 
       if(!s)
         return;
@@ -83,7 +84,8 @@ const Step3 = (props) =>
 
   const [loadingH,setloadingH] = React.useState(false);
   const [listHospitals,setlistHospitals] = React.useState([]);
-  const loadHospitals = () => {
+  const loadHospitals =(p) => {
+    
     setloadingH(true);
     let endPointComplete = "https://cors-anywhere.herokuapp.com/https://stepesbdhospital.herokuapp.com/api/hosp-list"
     UseGetApiURL(endPointComplete).then(result => {
@@ -93,7 +95,8 @@ const Step3 = (props) =>
         return false;
       }
       setloadingH(false);
-      if(result.data.length > 5)
+      getNearestHospitals(result.data,p);
+      /*if(result.data.length > 5)
       {
         var top5Hospitals = result.data.slice(1, 5);
         setlistHospitals(top5Hospitals);
@@ -101,11 +104,32 @@ const Step3 = (props) =>
       else
       {
         setlistHospitals(result.data);
-      }
+      }*/
 
       return true;
     });
   };
+
+  const getNearestHospitals =(hospitais,pacient)=>{
+    
+    let hospDist = []
+    hospitais.map(element => {
+      let resultDist = distanceTo(pacient.add.addLatitude,pacient.add.addLongitude,element.add_latitude,element.add_longitude);
+      let newh = {...element,distancia:resultDist};
+      hospDist.push(newh);
+    });
+
+  hospDist.sort(function compare(a, b) {
+    if (a.distancia < b.distancia) return -1;
+    if (a.distancia > b.distancia) return 1;
+    return 0;
+    
+  })
+
+    var top5Hospitals = hospDist.slice(1, 5);
+    setlistHospitals(top5Hospitals);
+    console.log(top5Hospitals);
+  }
 
   const [doctorSelected,setdoctorSelected] = React.useState(0);
   const handleChangeDoctor = (e, doctor) =>{
@@ -121,6 +145,102 @@ const Step3 = (props) =>
   const hideAlert = () =>{
     setsalert(null);
   }
+
+
+  function distanceTo(lat1, lon1, lat2, lon2) {
+    var rlat1 = Math.PI * lat1/180
+    var rlat2 = Math.PI * lat2/180
+    var rlon1 = Math.PI * lon1/180
+    var rlon2 = Math.PI * lon2/180
+    var theta = lon1-lon2
+    var rtheta = Math.PI * theta/180
+    var dist = Math.sin(rlat1) * Math.sin(rlat2) + Math.cos(rlat1) * Math.cos(rlat2) * Math.cos(rtheta);
+    dist = Math.acos(dist)
+    dist = dist * 180/Math.PI
+    dist = dist * 60 * 1.1515
+    dist = dist * 1.609344
+    return Math.round(dist, 2);
+  }
+
+  const [loading,setloading] = React.useState(false);
+  const onSubmit = data => {
+      
+      if (data.dataatendimento!==""&&!moment(data.dataatendimento, 'DD/MM/YYYY',true).isValid()) {
+        setError("dataatendimento", "invaliddate", "Data Inválida")
+        return false;
+      }
+  
+      setloading(true);
+      let endPoint = "attendance/"
+      let dtA = null;
+  
+      if(data.dataatendimento)
+        dtA = moment(data.dataatendimento, 'DD/MM/YYYY').toDate()
+      
+      let sint = "";
+      if(sintomas.febre)
+        sint = "febre,";
+      if(sintomas.fadiga)
+        sint = sint+ "fadiga,";
+      if(sintomas.tosse)
+        sint = sint+ "tosse,";
+      if(sintomas.anorexia)
+        sint = sint+ "anorexia,";
+      if(sintomas.dispneia)
+        sint = sint+ "dispneia,";
+      if(sintomas.dorpressaopeito)
+        sint = sint+ "dorpressaopeito,";
+      if(sintomas.perdafalamovimento)
+        sint = sint+ "perdafalamovimento,";
+      if(sintomas.mialgias)
+        sint = sint+ "mialgias,";
+      if(sintomas.dordegarganta)
+        sint = sint+ "dordegarganta,";
+      if(sintomas.conjuntivite)
+        sint = sint+ "conjuntivite,";
+      if(sintomas.diarreia)
+        sint = sint+ "diarreia,";
+      if(sintomas.neuseas)
+        sint = sint+ "neuseas,";
+      if(sintomas.cefaleia)
+        sint = sint+ "cefaleia,";
+      if(sintomas.perdapaladar)
+        sint = sint+ "perdapaladar,";        
+      if(sintomas.tontura)
+        sint = sint+ "tontura,";
+      if(sintomas.rinorreia)
+        sint = sint+ "rinorreia,";     
+  
+
+      //Inserir
+      let obj = {
+        attDate: dtA,
+        attPreSymptoms: sint,
+        attDescription: data.obs,
+        hosId: hospitalSelected,
+        medId: doctorSelected,
+        perId: paciente.perId
+      }
+
+      UsePostApi('P',endPoint,obj).then(result => {
+        console.log(result)
+        if (result.status !== 201) {
+          setsalert(<SweetAlert warning title={result.message} onConfirm={hideAlert} />);
+          setloading(false);
+          return false;
+        }
+        setloading(false);
+        setsalert(<SweetAlert success title="Agendamento Realizado com Sucesso!" onConfirm={() => sendToStep1()} />);
+        return true;
+      });
+      
+    }
+
+    const sendToStep1 = () =>{
+      props.history.push({
+        pathname: '/step1'
+      })
+    }
 
 return (
   <Container fluid className="main-content-container px-4">
@@ -156,15 +276,19 @@ return (
                       <div>
                         <h3>Atenção!</h3>
                         <label htmlFor="feFirstName">Você precisa de atendimento no momento.</label>
-                        <br/><br/>
+                        <br/>
                         <center>
                         <Badge outline theme="danger">
                          Faça um agendamento para seu atendimento:
                         </Badge></center>
-
-                        <br/>
                         
                         <h6>Hospitais:</h6>
+
+                        <center><Badge outline theme="success">
+                          Selecionamos os hospitais mais proximos do seu endereço.
+                        </Badge></center>
+                        <br/>
+
                         {listHospitals.length > 0 &&
                           <div style={{
                             background:'rgb(239, 239, 239)',
@@ -180,13 +304,14 @@ return (
                                 checked={hospitalSelected === item.hos_id}
                                 onChange={e => handleChangeHospital(e, item.hos_id)}
                               >
-                              <b>Hospital:</b> {item.hos_name}
+                              <b>Hospital:</b> {item.hos_name} ({item.distancia} Km)
                               </FormRadio>
                             </div>
                             ))
                           }
                           </div>
                         }
+                        
                         <br/>
                         <h6>Médicos:</h6>
                         {listDoctors.length > 0 &&

@@ -26,10 +26,12 @@ const Step2 = (props) =>
   }, []);
 
   const [nome,setnome] = React.useState('');
+  const [paciente,setpaciente] = React.useState({});
   const verifyProps = () =>{
     if(props.location.state.item)
     {
       let dados = props.location.state.item; 
+      setpaciente(dados.per);
       setnome(dados.per.perFirstName);
     }
   }
@@ -64,7 +66,7 @@ const Step2 = (props) =>
   const onSubmit = data => {    
     props.history.push({
       pathname: '/step3',
-      state:{item:sintomas}
+      state:{item:sintomas, pac:paciente}
     })
   };
 

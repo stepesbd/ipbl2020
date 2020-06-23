@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using RabbitMQ.Client;
 using System.Threading;
+using System.Windows.Forms.DataVisualization.Charting;
+using System.IO.Ports;
 
 namespace rabbitMQPerformaceTest
 {
@@ -24,6 +26,24 @@ namespace rabbitMQPerformaceTest
         {
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;
+            inicializaGrafico();
+        }
+
+        public void inicializaGrafico()
+        {
+            Resultado.Series.Clear();
+            var series = new Series("Resultado");
+
+            Resultado.ChartAreas["ChartArea1"].AxisX.Title = "Mensagem";
+            Resultado.ChartAreas["ChartArea1"].AxisY.Title = "Resposta (ms)";
+
+
+            series.BorderWidth = 3;
+            series.ChartType = SeriesChartType.Spline;
+
+            // Frist parameter is X-Axis and Second is Collection of Y- Axis
+            //series.Points.DataBindXY(new[] { 2001, 2002, 2003, 2004 }, new[] { 100, 200, 90, 150 });
+            Resultado.Series.Add(series);
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -105,8 +125,9 @@ namespace rabbitMQPerformaceTest
                     {
                         int id = Convert.ToInt32(data.Split(' ')[0]);
                         TimeSpan dif = DateTime.Now.Subtract(dicionarioTeste[id]);
-                        dicionarioResultado.Add(id, dif);                        
+                        dicionarioResultado.Add(id, dif);
                         textBox1.AppendText("teste : " + id.ToString() + " | Diferença de tempo: " + dif.ToString("ss':'fff") + Environment.NewLine);
+                        Resultado.Series.First().Points.AddXY(id, dif.TotalMilliseconds);
                         if (id == dicionarioTeste.Count)
                             finalizarTeste();
                     }
@@ -122,6 +143,7 @@ namespace rabbitMQPerformaceTest
         {
             try
             {
+                inicializaGrafico();
                 textBox1.Clear();
                 button1.Enabled = false;
                 button1.Text = "Testando...";
@@ -209,6 +231,16 @@ namespace rabbitMQPerformaceTest
             }
 
             label8.Text = trackBar1.Value.ToString();
+        }
+
+        private void Resultado_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            conn.Close();
         }
     }
 }

@@ -21,7 +21,6 @@ namespace stepesdb_api
         public virtual DbSet<Contacts> Contacts { get; set; }
         public virtual DbSet<Diagnosis> Diagnosis { get; set; }
         public virtual DbSet<Disease> Disease { get; set; }
-        public virtual DbSet<EventMedicalRecord> EventMedicalRecord { get; set; }
         public virtual DbSet<KnexMigrations> KnexMigrations { get; set; }
         public virtual DbSet<KnexMigrationsLock> KnexMigrationsLock { get; set; }
         public virtual DbSet<Patient> Patient { get; set; }
@@ -186,48 +185,40 @@ namespace stepesdb_api
 
             modelBuilder.Entity<Attendance>(entity =>
             {
-                entity.HasKey(e => e.AttId)
-                    .HasName("PRIMARY");
-
                 entity.ToTable("attendance");
-
-                entity.HasIndex(e => e.PatId)
-                    .HasName("fk_att_pat_idx");
+                entity.HasKey(e => e.AttId)
+                    .HasName("PRIMARY"); 
 
                 entity.Property(e => e.AttId).HasColumnName("att_id");
-
+ 
                 entity.Property(e => e.AttDate)
                     .HasColumnName("att_date")
                     .HasColumnType("date");
 
-                entity.Property(e => e.AttDoctor)
-                    .IsRequired()
-                    .HasColumnName("att_doctor")
-                    .HasColumnType("varchar(100)")
-                    .HasDefaultValueSql("'Dr. Adilson Marques da Cunha'")
-                    .HasComment("Doctor Name")
-                    .HasCharSet("utf8")
-                    .HasCollation("utf8_general_ci");
+                entity.Property(e => e.AttDescription)
+                    .HasColumnName("att_description")
+                    .HasColumnType("text")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
 
-                entity.Property(e => e.AttEmergency)
-                    .HasColumnName("att_emergency")
-                    .HasComment("Boolean Value. 0-Routine 1-Emergency");
+                entity.Property(e => e.AttPreSymptoms)
+                    .HasColumnName("att_pre_symptoms")
+                    .HasColumnType("varchar(300)")
+                    .HasComment("Pré simtomas separados por ,")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
 
-                entity.Property(e => e.AttLocation)
-                    .IsRequired()
-                    .HasColumnName("att_location")
-                    .HasColumnType("varchar(45)")
-                    .HasDefaultValueSql("'ITA HOSPITAL'")
-                    .HasCharSet("utf8")
-                    .HasCollation("utf8_general_ci");
+                entity.Property(e => e.HosId)
+                    .HasColumnName("hos_id")
+                    .HasComment("ID do Hospital escolhido");
 
-                entity.Property(e => e.PatId).HasColumnName("pat_id");
+                entity.Property(e => e.MedId)
+                    .HasColumnName("med_id")
+                    .HasComment("ID do médico escolhido");
 
-                entity.HasOne(d => d.Pat)
-                    .WithMany(p => p.Attendance)
-                    .HasForeignKey(d => d.PatId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_att_pat");
+                entity.Property(e => e.PerId)
+                    .HasColumnName("per_id")
+                    .HasComment("ID da pessoa");
             });
 
             modelBuilder.Entity<Contacts>(entity =>
@@ -329,52 +320,6 @@ namespace stepesdb_api
                     .HasColumnType("varchar(100)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
-            });
-
-            modelBuilder.Entity<EventMedicalRecord>(entity =>
-            {
-                entity.HasKey(e => e.EmrId)
-                    .HasName("PRIMARY");
-
-                entity.ToTable("event_medical_record");
-
-                entity.HasIndex(e => e.PatId)
-                    .HasName("fk_emr_pat_idx");
-
-                entity.Property(e => e.EmrId).HasColumnName("emr_id");
-
-                entity.Property(e => e.EmrDate)
-                    .HasColumnName("emr_date")
-                    .HasColumnType("date")
-                    .HasComment("Event Date");
-
-                entity.Property(e => e.EmrDescription)
-                    .IsRequired()
-                    .HasColumnName("emr_description")
-                    .HasColumnType("mediumtext")
-                    .HasCharSet("utf8")
-                    .HasCollation("utf8_general_ci");
-
-                entity.Property(e => e.EmrReferenceId)
-                    .HasColumnName("emr_reference_id")
-                    .HasComment("Value of Primary Key in Target Entity");
-
-                entity.Property(e => e.EmrType)
-                    .IsRequired()
-                    .HasColumnName("emr_type")
-                    .HasColumnType("varchar(45)")
-                    .HasDefaultValueSql("'GENERIC EVENT'")
-                    .HasComment("GENERIC EVENT | ATTENDANCE | EXAM | PROCEDURE | REVENUE | DIAGNOSIS | BIRTH | DEATH")
-                    .HasCharSet("utf8")
-                    .HasCollation("utf8_general_ci");
-
-                entity.Property(e => e.PatId).HasColumnName("pat_id");
-
-                entity.HasOne(d => d.Pat)
-                    .WithMany(p => p.EventMedicalRecord)
-                    .HasForeignKey(d => d.PatId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_emr_pat");
             });
 
             modelBuilder.Entity<KnexMigrations>(entity =>
