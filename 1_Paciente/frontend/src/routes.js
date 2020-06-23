@@ -107,7 +107,7 @@ export default [
   },
   {
     path: '/schedule',
-    layout: Default2Layout,
+    layout: DefaultLayout,
     component: Schedule,
   },
   {
