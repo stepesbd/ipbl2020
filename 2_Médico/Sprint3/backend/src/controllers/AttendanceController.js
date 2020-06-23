@@ -5,6 +5,7 @@ module.exports = {
     const attendances = await connection('attendance')
       .innerJoin('physicians', 'physicians.id', '=', 'attendance.med_id')
       .innerJoin('person', 'person.per_id', '=', 'attendance.per_id')
+      .innerJoin('address', 'address.add_id', '=', 'person.add_id')
       .select();
 
     const serializedAttendances = attendances.map((attendance) => {
@@ -25,16 +26,29 @@ module.exports = {
         },
         patient: {
           per_id: attendance.per_id,
+          name: `${attendance.per_first_name} ${attendance.per_last_name}`,
           per_first_name: attendance.per_first_name,
           per_last_name: attendance.per_last_name,
           per_birth: attendance.per_birth,
           per_email: attendance.per_email,
           per_cpf: attendance.per_cpf,
-          add_id: attendance.add_id,
           per_nickname: attendance.per_nickname,
           per_senha: attendance.per_senha,
           per_public_key: attendance.per_public_key,
           per_private_key: attendance.per_private_key,
+          address: {
+            add_id: attendance.add_id,
+            add_street: attendance.add_street,
+            add_number: attendance.add_number,
+            add_extra_number: attendance.add_extra_number,
+            add_city: attendance.add_city,
+            add_state: attendance.add_state,
+            add_neighborhood: attendance.add_neighborhood,
+            add_country: attendance.add_country,
+            add_latitude: attendance.add_latitude,
+            add_longitude: attendance.add_longitude,
+            add_zipcode: attendance.add_zipcode,
+          },
         },
       };
     });
