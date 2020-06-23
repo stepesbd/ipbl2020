@@ -1,9 +1,12 @@
 const connection = require('../database');
-const faker = require('faker/locale/pt_BR');
+
+function escolherIndex(vector) {
+  return Math.floor(Math.random() * vector.length);
+}
 
 module.exports = {
   async index(request, response) {
-    const physicians = await connection('physicians').select('*');
+    const physicians = await connection('physicians').select('*').limit(100);
 
     return response.json({ msg: physicians });
   },
@@ -53,14 +56,12 @@ module.exports = {
 
     return response.status(204).send();
   },
-  async create(request, response) {
-    return response.json({
-      name: faker.name.findName(),
-      crm: `${faker.random.number()}-${faker.address.stateAbbr()}`,
-      cpf: faker.random.number({
-        min: 10000000000,
-        max: 99999999999,
-      }),
-    });
+  async rand(request, response) {
+    const physicians = [];
+    for (i = 0; i < 5; i++) {
+      const aux = await connection('physicians').select('*').limit();
+      physicians.push(aux[escolherIndex(aux)]);
+    }
+    return response.json(physicians);
   },
 };

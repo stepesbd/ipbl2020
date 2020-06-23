@@ -104,17 +104,12 @@
                 </div>
             </div>  
             <div class="row">
-              <!--
-                <div class="col">
-                  <div class="form-group">
-                     <label for="inputStatus">Status de Leito</label>
-                          <select class="form-control" name="inputStatus">                                                        
-                              <option value="0">Disponível</option>
-                              <option value="1">Ocupado</option>                              
-                          </select>                                      
-                  </div>
-                </div>
-              -->
+              {{#ifEquals bed_status 0 }}
+                  <input type="hidden" name="inputStatus" value="0">
+              {{/ifEquals}} 
+              {{#ifEquals bed_status 1 }}
+                  <input type="hidden" name="inputStatus" value="1">
+              {{/ifEquals}}  
             </div>  
           <!--  FIM FORM ATUALIZACAO  --->
           <div class="modal-footer">

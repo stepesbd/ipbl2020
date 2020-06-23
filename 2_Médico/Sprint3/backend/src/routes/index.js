@@ -28,7 +28,7 @@ routes.group('/api', (router) => {
 
   //Physicians's routes
   router.get('/physicians', PhysicianController.index);
-  router.get('/create', PhysicianController.create);
+  router.get('/rand', PhysicianController.rand);
   router.get('/physicians/:id', PhysicianController.show);
   router.post('/physicians', PhysicianController.store);
   router.put('/physicians/:id', PhysicianController.update);
@@ -60,10 +60,10 @@ routes.group('/api', (router) => {
 
   //Attendances's routes
   router.get('/attendances', AttendanceController.index);
-  //router.get("/attendances/:id", AttendanceController.show)
+  router.get('/attendances/:id', AttendanceController.show);
   router.post('/attendances', AttendanceController.store);
-  //router.put("/attendances/:attribute", AttendanceController.update)
-  //router.delete("/attendances/:attribute", AttendanceController.destroy)
+  router.put('/attendances/:attribute', AttendanceController.update);
+  router.delete('/attendances/:attribute', AttendanceController.destroy);
 });
 
 module.exports = routes;

@@ -40,6 +40,18 @@
                             Mapa de recuperados de COVID-19</a></h5>
                         </li>
                     {{/ifEquals}}
+                {{else if monitoring}}
+                    <li class="nav-item">
+                        <h5><a class="nav-link disabled text-white" href="">
+                        <i class="fas fa-user"></i>
+                        Acompanhamento de Pacientes</a></h5>
+                    </li>
+                {{else if recover}}
+                    <li class="nav-item">
+                        <h5><a class="nav-link disabled text-white" href="">
+                        <i class="fas fa-recycle"></i>
+                        Recuperação de dados</a></h5>
+                    </li>
                 {{else}}
                     <li class="nav-item">
                         <h5><a class="nav-link disabled text-white" href="">

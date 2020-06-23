@@ -1,0 +1,27 @@
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div class="container-fluid mt-4">
+  <div class="row justify-content-center">
+      <div class="col-auto mb-3">
+        <div class="card" style="width: 32rem;">
+          <div class="card-body">
+            <p class="card-text text-center"> <strong>Você foi direcionado para página de recuperação de dados de casos positivos de Covid-19 sem internação.</strong> </p>
+            <p class="card-text text-center">Número de casos positivos: {{quantidade}}</p>
+            <p class="card-text text-center">Digite a senha e clique em <strong>Prosseguir</strong> para continuar a recuperação.</p>
+            <hr> 
+            <form class="form-inline justify-content-center" action="/monitoring/reset" method="POST">
+              <div class="form-group">
+                <input type="password" class="form-control mr-2" id="inputPwd" name="inputPwd" placeholder="Senha">
+                <button type="submit" class="btn btn-primary">Prosseguir</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
+
+
+

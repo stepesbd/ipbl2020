@@ -23,7 +23,6 @@
     "express-group-routes": "^1.1.0",
     "faker": "^4.1.0",
     "knex": "^0.20.13",
-    "mongoose": "^5.9.16",
     "mqtt": "^4.1.0",
     "mysql": "^2.18.1",
     "mysql2": "^2.1.0"

@@ -1,51 +1,69 @@
-const ack_queue = 'ts2-backend'
-const Attendance = require('../models/Attendance')
+const connection = require('../database');
 
 module.exports = {
-    /*async index(request, response) {
-        const operation = 'get'
-        const attribute = "all"
-        data = {
-            operation,
-            ack_queue,
-            attribute
-        }
-        await request.amqp.publisher(JSON.stringify(data))
-        let result = await request.amqp.consumer();
-        return response.json(result)
-    },*/
+  async index(request, response) {
+    const attendances = await connection('attendance').select('*');
 
-    async index(request, response) {
-        const attendances = await Attendance.find()
-        return response.json(attendances)
-    },
-    async show(request, response) {
-        const operation = 'get'
-    },
+    return response.json({ msg: attendances });
+  },
 
-    async store(request, response) {
-        const operation = 'insert'
-        const { physicianId, patId, symptoms, diagnosis } = request.body;
-        let data = {
-            operation,
-            ack_queue,
-            physicianId,
-            patId,
-            symptoms,
-            diagnosis,
-            newAttendance: null,
-            status: true
-        }
-        await request.amqp.publisher(JSON.stringify(data))
-        //let result = await request.amqp.consumer()
-        return response.json('success')
-    },
+  async show(request, response) {
+    const { id } = request.params;
 
-    async update(request, response) {
-        const operation = 'update'
-    },
+    const [attendance] = await connection('attendance')
+      .where('att_id', id)
+      .select();
 
-    async destroy(request, response) {
-        const operation = 'delete'
+    return response.status(200).json({ msg: attendance });
+  },
+
+  async store(request, response) {
+    const { name } = request.body;
+
+    const [att_date] = await connection('attendance').insert({
+      att_date,
+      att_pre_symptoms,
+      att_description,
+      hos_id,
+      med_id,
+      per_id,
+    });
+
+    return response.status(201).json({ msg: { id, name } });
+  },
+
+  async update(request, response) {
+    const { id } = request.params;
+
+    const { name } = request.body;
+
+    const specialty = await connection('attendance')
+      .where('att_date', id)
+      .update({
+        att_date,
+        att_pre_symptoms,
+        att_description,
+        hos_id,
+        med_id,
+        per_id,
+      });
+
+    if (specialty === 0) {
+      return response.status(406).json({ error: 'specialty not updated!' });
     }
-}
+
+    return response.status(200).json({ msg: { id, name } });
+  },
+
+  async destroy(request, response) {
+    const { id } = request.params;
+
+    const specialty = await connection('specialties').where('id', id).delete();
+
+    if (specialty === 0) {
+      return response.status(406).json({ error: 'specialty not found!' });
+    }
+
+    return response.status(204).send();
+  },
+};

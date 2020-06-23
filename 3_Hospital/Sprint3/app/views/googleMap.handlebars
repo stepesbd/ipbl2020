@@ -9,8 +9,8 @@
 
   function initMap() {
     map = new google.maps.Map(document.getElementById("map"), {
-      zoom: 13,
-      center: {lat: -23.2205624083, lng: -45.8877512673}, 
+      zoom: 12,
+      center: {lat: -23.210810, lng: -45.856375}, 
       //mapTypeId: 'satellite'
     });
 
@@ -18,10 +18,10 @@
       data: getPoints(),
       map: map
     });
-    heatmap.set('radius', 0.003);
-    heatmap.set('opacity', 0.4);
-    heatmap.set('dissipating', false);
-    heatmap.set('maxIntensity', 10)
+    heatmap.set('radius', 15);
+    //heatmap.set('opacity', 0.7);
+    //heatmap.set('dissipating', false);
+    heatmap.set('maxIntensity', 15)
   }
 
   function toggleHeatmap() {

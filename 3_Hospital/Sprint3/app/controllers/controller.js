@@ -1,8 +1,6 @@
 'use strict';
 var request = require('request');
 var requestAsync = require('async-request');
-const fs = require("fs")
-const fsPromise = require('fs').promises;
 const sequelize = require('sequelize');
 const driver = require('bigchaindb-driver');
 const moment = require('moment');
@@ -13,6 +11,8 @@ const { Hospital } = require('../models/TS03');
 const { Address } = require('../models/TS03');
 const { Bed } = require('../models/TS03');
 const { Bed_sector } = require('../models/TS03');
+const { RecordsCovidHome } = require('../models/TS03');
+const date_base = require('../config/dbBigchainDB').date_base;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -50,7 +50,8 @@ exports.get = async (req, res, next) => {
                 // ADICIONANDO HOSPITAL NO ATENDIMENTO (ESCOLHA DO STEP 1)
                 attObj.Atendimento = { ...attObj.Atendimento,  
                     // ADICIONANDO LEITO DE INTERNAÇÃO NO JSON ATENDIMENTO (ESCOLHA DO STEP 2)
-                Data_atendimento: moment(new Date()).format('L'),
+                // Data_atendimento: moment(new Date()).format('L'),
+                Data_atendimento: moment(new Date()).subtract(date_base, 'days').format('L'),
                 Hospital: {
                     Id: req.body.inputHosID, 
                     Nome: req.body.inputHosName
@@ -175,7 +176,7 @@ exports.get = async (req, res, next) => {
 
             // STEP 3: ESCOLHA DOS ITENS DESCARTÁVEIS
             if(type_of_page == 'STEP4'){
-                
+                var result_test = '';
                 // ADICIONANDO LEITO DE INTERNAÇÃO NO JSON ATENDIMENTO (ESCOLHA DO STEP 2)
                 attObj.Atendimento.Hospital = { ...attObj.Atendimento.Hospital, 
                     Itens_consumidos: []
@@ -247,7 +248,6 @@ exports.get = async (req, res, next) => {
                                     // GERANDO RESULTADO RANDÔMICO PARA TESTE COVID
                                     //var result = Math.random() >= 0.1;
                                     var result = true;
-                                    var result_test = '';
                                     // CASO TESTE POSITIVO
                                     if(result){
                                         result_test = 'POSITIVO';
@@ -258,8 +258,10 @@ exports.get = async (req, res, next) => {
                                                 Resultado: result_test,
                                                 Latitude: attObj.Paciente.Endereco.Latitude.toString(),
                                                 Longitude: attObj.Paciente.Endereco.Longitude.toString(),
-                                                Data: moment(new Date()).format('L'),
-                                                Unix_time: parseInt((new Date().getTime() / 1000).toFixed(0))
+                                                // Data: moment(new Date()).format('L'),
+                                                // Unix_time: parseInt((new Date().getTime() / 1000).toFixed(0))
+                                                Data: moment(new Date()).subtract(date_base, 'days').format('L'),
+                                                Unix_time: parseInt((new Date().getTime() / 1000).toFixed(0)) - (86400 * date_base)
                                             }
                                         }
                                         metadata = {
@@ -267,7 +269,8 @@ exports.get = async (req, res, next) => {
                                                 'Test': result_test,
                                                 'Status': 'POSITIVO'
                                             },
-                                            'Transaction_date': new Date(),
+                                            //'Transaction_date': new Date(),
+                                            'Transaction_date': moment(new Date()).subtract(date_base, 'days').format('L'),
                                         }
                                     }else{
                                         // CASO TESTE NEGATIVO
@@ -283,13 +286,15 @@ exports.get = async (req, res, next) => {
                                                 'Test': result_test,
                                                 'Status': 'NEGATIVO'
                                             },
-                                            'Transaction_date': new Date(),
+                                            //'Transaction_date': new Date(),
+                                            'Transaction_date': moment(new Date()).subtract(date_base, 'days').format('L'),
                                         }
                                     }
                                 }else{
                                     // ADICIONANDO METADATA PARA TRANSACTION CREATE DO ATENDIMENTO SEM USO DE TESTE DE COVID
                                     metadata = {
-                                            'Transaction_date': new Date()
+                                            //'Transaction_date': new Date(),
+                                            'Transaction_date': moment(new Date()).subtract(date_base, 'days').format('L'),
                                     }
                                 }
 
@@ -372,7 +377,8 @@ exports.get = async (req, res, next) => {
                         {
                             'Medico': attObj.Medico.Nome,
                             'CRM': attObj.Medico.CRM,
-                            'Create_medical_record_date': new Date()
+                            //'Create_medical_record_date': new Date()
+                            'Create_medical_record_date': moment(new Date()).subtract(date_base, 'days').format('L')
                         },
                         // OUTPUT -> DESTINO(S) DO ASSET
                         [ driver.Transaction.makeOutput(driver.Transaction.makeEd25519Condition(attObj.Medico.PublicKey), '1') ],
@@ -390,7 +396,10 @@ exports.get = async (req, res, next) => {
                     const txTransferMedicalRecord = driver.Transaction.makeTransferTransaction(
                             [{ tx: txCreateMedicalRecordSigned, output_index: 0 }],
                             [driver.Transaction.makeOutput(driver.Transaction.makeEd25519Condition(attObj.Paciente.PublicKey))],
-                            {'Paciente': attObj.Paciente.Nome}
+                            {
+                                'Paciente': attObj.Paciente.Id,
+                                'Type': 'PRELIMINARY-CARE'
+                            }
                     )
 
                     // ASSINATURA DO VENDEDOR PARA TRANSAÇÃO
@@ -411,6 +420,17 @@ exports.get = async (req, res, next) => {
                                 },
                                 {where: {bed_id: attObj.Atendimento.Hospital.Internacao.Leito_id}}
                             )
+                        }else{
+                            if(result_test == 'POSITIVO'){
+                                // INSERINDO REGISTRO NA TABELA RELACIONAL DE CASOS DE COVID SEM INTERNAÇÃO
+                                RecordsCovidHome.create({
+                                    rec_paciente_id: attObj.Paciente.Id,
+                                    rec_name: attObj.Paciente.Nome,
+                                    rec_date: moment(new Date()).subtract(date_base, 'days').format('L'),
+                                    rec_cpf: attObj.Paciente.CPF,
+                                    rec_medrec_id: txTransferMedicalRecordSigned.asset.id
+                                });
+                            }
                         }
                         
                         // REDIRECIONANDO PARA VISUALIZAÇÃO DO REGISTRO MÉDICO APÓS AS TRANSAÇÕES DE ITENS USADOS

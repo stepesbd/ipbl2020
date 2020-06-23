@@ -4,13 +4,17 @@ const router = express.Router();
 const controller = require('../controllers/controller')
 const controllerAPI = require('../controllers/controllerAPI')
 const controllerMAP = require('../controllers/controllerMAP')
-const controllerKILL = require('../controllers/controllerKILL')
+const controllerMONIT = require('../controllers/controllerMONIT')
 
 
 module.exports = function(app) {
     router.get('/', controller.get);
     router.post('/', controller.post);
-    router.get('/kill', controllerKILL.get);
+    router.get('/monitoring', controllerMONIT.get);
+    router.get('/monitoring/:id', controllerMONIT.get);
+    router.get('/monitoring/:id/:action', controllerMONIT.get);
+    router.post('/monitoring/:id', controllerMONIT.post);
+    router.post('/monitoring/:id/:action', controllerMONIT.post);
     router.get('/map/', controllerMAP.get);
     router.get('/map/:request', controllerMAP.get);
     router.post('/attendance/:step', controller.get);

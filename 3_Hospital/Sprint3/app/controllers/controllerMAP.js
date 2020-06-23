@@ -28,7 +28,7 @@ exports.get = async (req, res, next) => {
             
             const qtyCases = result.length;
 
-            return res.render('googleMap', { title: 'Mapa de Contágio', map: 'positive', cases: result, qtyCases:qtyCases })
+            return res.render('googleMap', { title: 'Mapa de Contágio', map: 'positive', cases: result, qtyCases:qtyCases, key: 'AIzaSyAHa1KVp_6wozWWyXGKxIHpfScYuNhqaoU' })
         }else{
             return res.render('erro-page',  {    title: 'Erro', 
                                                         erro: '404',

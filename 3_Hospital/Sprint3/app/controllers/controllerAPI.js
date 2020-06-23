@@ -3,12 +3,14 @@ var request = require('request');
 const moment = require('moment');
 moment.locale('pt-BR');
 const driver = require('bigchaindb-driver');
-const fs = require("fs")
+const sequelize = require('sequelize');
 const BigchainDB = require( '../config/dbBigchainDB' );
 const BigchainDB_API_PATH = 'http://' + BigchainDB.IP + ':9984/api/v1/'
 const { Bed } = require('../models/TS03');
 const { Hospital } = require('../models/TS03');
 const { Address } = require('../models/TS03');
+const { RecordsCovidHome } = require('../models/TS03');
+const date_base = require('../config/dbBigchainDB').date_base;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -35,15 +37,19 @@ exports.get = async (req, res, next) => {
                 'API': {
                     'Casos_positivos_COVID-19': 'https://stepesbdmedrecords.herokuapp.com/api/positive',
                     'Numero_de_casos_positivos_COVID-19': 'https://stepesbdmedrecords.herokuapp.com/api/positive/amount',
+                    'Casos_positivos_COVID-19_tratamento_em_casa': 'https://stepesbdmedrecords.herokuapp.com/api/covid-home',
+                    'Numero_de_casos_positivos_COVID-19_tratamento_em_casa': 'https://stepesbdmedrecords.herokuapp.com/api/covid-home-amount',
                     'Casos_recuperados_COVID-19': 'https://stepesbdmedrecords.herokuapp.com/api/release',
                     'Numero_de_casos_recuperados_COVID-19': 'https://stepesbdmedrecords.herokuapp.com/api/release/amount',
                     'Casos_obitos_COVID-19': 'https://stepesbdmedrecords.herokuapp.com/api/death',
                     'Numero_de_casos_obitos_COVID-19': 'https://stepesbdmedrecords.herokuapp.com/api/death/amount',
                     'Lista_de_hospitais': 'https://stepesbdhospital.herokuapp.com/api/hosp-list',
+                    'Numero_de_leitos_disponiveis': 'https://stepesbdhospital.herokuapp.com/api/bed-unoccupied',
+                    'Numero_de_leitos_disponiveis': 'https://stepesbdhospital.herokuapp.com/api/bed-occupied',
                     'Geracao_de_chaves_blockchain': 'https://stepesbdmedrecords.herokuapp.com/api/keypair',
-                    'Comunicacao_de_obitos': ' https://stepesbd.ddns.net:5000/patient/api',
-                    'Contagem_de_obitos': 'https://stepesbd.ddns.net:5000/dashboard/api/obitos/covid',
-                    'Simulacao_de_atendimento': 'https://stepesbd.ddns.net:5000/simulation/api/attendance'
+                    'Comunicacao_de_obitos': ' http://stepesbd.ddns.net:5000/patient/api',
+                    'Contagem_de_obitos': 'http://stepesbd.ddns.net:5000/dashboard/api/obitos/covid',
+                    'Simulacao_de_atendimento': 'http://stepesbd.ddns.net:5000/simulation/api/attendance'
                 },
                 'Versao': '1.0'
             })
@@ -56,7 +62,7 @@ exports.get = async (req, res, next) => {
                     var response = {}
 
                     // ENCONTRAR O REGISTRO MÉDICO NA BLOCKCHAIN PARA DEPOIS ENCONTRAR A UNSPENT TRANSACTION
-                    const medicalRecord = await await bigchain.collection('assets').findOne({ id: req.params.id1 });
+                    const medicalRecord = await bigchain.collection('assets').findOne({ id: req.params.id1 });
 
                     // CASO NÃO HAJA OPÇÃO DEFINIDA, APENAS EXIBE O REGISTRO MÉDICO 
                     // CONFIGURANDO O OBJETO-RESPOSTA
@@ -107,9 +113,15 @@ exports.get = async (req, res, next) => {
                     'PublicKey': keys.publicKey,
                     'PrivateKey': keys.privateKey
                 });
+            }else if(API_type == 'COVID-HOME-AMOUNT'){
+                const medRecs = await RecordsCovidHome.findAll({raw: true, attributes: [[sequelize.fn('COUNT', sequelize.col('rec_id')), 'qty_cases_at_home']]});
+                return res.json(medRecs[0].qty_cases_at_home);
+            }else if(API_type == 'COVID-HOME'){
+                const medRecs = await RecordsCovidHome.findAll({raw: true});
+                return res.json(medRecs);
             }
                 
-        }
+        }  
             
     }catch(err){
         console.log(err);
@@ -141,7 +153,7 @@ exports.post = async (req, res, next) => {
                 var response = {}
 
                 // ENCONTRAR O REGISTRO MÉDICO NA BLOCKCHAIN PARA DEPOIS ENCONTRAR A UNSPENT TRANSACTION
-                const medicalRecord = await await bigchain.collection('assets').findOne({ id: req.params.id1 });
+                const medicalRecord = await bigchain.collection('assets').findOne({ id: req.params.id1 });
                 
                 if(medicalRecord.data.Paciente.Id)
                     paciente_id = medicalRecord.data.Paciente.Id;
@@ -161,6 +173,8 @@ exports.post = async (req, res, next) => {
                 var type_of_request = '';
                 if(req.params.id2)
                     type_of_request = req.params.id2.toUpperCase();
+
+                
                 // VERIFICANDO O TIPO DE SOLICITAÇÃO PARA O REGISTRO MÉDICO PELA API
                 if(type_of_request == 'RELEASE'){
                     // CASO ESCOLHA OPÇÃO ALTA MÉDICA
@@ -172,21 +186,29 @@ exports.post = async (req, res, next) => {
                                 'Paciente': medicalRecord.data.Paciente.Id,
                                 'Latitude': medicalRecord.data.Atendimento.Hospital.Exame_covid.Latitude,
                                 'Longitude': medicalRecord.data.Atendimento.Hospital.Exame_covid.Longitude,
-                                'Data' : moment(new Date()).format('L'),
-                                'Unix_time': parseInt((new Date().getTime() / 1000).toFixed(0)).toString()
+                                //'Data' : moment(new Date()).format('L'),
+                                //'Unix_time': parseInt((new Date().getTime() / 1000).toFixed(0)).toString()
+                                'Release_Date': moment(new Date()).subtract(date_base, 'days').format('L'),
+                                'Unix_time': parseInt((new Date().getTime() / 1000).toFixed(0)) - (86400 * date_base)
                             }
                         }else{
                             metadata = {
+                                'Type': 'RELEASE',
                                 'Paciente': medicalRecord.data.Paciente.Id,
-                                'Data' : moment(new Date()).format('L'),
-                                'Unix_time': parseInt((new Date().getTime() / 1000).toFixed(0)).toString()
+                                //'Data' : moment(new Date()).format('L'),
+                                //'Unix_time': parseInt((new Date().getTime() / 1000).toFixed(0)).toString()
+                                'Data': moment(new Date()).subtract(date_base, 'days').format('L'),
+                                'Unix_time': parseInt((new Date().getTime() / 1000).toFixed(0)) - (86400 * date_base)
                             }
                         }
                     }else{
                         metadata = {
+                            'Type': 'RELEASE',
                             'Paciente': medicalRecord.data.Paciente.Id,
-                            'Data' : moment(new Date()).format('L'),
-                            'Unix_time': parseInt((new Date().getTime() / 1000).toFixed(0)).toString()
+                            //'Data' : moment(new Date()).format('L'),
+                            //'Unix_time': parseInt((new Date().getTime() / 1000).toFixed(0)).toString()
+                            'Data': moment(new Date()).subtract(date_base, 'days').format('L'),
+                            'Unix_time': parseInt((new Date().getTime() / 1000).toFixed(0)) - (86400 * date_base)
                         }
                     }
 
@@ -202,14 +224,24 @@ exports.post = async (req, res, next) => {
 
                     // TRANSMISSÃO DE DADOS PARA BLOCKCHAIN
                     conn.postTransactionAsync(txTransferReleaseSigned).then(()=>{
-                        // ATUALIZAÇÃO DO LEITO HOSPITALAR
-                        Bed.update(
-                            {
-                                bed_medical_record: '',
-                                bed_status: 0   // LIBERA LEITO
-                            },
-                            {where: {bed_id: medicalRecord.data.Atendimento.Hospital.Internacao.Leito_id}}
-                        )
+                        if(medicalRecord.data.Atendimento.Hospital.Internacao){
+                            // ATUALIZAÇÃO DO LEITO HOSPITALAR
+                            Bed.update(
+                                {
+                                    bed_medical_record: '',
+                                    bed_status: 0   // LIBERA LEITO
+                                },
+                                {where: {bed_id: medicalRecord.data.Atendimento.Hospital.Internacao.Leito_id}}
+                            )
+                        }else{
+                            // APAGA REGISTRO DO BANCO RELACIONAL RecordsCovidHome PARA PACIENTES COM COVID-19 QUE NÃO FORAM INTERNADOS
+                            RecordsCovidHome.destroy({where: { rec_medrec_id: req.params.id1 }})
+                            .then(()=>{console.log('Registro de RecordsCovidHome apagado.')})
+                            .catch(err=>{
+                                console.log("Erro ao apagar registro de RecordsCovidHome."); 
+                                console.log(err);
+                            })
+                        }
                         console.log('Registro de Alta Médica feito com sucesso: ', txTransferReleaseSigned.id)   
                         const responseMetadata = {Release: txTransferReleaseSigned.metadata}
                         // CONFIGURANDO O OBJETO-RESPOSTA
@@ -228,19 +260,25 @@ exports.post = async (req, res, next) => {
                     if(causa_mortis == 'COVID-19'){
                         // CASO SEJA MORTE POR COVID-19
                         metadata = {
+                            'Type': 'COVID-19-DEATH',
                             'Causa_mortis': causa_mortis,
                             'Nome': medicalRecord.data.Paciente.Nome,
                             'Latitude': medicalRecord.data.Atendimento.Hospital.Exame_covid.Latitude,
                             'Longitude': medicalRecord.data.Atendimento.Hospital.Exame_covid.Longitude,
-                            'Death_date': moment(new Date()).format('LLL'),
-                            'Death_unix': parseInt((new Date().getTime() / 1000).toFixed(0))
+                            //'Data' : moment(new Date()).format('LLL'),
+                            //'Unix_time': parseInt((new Date().getTime() / 1000).toFixed(0)).toString()
+                            'Data': moment(new Date()).subtract(date_base, 'days').format('LLL'),
+                            'Unix_time': parseInt((new Date().getTime() / 1000).toFixed(0)) - (86400 * date_base)
                         }
                     }else{
                         // CASO NÃO SEJA MORTE POR COVID-19
                         metadata = { 
+                            'Type': 'DEATH',
                             'Causa_mortis': causa_mortis,
-                            'Death_date': moment(new Date()).format('LLL'),
-                            'Death_unix': parseInt((new Date().getTime() / 1000).toFixed(0))
+                            //'Data' : moment(new Date()).format('LLL'),
+                            //'Unix_time': parseInt((new Date().getTime() / 1000).toFixed(0)).toString()
+                            'Data': moment(new Date()).subtract(date_base, 'days').format('LLL'),
+                            'Unix_time': parseInt((new Date().getTime() / 1000).toFixed(0)) - (86400 * date_base)
                         }
                     }
                     
@@ -257,18 +295,29 @@ exports.post = async (req, res, next) => {
                     
                     // TRANSMISSÃO DE DADOS PARA BLOCKCHAIN
                     conn.postTransactionAsync(txTransferReleaseSigned).then(async ()=>{
-                        // ATUALIZAÇÃO DO LEITO HOSPITALAR
-                        Bed.update(
-                            {
-                                bed_medical_record: '',
-                                bed_status: 0   // LIBERA LEITO
-                            },
-                            {where: {bed_id: medicalRecord.data.Atendimento.Hospital.Internacao.Leito_id}}
-                        )
+                        if(medicalRecord.data.Atendimento.Hospital.Internacao){
+                            // ATUALIZAÇÃO DO LEITO HOSPITALAR
+                            Bed.update(
+                                {
+                                    bed_medical_record: '',
+                                    bed_status: 0   // LIBERA LEITO
+                                },
+                                {where: {bed_id: medicalRecord.data.Atendimento.Hospital.Internacao.Leito_id}}
+                            ) 
+                        }else{
+                            // APAGA REGISTRO DO BANCO RELACIONAL RecordsCovidHome PARA PACIENTES COM COVID-19 QUE NÃO FORAM INTERNADOS
+                            RecordsCovidHome.destroy({where: { rec_medrec_id: req.params.id1 }})
+                            .then(()=>{console.log('Registro de RecordsCovidHome apagado.')})
+                            .catch(err=>{
+                                console.log("Erro ao apagar registro de RecordsCovidHome."); 
+                                console.log(err);
+                            })
+                        }
                         
                         // ENVIANDO DADOS PARA TIME PACIENTES REALIZAR ATUALIZAÇÃO DE FALECIMENTO
                         const id = paciente_id.toString();
-                        const data_obito = parseInt((new Date().getTime() / 1000).toFixed(0)).toString();
+                        //const data_obito = parseInt((new Date().getTime() / 1000).toFixed(0)).toString();
+                        const data_obito = parseInt((new Date().getTime() / 1000).toFixed(0)) - (86400 * date_base)
                         const message = {
                             "id": id,
                             "causa_mortis": causa_mortis,
@@ -293,8 +342,6 @@ exports.post = async (req, res, next) => {
                         console.log(err)
                         return res.json({Erro: 'Erro ao realizar Transaction!'});
                     })
-                }else{
-                    return res.json({Erro: 'Solicitação com falta de parâmetros.'});
                 }
             }else
                 return res.json({Erro: 'Erro ao carregar a página: Registro médico não encontrado!'});

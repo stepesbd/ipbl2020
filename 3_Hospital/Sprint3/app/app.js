@@ -1,5 +1,6 @@
 // MÓDULOS PRINCIPAIS
     var express = require('express');
+    var timeout = require('connect-timeout');
     const handlebars = require("express-handlebars") 
     const bodyParser = require('body-parser')
     const app = express(); //cria e configura a aplicacao
@@ -12,6 +13,11 @@ BigchainDB.connectToServer( function( err, client ) {
   if (err) console.log(err);
 
     // CONFIGURAÇÕES
+        // TIMEOUT SERVER
+            function haltOnTimedout (req, res, next) {
+                if (!req.timedout) next()
+            }
+            app.use(haltOnTimedout);
         // BODY-PARSER
             app.use(bodyParser.urlencoded({extended: false})) //para codificar as urls
             app.use(bodyParser.json()) //todo conteudo deve convertido para json
@@ -55,6 +61,9 @@ BigchainDB.connectToServer( function( err, client ) {
 
     // OBJETO QUE ARMAZENARÁ O JSON VINDO DA VIEW DE ATENDIMENTO INICIAL
         attObj = {};   // VARIÁVEL GLOBAL
+        positiveCases = {};
+        arrayOfTransfers = [];
+        auth_pwd_reset = false;
     
     // ROTAS
         app.use('/', require('./routes/route')(app));
