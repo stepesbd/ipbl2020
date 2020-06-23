@@ -50,7 +50,7 @@ function Schedule(props) {
       if (result.status !== 200) {
         return false;
       }
-      console.log(result.data.msg);
+      //console.log(result.data.msg);
       setAttendances(result.data.msg);
       return true;
     });
@@ -70,7 +70,10 @@ function Schedule(props) {
   };
 
   function getName(id) {
-    let patient = patients.find((patient) => patient.patId == id);
+    let patient = patients.find((patient) => patient.perId == id);
+    patients.map((patient) => {
+      console.log(patient.perId);
+    });
     if (patient !== undefined) {
       return patient.per.perFirstName + ' ' + patient.per.perLastName;
     }
@@ -129,7 +132,7 @@ function Schedule(props) {
                   {attendances.map((item, index) => (
                     <tr key={item.att_id}>
                       <td>{index}</td>
-                      <td>{item.per_id}</td>
+                      <td>{getName(item.per_id)}</td>
                       <td style={{ textAlign: 'center' }}>
                         {moment.utc(item.att_date).format('DD/MM/YYYY HH:mm')}
                       </td>
