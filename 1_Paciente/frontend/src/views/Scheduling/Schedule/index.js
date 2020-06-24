@@ -37,7 +37,6 @@ function Schedule(props) {
       if (result.status !== 200) {
         return false;
       }
-      //console.log(result.data.msg);
       setAttendances(result.data.msg);
       return true;
     });
@@ -55,19 +54,6 @@ function Schedule(props) {
   const hideAlert = () => {
     setsalert(null);
   };
-
-  function getName(id) {
-    let patient = '';
-    let endPoint = `patients/${id}`;
-    UseGetApi('D', endPoint).then((result) => {
-      if (result.status !== 200) {
-        return false;
-      }
-      patient = result.data.msg;
-    });
-    console.log(patient);
-    return id;
-  }
 
   return (
     <Container fluid className="main-content-container px-12">
@@ -114,6 +100,20 @@ function Schedule(props) {
                       scope="col"
                       className="border-0"
                     >
+                      DT nascimento
+                    </th>
+                    <th
+                      style={{ textAlign: 'center' }}
+                      scope="col"
+                      className="border-0"
+                    >
+                      CPF
+                    </th>
+                    <th
+                      style={{ textAlign: 'center' }}
+                      scope="col"
+                      className="border-0"
+                    >
                       Agendamento
                     </th>
                   </tr>
@@ -122,7 +122,13 @@ function Schedule(props) {
                   {attendances.map((item, index) => (
                     <tr key={item.att_id}>
                       <td>{index}</td>
-                      <td>{getName(item.per_id)}</td>
+                      <td>{item.patient.name}</td>
+                      <td style={{ textAlign: 'center' }}>
+                        {moment.utc(item.per_birth).format('DD/MM/YYYY')}
+                      </td>
+                      <td style={{ textAlign: 'center' }}>
+                        {item.patient.per_cpf}
+                      </td>
                       <td style={{ textAlign: 'center' }}>
                         {moment.utc(item.att_date).format('DD/MM/YYYY HH:mm')}
                       </td>

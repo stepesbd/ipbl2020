@@ -117,7 +117,7 @@ export default [
   },
   {
     path: '/attendance-form',
-    layout: Default2Layout,
+    layout: DefaultLayout,
     component: AttendanceForm,
   },
 ];
