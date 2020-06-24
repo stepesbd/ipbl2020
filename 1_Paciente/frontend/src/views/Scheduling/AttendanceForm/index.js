@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import React, { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
 import {
   Container,
   FormInput,
@@ -11,16 +11,20 @@ import {
   Row,
   Col,
   Button,
-} from 'shards-react';
-import ClipLoader from 'react-spinners/ClipLoader';
-import SweetAlert from 'react-bootstrap-sweetalert';
-import { UsePostApi } from '../../../services/apiService';
+  FormSelect
+} from "shards-react";
+import ClipLoader from "react-spinners/ClipLoader";
+import SweetAlert from "react-bootstrap-sweetalert";
+import { UsePostApi } from "../../../services/apiService";
+
+import "react-quill/dist/quill.snow.css";
+import "../../../assets/quill.css";
 
 function AttendanceForm(props) {
-  const [name, setName] = useState('');
+  const [name, setName] = useState("");
   const [id, setId] = useState();
-  const [newAttendance, setNewAttendance] = useState('');
-  const [diagnosis, setDiagnosis] = useState('');
+  const [newAttendance, setNewAttendance] = useState("");
+  const [diagnosis, setDiagnosis] = useState("");
   const { register, handleSubmit, errors, setValue, setError } = useForm();
   const physicianId = 1;
 
@@ -33,19 +37,23 @@ function AttendanceForm(props) {
       let dados = props.location.pasprops.item;
       setName(dados.patient.name);
       setId(dados.patient.per_id);
-    }
+    } /* else {
+      props.history.push({
+        pathname: "/schedule"
+      });
+    }*/
   };
 
   const [loading, setloading] = React.useState(false);
-  const onSubmit = (data) => {
+  const onSubmit = data => {
     let obj = {
       cpf: data.cpf,
-      senha: data.senha,
+      senha: data.senha
     };
-    let endPoint = 'attendance';
+    let endPoint = "attendance";
     setloading(true);
 
-    UsePostApi('P', endPoint, obj).then((result) => {
+    UsePostApi("P", endPoint, obj).then(result => {
       console.log(result);
       if (result.status !== 204 && result.status !== 200) {
         setsalert(
@@ -58,8 +66,8 @@ function AttendanceForm(props) {
       setloading(false);
       if (result.data) {
         props.history.push({
-          pathname: '/step2',
-          state: { item: result.data },
+          pathname: "/step2",
+          state: { item: result.data }
         });
       } else {
         setsalert(
@@ -75,25 +83,25 @@ function AttendanceForm(props) {
   };
 
   const handleNew = () => {
-    let endPoint = 'attendances';
+    let endPoint = "attendances";
     let data = {
       physicianId,
       patId: id,
       diagnosis,
-      newAttendance,
+      newAttendance
     };
-    UsePostApi('D', endPoint, data).then((result) => {
+    UsePostApi("D", endPoint, data).then(result => {
       console.log(data);
       console.log(result);
       props.history.push({
-        pathname: '/schedule',
+        pathname: "/schedule"
         //state: { item: data }
       });
     });
   };
 
   const handleBack = () => {
-    props.history.push('/new-attendance');
+    props.history.push("/new-attendance");
   };
 
   const [salert, setsalert] = React.useState();
@@ -117,7 +125,7 @@ function AttendanceForm(props) {
               <ListGroupItem className="p-3">
                 <Row>
                   <Container>
-                    <label htmlFor="feFirstName">Paciente*</label>
+                    <label htmlFor="feFirstName">Paciente</label>
 
                     <FormInput
                       name="nome"
@@ -127,21 +135,33 @@ function AttendanceForm(props) {
                     />
                     <br />
 
+                    <label htmlFor="feFirstName">Sintomas</label>
+
+                    <FormInput
+                      name="nome"
+                      value={name}
+                      placeholder="Nome"
+                      disabled={true}
+                    />
+                    <br />
+
+                    <label htmlFor="estado">Estado</label>
+
+                    <FormSelect id="estado">
+                      <option>Selecione...</option>
+                      <option>Leve</option>
+                      <option>Médio</option>
+                      <option>Grave</option>
+                    </FormSelect>
+
                     <label htmlFor="diagnosis">Descrição*</label>
                     <FormTextarea
                       name="diagnosis"
                       value={diagnosis}
-                      onChange={(e) => setDiagnosis(e.target.value)}
+                      rows="10"
+                      onChange={e => setDiagnosis(e.target.value)}
                     />
                     <br />
-                    <label htmlFor="newAttendance">Novo Agendamento*</label>
-                    <FormInput
-                      name="newAttendance"
-                      value={newAttendance}
-                      onChange={(e) => setNewAttendance(e.target.value)}
-                      invalid={errors.nome}
-                      type="date"
-                    />
                   </Container>
                 </Row>
                 <br />
@@ -154,7 +174,7 @@ function AttendanceForm(props) {
                       type="button"
                       onClick={handleBack}
                       theme="default"
-                      style={{ float: 'right' }}
+                      style={{ float: "right" }}
                     >
                       Voltar
                     </Button>
@@ -165,7 +185,7 @@ function AttendanceForm(props) {
 
             {loading && (
               <div className="loading">
-                <ClipLoader size={60} color={'#123abc'} loading={loading} />
+                <ClipLoader size={60} color={"#123abc"} loading={loading} />
               </div>
             )}
           </Card>
