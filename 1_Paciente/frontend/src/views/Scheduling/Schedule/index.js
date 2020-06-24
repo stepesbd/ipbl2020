@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import moment from 'moment';
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import moment from "moment";
 import {
   Container,
   Row,
@@ -9,20 +9,20 @@ import {
   CardHeader,
   CardBody,
   Button,
-  Alert,
-} from 'shards-react';
-import PageTitle from '../../../components/common/PageTitle';
-import ClipLoader from 'react-spinners/ClipLoader';
-import { NavLink } from 'react-router-dom';
-import { UseGetApi } from '../../../services/apiService';
+  Alert
+} from "shards-react";
+import PageTitle from "../../../components/common/PageTitle";
+import ClipLoader from "react-spinners/ClipLoader";
+import { NavLink } from "react-router-dom";
+import { UseGetApi } from "../../../services/apiService";
 
 function Schedule(props) {
   const [loading, setloading] = useState(false);
   const [list, setlist] = useState([]);
   const [notification, setnotification] = React.useState({
     show: false,
-    message: '',
-    color: 'info',
+    message: "",
+    color: "info"
   });
 
   const [attendances, setAttendances] = useState([]);
@@ -32,22 +32,24 @@ function Schedule(props) {
   }, []);
 
   const loadAttendances = () => {
-    let endPoint = 'attendances';
-    UseGetApi('D', endPoint).then((result) => {
+    setloading(true);
+    let endPoint = "attendances";
+    UseGetApi("D", endPoint).then(result => {
       if (result.status !== 200) {
         return false;
       }
+      setloading(false);
       setAttendances(result.data.msg);
       return true;
     });
   };
 
   const handleNew = () => {
-    props.history.push('/new-attendance');
+    props.history.push("/new-attendance");
   };
 
   const handleBack = () => {
-    props.history.push('/patient-list');
+    props.history.push("/patient-list");
   };
 
   const [salert, setsalert] = React.useState();
@@ -89,28 +91,28 @@ function Schedule(props) {
                       #
                     </th>
                     <th
-                      style={{ width: '500px' }}
+                      style={{ width: "500px" }}
                       scope="col"
                       className="border-0"
                     >
                       Paciente
                     </th>
                     <th
-                      style={{ textAlign: 'center' }}
+                      style={{ textAlign: "center" }}
                       scope="col"
                       className="border-0"
                     >
                       DT nascimento
                     </th>
                     <th
-                      style={{ textAlign: 'center' }}
+                      style={{ textAlign: "center" }}
                       scope="col"
                       className="border-0"
                     >
                       CPF
                     </th>
                     <th
-                      style={{ textAlign: 'center' }}
+                      style={{ textAlign: "center" }}
                       scope="col"
                       className="border-0"
                     >
@@ -123,20 +125,20 @@ function Schedule(props) {
                     <tr key={item.att_id}>
                       <td>{index}</td>
                       <td>{item.patient.name}</td>
-                      <td style={{ textAlign: 'center' }}>
-                        {moment.utc(item.per_birth).format('DD/MM/YYYY')}
+                      <td style={{ textAlign: "center" }}>
+                        {moment.utc(item.per_birth).format("DD/MM/YYYY")}
                       </td>
-                      <td style={{ textAlign: 'center' }}>
+                      <td style={{ textAlign: "center" }}>
                         {item.patient.per_cpf}
                       </td>
-                      <td style={{ textAlign: 'center' }}>
-                        {moment.utc(item.att_date).format('DD/MM/YYYY HH:mm')}
+                      <td style={{ textAlign: "center" }}>
+                        {moment.utc(item.att_date).format("DD/MM/YYYY HH:mm")}
                       </td>
-                      <td style={{ textAlign: 'right' }}>
+                      <td style={{ textAlign: "right" }}>
                         <NavLink
                           to={{
-                            pathname: '/attendance-form',
-                            pasprops: { item: item },
+                            pathname: "/attendance-form",
+                            pasprops: { item: item }
                           }}
                         >
                           <Button
@@ -145,7 +147,7 @@ function Schedule(props) {
                             theme="success"
                             className="mb-2 mr-1"
                           >
-                            <i className="material-icons">local_hospital</i>{' '}
+                            <i className="material-icons">local_hospital</i>{" "}
                             ATENDER
                           </Button>
                         </NavLink>
@@ -157,7 +159,7 @@ function Schedule(props) {
 
               {loading && (
                 <div className="loading">
-                  <ClipLoader size={60} color={'#123abc'} loading={loading} />
+                  <ClipLoader size={60} color={"#123abc"} loading={loading} />
                 </div>
               )}
             </CardBody>
