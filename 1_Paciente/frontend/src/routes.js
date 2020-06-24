@@ -107,7 +107,7 @@ export default [
   },
   {
     path: '/schedule',
-    layout: Default2Layout,
+    layout: DefaultLayout,
     component: Schedule,
   },
   {
@@ -117,7 +117,7 @@ export default [
   },
   {
     path: '/attendance-form',
-    layout: Default2Layout,
+    layout: DefaultLayout,
     component: AttendanceForm,
   },
 ];
