@@ -5,6 +5,7 @@ module.exports = {
     const attendances = await connection('attendance')
       .innerJoin('physicians', 'physicians.id', '=', 'attendance.med_id')
       .innerJoin('person', 'person.per_id', '=', 'attendance.per_id')
+      .innerJoin('patient', 'patient.per_id', '=', 'person.per_id')
       .innerJoin('address', 'address.add_id', '=', 'person.add_id')
       .select();
 
@@ -36,6 +37,8 @@ module.exports = {
           per_senha: attendance.per_senha,
           per_public_key: attendance.per_public_key,
           per_private_key: attendance.per_private_key,
+          pat_blood_group: attendance.pat_blood_group,
+          pat_rh_factor: attendance.pat_rh_factor,
           address: {
             add_id: attendance.add_id,
             add_street: attendance.add_street,
