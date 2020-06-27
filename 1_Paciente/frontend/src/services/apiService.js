@@ -259,13 +259,18 @@ const UseGetApiURL = endpointComplete => {
   }
 };
 
-const UsePostApiURL = endpointComplete => {
+const UsePostApiURL = (endpointComplete, obj) => {
   try {
+    const headers = {
+      headers: { "Content-Type": "application/json", JSON: "true" }
+    };
+    console.log(headers);
     return axios
-      .post(endpointComplete)
+      .post(endpointComplete, obj, headers)
       .then(result => {
         var newResult = {
           status: result.status,
+          message: "Cadastro realizado com sucesso!",
           data: result.data,
           headers: result.headers
         };

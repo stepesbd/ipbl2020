@@ -12,7 +12,8 @@ import {
   Row,
   Col,
   Button,
-  FormSelect
+  FormSelect,
+  array
 } from "shards-react";
 import ClipLoader from "react-spinners/ClipLoader";
 import SweetAlert from "react-bootstrap-sweetalert";
@@ -33,7 +34,6 @@ function AttendanceForm(props) {
     if (props.location.pasprops) {
       const dados = props.location.pasprops.item;
       setItem(dados);
-      console.log(dados);
       setValue("patientName", dados.patient.name);
       setValue("sintomas", dados.att_pre_symptoms);
       setValue("description", dados.att_description);
@@ -55,57 +55,82 @@ function AttendanceForm(props) {
     setsalert(null);
   };
 
+  const redrectAttendance = () => {
+    setsalert(null);
+    window.location.replace("https://stepesbdmedrecords.herokuapp.com");
+  };
+
   function setData(data) {
-    console.log(item);
-    const symptons = item.att_pre_symptoms.split(",").map(elem => {
-      if (elem.length !== 0) {
-        return elem.toLowerCase();
+    let symptons = item.att_pre_symptoms.split(",").filter(symptom => {
+      if (symptom.length !== 0) {
+        return symptom.toLowerCase();
       }
     });
     return {
-      Comentarios: data.description,
-      Estado: data.estado,
-      Sintomas: symptons,
-      Data_atendimento: item.att_date,
-      Hospital: {
-        Id: item.hos_id
+      Atendimento: {
+        Comentarios: data.description,
+        Estado: data.estado,
+        Sintomas: symptons,
+        Data_atendimento: item.att_date,
+        Hospital: {
+          Id: Number(item.hos_id)
+        }
       },
       Medico: {
-        CRM: "",
-        Nome: "",
-        PrivateKey: "",
-        PubicKey: ""
+        CRM: item.physician.crm,
+        Nome: item.physician.name,
+        PrivateKey: item.physician.privateKey,
+        PubicKey: item.physician.publicKey
       },
       Paciente: {
-        CPF: "",
+        CPF: item.patient.per_cpf,
         Endereco: {
-          Bairro: "",
-          CEP: "",
-          Cidade: "",
-          Latitude: "",
-          Longitude: "",
-          Numero: "",
-          Rua: "",
-          UF: ""
+          Bairro: item.patient.address.add_neighborhood,
+          CEP: item.patient.address.add_zipcode,
+          Cidade: item.patient.address.add_city,
+          Latitude: item.patient.address.add_latitude,
+          Longitude: item.patient.address.add_longitude,
+          Numero: item.patient.address.add_number,
+          Rua: item.patient.address.add_street,
+          UF: item.patient.address.add_state
         },
-        FatorRH: "",
-        GrupoSanguineo: "",
-        Id: 0,
-        Nascimento: "",
-        Nome: "",
-        PrivateKey: "",
-        PublicKey: ""
+        FatorRH: item.patient.pat_rh_factor,
+        GrupoSanguineo: item.patient.pat_blood_group,
+        Id: Number(item.patient.per_id),
+        Nascimento: item.patient.per_birth,
+        Nome: item.patient.name,
+        PrivateKey: item.patient.per_private_key,
+        PublicKey: item.patient.per_public_key
       }
     };
   }
 
   const SubmitHandler = data => {
     setloading(true);
-    const endPoint = "https://stepesbdmedrecords.herokuapp.com";
+    const endPoint =
+      "https://cors-anywhere.herokuapp.com/https://stepesbdmedrecords.herokuapp.com";
     const attendanceData = setData(data);
-    setloading(false);
-    setsalert(<SweetAlert success title={"teste"} onConfirm={hideAlert} />);
-    return true;
+    console.log(attendanceData);
+
+    UsePostApiURL(endPoint, attendanceData).then(result => {
+      console.log(result);
+      if (result.status !== 200) {
+        setsalert(
+          <SweetAlert warning title={result.message} onConfirm={hideAlert} />
+        );
+        setloading(false);
+        return false;
+      }
+      setloading(false);
+      setsalert(
+        <SweetAlert
+          success
+          title={result.message}
+          onConfirm={redrectAttendance}
+        />
+      );
+      return true;
+    });
   };
 
   return (
