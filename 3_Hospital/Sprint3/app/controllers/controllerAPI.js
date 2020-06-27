@@ -35,8 +35,9 @@ exports.get = async (req, res, next) => {
                             'https://stepesbdrecursos.herokuapp.com/',
                             'https://stepesbdmedrecords.herokuapp.com/',],
                 'API': {
-                    'Casos_positivos_COVID-19': 'https://stepesbdmedrecords.herokuapp.com/api/positive',
-                    'Numero_de_casos_positivos_COVID-19': 'https://stepesbdmedrecords.herokuapp.com/api/positive/amount',
+                    'Casos_positivos_COVID-19_por_dia': 'https://stepesbdmedrecords.herokuapp.com/api/positive',
+                    'Localizacao_de_casos_positivos_COVID-19': 'https://stepesbdmedrecords.herokuapp.com/api/positive-map',
+                    'Numero_total_de_casos_positivos_COVID-19': 'https://stepesbdmedrecords.herokuapp.com/api/positive/amount',
                     'Casos_positivos_COVID-19_tratamento_em_casa': 'https://stepesbdmedrecords.herokuapp.com/api/covid-home',
                     'Numero_de_casos_positivos_COVID-19_tratamento_em_casa': 'https://stepesbdmedrecords.herokuapp.com/api/covid-home-amount',
                     'Casos_recuperados_COVID-19': 'https://stepesbdmedrecords.herokuapp.com/api/release',
@@ -82,7 +83,20 @@ exports.get = async (req, res, next) => {
                 if(API_id1 == 'AMOUNT')
                     positiveCases = await bigchain.collection('assets').find( {'data.Atendimento.Hospital.Exame_covid.Resultado': 'POSITIVO'}).count()
                 else
-                    positiveCases = await bigchain.collection('assets').find( {'data.Atendimento.Hospital.Exame_covid.Resultado': 'POSITIVO'}).project({'data.Atendimento.Hospital.Exame_covid':true}).toArray()
+                    positiveCases   = await bigchain.collection('assets')
+                                                    .aggregate(
+                                                        [
+                                                        { $match : { "data.Atendimento.Hospital.Exame_covid.Unix_time" : { "$exists" : 1 } } },
+                                                        { $match : { 'data.Atendimento.Hospital.Exame_covid.Resultado': 'POSITIVO' } },
+                                                        { $project : { "mongoTimestamp" : {$add : [new Date(0), { "$multiply": [ "$data.Atendimento.Hospital.Exame_covid.Unix_time", 1000 ] }] } } },
+                                                        { $group : { _id : {
+                                                            day: { $dayOfMonth: "$mongoTimestamp" },
+                                                            month: { $month: "$mongoTimestamp" },
+                                                            year: { $year: "$mongoTimestamp" }
+                                                            } , number : { $sum : 1 } } }
+                                                        ]
+                                                    )
+                                                    .toArray()
                 return res.json(positiveCases);
             }else if(API_type == 'RELEASE'){
                 // BUSCAR CASOS DE RECUPERADOS DE COVID-19
@@ -119,6 +133,11 @@ exports.get = async (req, res, next) => {
             }else if(API_type == 'COVID-HOME'){
                 const medRecs = await RecordsCovidHome.findAll({raw: true});
                 return res.json(medRecs);
+            }else if(API_type == 'POSITIVE-MAP'){
+                positiveCases = await bigchain.collection('assets').find( {'data.Atendimento.Hospital.Exame_covid.Resultado': 'POSITIVO'})
+                                                                    .project({'data.Atendimento.Hospital.Exame_covid':true})
+                                                                    .toArray();
+                return res.json(positiveCases);
             }
                 
         }  

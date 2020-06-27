@@ -81,8 +81,9 @@ exports.get = async (req, res, next) => {
                             'https://stepesbdrecursos.herokuapp.com/',
                             'https://stepesbdmedrecords.herokuapp.com/',],
                 'API': {
-                    'Casos_positivos_COVID-19': 'https://stepesbdmedrecords.herokuapp.com/api/positive',
-                    'Numero_de_casos_positivos_COVID-19': 'https://stepesbdmedrecords.herokuapp.com/api/positive/amount',
+                    'Casos_positivos_COVID-19_por_dia': 'https://stepesbdmedrecords.herokuapp.com/api/positive',
+                    'Localizacao_de_casos_positivos_COVID-19': 'https://stepesbdmedrecords.herokuapp.com/api/positive-map',
+                    'Numero_total_de_casos_positivos_COVID-19': 'https://stepesbdmedrecords.herokuapp.com/api/positive/amount',
                     'Casos_positivos_COVID-19_tratamento_em_casa': 'https://stepesbdmedrecords.herokuapp.com/api/covid-home',
                     'Numero_de_casos_positivos_COVID-19_tratamento_em_casa': 'https://stepesbdmedrecords.herokuapp.com/api/covid-home-amount',
                     'Casos_recuperados_COVID-19': 'https://stepesbdmedrecords.herokuapp.com/api/release',

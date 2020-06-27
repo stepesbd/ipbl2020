@@ -5,6 +5,7 @@
     const app = express(); //cria e configura a aplicacao
     const path = require('path');
     const BigchainDB = require( './config/dbBigchainDB' );
+    const HOST = require('./config/hostAPP').HOST;
 
 // CONEXÃO COM BANCO DE DADOS BLOCKCHAIN
 BigchainDB.connectToServer( function( err, client ) {
@@ -50,6 +51,7 @@ BigchainDB.connectToServer( function( err, client ) {
                     },
                 }
             });
+            app.locals.hostAPP = HOST;
             app.engine("handlebars", hbs.engine)
             app.set('view engine', 'handlebars');
         // PUBLIC
@@ -59,8 +61,6 @@ BigchainDB.connectToServer( function( err, client ) {
         var createError = require('http-errors');
         var cookieParser = require('cookie-parser');
         var logger = require('morgan');
-
-
 
     // ROTAS
         app.use('/', require('./routes/index-route')(app));
