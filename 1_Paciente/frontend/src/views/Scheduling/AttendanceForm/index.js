@@ -56,6 +56,7 @@ function AttendanceForm(props) {
   };
 
   function setData(data) {
+    console.log(item);
     const symptons = item.att_pre_symptoms.split(",").map(elem => {
       if (elem.length !== 0) {
         return elem.toLowerCase();
@@ -65,9 +66,9 @@ function AttendanceForm(props) {
       Comentarios: data.description,
       Estado: data.estado,
       Sintomas: symptons,
-      Data_atendimento: "",
+      Data_atendimento: item.att_date,
       Hospital: {
-        Id: ""
+        Id: item.hos_id
       },
       Medico: {
         CRM: "",
@@ -102,8 +103,6 @@ function AttendanceForm(props) {
     setloading(true);
     const endPoint = "https://stepesbdmedrecords.herokuapp.com";
     const attendanceData = setData(data);
-    console.log(data);
-    console.log(attendanceData);
     setloading(false);
     setsalert(<SweetAlert success title={"teste"} onConfirm={hideAlert} />);
     return true;
