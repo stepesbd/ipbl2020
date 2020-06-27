@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %} Fornecedores - Lista{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-8">
+      <h1>Lista de Fornecedores: </h1>
+    </div>
+    <div class="col-md-4">
+      <a href="{% url 'fornecedor:criar' %}" class="btn btn-default" role="button">Novo</a>
+    </div>
+  </div>
+  <div class="row">
+    <table class="table">
+      <thead>
+        <td>Razão Social</td>
+        <td>CNPJ</td>
+        <td>Ações</td>
+      </thead>
+      <tbody>
+        {% for fornecedor in fornecedores %}
+          <tr>
+            <td>
+              {{ fornecedor.PRO_SOCIAL_REASON }}
+            </td>
+            <td>
+              {{ fornecedor.PRO_CNPJ }}
+            </td>
+            <td>
+              <a href="{% url 'fornecedor:editar' pk=fornecedor.PRO_ID %}">Editar</a>
+              <a href="{% url 'fornecedor:deletar' pk=fornecedor.PRO_ID %}">Excluir</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+
+
+
+{% endblock %}

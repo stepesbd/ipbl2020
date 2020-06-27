@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %} Produto - Lista{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-8">
+      <h1>Lista de Produtos: </h1>
+    </div>
+    <div class="col-md-4">
+      <a href="{% url 'fornecedor:criar_produto' %}" class="btn btn-default" role="button">Novo</a>
+    </div>
+  </div>
+  <div class="row">
+    <table class="table">
+      <thead>
+        <td>Descrição</td>
+        <td>Fornecedor</td>
+        <td>Imagem</td>
+        <td>Ações</td>
+      </thead>
+      <tbody>
+        {% for produto in produtos %}
+          <tr>
+            <td>
+              {{ produto.PRD_NAME }}
+            </td>
+            <td>
+              {{ produto.PRD_DESCRIPTION }}
+            </td>
+            <td>
+              {{ produto.PRD_PROVIDER }}
+            </td>
+
+            <td>
+              <a href="{% url 'fornecedor:editar_produto' pk=produto.PRD_ID %}">Editar</a>
+              <a href="{% url 'fornecedor:deletar_produto' pk=produto.PRD_ID %}">Excluir</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+
+
+
+{% endblock %}
