@@ -18,7 +18,7 @@ import {
   FormTextarea,
   Button
 } from "shards-react";
-import { UsePutApi, UsePostApi, UseGetApiCEP } from "../../services/apiService";
+import { UsePutApi, UseGetApiURL, UsePostApi, UseGetApiCEP } from "../../services/apiService";
 import ClipLoader from "react-spinners/ClipLoader";
 import SweetAlert from "react-bootstrap-sweetalert";
 
@@ -42,19 +42,13 @@ export default function Register (props){
     if(data.datanasc)
       dtN = moment(data.datanasc, 'DD/MM/YYYY').toDate()
 
-      
-      let endPointChaves = "https://stepesbdmedrecords.herokuapp.com/api/keypair"
-      UseGetApiURL(endPointComplete).then(result => {
-        if (result.status !== 200) {
-          setsalert(<SweetAlert warning title={result.message} onConfirm={hideAlert} />);
-          setloadingK(false);
-          return false;
-        }else{
-          console.log(result.data)
-        }
-      }); 
-
-    //Inserir
+      let chavePub = null; 
+      let chavePriv = null;
+      let endPointChaves = "https://cors-anywhere.herokuapp.com/https://stepesbdmedrecords.herokuapp.com/api/keypair"
+      UseGetApiURL(endPointChaves).then(result => {
+      console.log(result.data)
+       
+          //Inserir
     let obj = {
       patInclusionDate: new Date(),
       patStatus:1,
@@ -66,6 +60,8 @@ export default function Register (props){
           perSenha: data.senha,
           perCpf: data.cpf,
           perBirth: dtN,
+          perPublicKey:result.data.PublicKey,
+          perPrivateKey: result.data.PrivateKey,
           add:
             {
               addStreet:data.rua,
@@ -80,18 +76,24 @@ export default function Register (props){
             }
         }
       };
-    UsePostApi('P',endPoint,obj).then(result => {
-      console.log(result)
-      if (result.status !== 201) {
-        setsalert(<SweetAlert warning title={result.message} onConfirm={hideAlert} />);
+
+
+      UsePostApi('P',endPoint,obj).then(result => {
+        console.log(result)
+        if (result.status !== 201) {
+          setsalert(<SweetAlert warning title={result.message} onConfirm={hideAlert} />);
+          setloading(false);
+          return false;
+        }
         setloading(false);
-        return false;
-      }
-      setloading(false);
-      setsalert(<SweetAlert success title={result.message} onConfirm={() => sendToStep2(result.data)} />);
-      return true;
-    });
-    
+        setsalert(<SweetAlert success title={result.message} onConfirm={() => sendToStep2(result.data)} />);
+        return true;
+      });
+      
+
+      }); 
+     
+   
   }
 
   const sendToStep2 = (data) =>{

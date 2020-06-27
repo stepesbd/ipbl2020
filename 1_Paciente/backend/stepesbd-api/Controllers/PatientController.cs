@@ -105,12 +105,6 @@ namespace stepesdb_api.Controllers
             if (patient is null)
                 return BadRequest(new BadRequest("O objeto patient é obrigatório"));
 
-                 /*var algorithm = SignatureAlgorithm.Ed25519;
-            var privateKey = Key.Import(algorithm, Utils.StringToByteArray(privateKeyString), KeyBlobFormat.PkixPrivateKey);
-            var publicKey = PublicKey.Import(algorithm, Utils.StringToByteArray(publicKeyString), KeyBlobFormat.PkixPublicKey);
-            patient.Per.PerPrivateKey = privateKey;
-            patient.Per.PerPublicKey=publicKey;
-            */
             try
             {
                 _context.Patient.Add(patient);

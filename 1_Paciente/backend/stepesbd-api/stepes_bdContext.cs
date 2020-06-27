@@ -432,11 +432,11 @@ namespace stepesdb_api
 
                 entity.Property(e => e.PerPrivateKey)
                     .HasColumnName("per_private_key")
-                    .HasColumnType("varchar(100)")
+                    .HasColumnType("varchar(100)");
 
                 entity.Property(e => e.PerPublicKey)
                     .HasColumnName("per_public_key")
-                    .HasColumnType("varchar(100)")
+                    .HasColumnType("varchar(100)");
 
                 entity.Property(e => e.PerFirstName)
                     .IsRequired()

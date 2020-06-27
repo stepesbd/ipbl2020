@@ -1,28 +1,30 @@
 {
   "format": 1,
   "restore": {
-    "C:\\GIT\\ipbl2020\\1_Paciente\\backend\\stepesbd-api\\stepesdb-api.csproj": {}
+    "D:\\ITA\\ipbl2020\\1_Paciente\\backend\\stepesbd-api\\stepesdb-api.csproj": {}
   },
   "projects": {
-    "C:\\GIT\\ipbl2020\\1_Paciente\\backend\\stepesbd-api\\stepesdb-api.csproj": {
+    "D:\\ITA\\ipbl2020\\1_Paciente\\backend\\stepesbd-api\\stepesdb-api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\GIT\\ipbl2020\\1_Paciente\\backend\\stepesbd-api\\stepesdb-api.csproj",
+        "projectUniqueName": "D:\\ITA\\ipbl2020\\1_Paciente\\backend\\stepesbd-api\\stepesdb-api.csproj",
         "projectName": "stepesdb-api",
-        "projectPath": "C:\\GIT\\ipbl2020\\1_Paciente\\backend\\stepesbd-api\\stepesdb-api.csproj",
-        "packagesPath": "C:\\Users\\GTAC3\\.nuget\\packages\\",
-        "outputPath": "C:\\GIT\\ipbl2020\\1_Paciente\\backend\\stepesbd-api\\obj\\",
+        "projectPath": "D:\\ITA\\ipbl2020\\1_Paciente\\backend\\stepesbd-api\\stepesdb-api.csproj",
+        "packagesPath": "C:\\Users\\DellVostro\\.nuget\\packages\\",
+        "outputPath": "D:\\ITA\\ipbl2020\\1_Paciente\\backend\\stepesbd-api\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\GTAC3\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\DellVostro\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -46,6 +48,12 @@
             "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
               "target": "Package",
               "version": "[3.1.4, )"
+            },
+            "Microsoft.CodeAnalysis.Analyzers": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.9.4, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
@@ -80,7 +88,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
         }
       }
     }
