@@ -17,6 +17,8 @@ namespace stepesdb_api
         public string PerEmail { get; set; }
         public string PerCpf { get; set; }
         public string PerSenha { get; set; }
+        public string PerPrivateKey { get; set; }
+        public string PerPublicKey { get; set; }
         public int? AddId { get; set; }
 
         public virtual Address Add { get; set; }

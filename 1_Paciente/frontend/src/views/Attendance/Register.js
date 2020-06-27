@@ -26,7 +26,7 @@ export default function Register (props){
 
   const { register, handleSubmit, errors, setValue,setError } = useForm();
   const [item,setitem] = React.useState({});
-  
+
   const [loading,setloading] = React.useState(false);
   const onSubmit = data => {
     
@@ -34,13 +34,25 @@ export default function Register (props){
       setError("datanasc", "invaliddate", "Data Inválida")
       return false;
     }
-
+   
     setloading(true);
     let endPoint = "patient/"
     let dtN = null;
 
     if(data.datanasc)
       dtN = moment(data.datanasc, 'DD/MM/YYYY').toDate()
+
+      
+      let endPointChaves = "https://stepesbdmedrecords.herokuapp.com/api/keypair"
+      UseGetApiURL(endPointComplete).then(result => {
+        if (result.status !== 200) {
+          setsalert(<SweetAlert warning title={result.message} onConfirm={hideAlert} />);
+          setloadingK(false);
+          return false;
+        }else{
+          console.log(result.data)
+        }
+      }); 
 
     //Inserir
     let obj = {

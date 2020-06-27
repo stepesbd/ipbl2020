@@ -105,11 +105,12 @@ namespace stepesdb_api.Controllers
             if (patient is null)
                 return BadRequest(new BadRequest("O objeto patient é obrigatório"));
 
-            //List<String> latlong = GetLatLongbyCep(patient.Per.Add.AddZipcode);
-            //patient.Per.Add.AddLatitude = latlong[0];
-            //patient.Per.Add.AddLongitude = latlong[1];
-            //return null;
-            
+                 /*var algorithm = SignatureAlgorithm.Ed25519;
+            var privateKey = Key.Import(algorithm, Utils.StringToByteArray(privateKeyString), KeyBlobFormat.PkixPrivateKey);
+            var publicKey = PublicKey.Import(algorithm, Utils.StringToByteArray(publicKeyString), KeyBlobFormat.PkixPublicKey);
+            patient.Per.PerPrivateKey = privateKey;
+            patient.Per.PerPublicKey=publicKey;
+            */
             try
             {
                 _context.Patient.Add(patient);
