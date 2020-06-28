@@ -13,6 +13,12 @@ export default function CasesNumber() {
     const canvasRef = React.createRef();
 
     const [title,settitle] = React.useState("Número de Casos");
+    const [dataC, setdataC] = React.useState([
+      500,
+      800,
+      320,
+      4250
+    ]);
     const [chartData,setchartData]  = React.useState({
         labels: [
           '01/06/2020',
@@ -24,12 +30,7 @@ export default function CasesNumber() {
           {
             label: "Casos Positivos",
             fill: "start",
-            data: [
-              500,
-              800,
-              320,
-              4250
-            ],
+            data: dataC,
             backgroundColor: "rgba(0,123,255,0.1)",
             borderColor: "rgba(0,123,255,1)",
             pointBackgroundColor: "#ffffff",
@@ -37,8 +38,8 @@ export default function CasesNumber() {
             borderWidth: 1.5,
             pointRadius: 0,
             pointHoverRadius: 3
-          },
-          {
+          }, 
+          /*{
             label: "Óbitos",
             fill: "start",
             data: [
@@ -56,7 +57,7 @@ export default function CasesNumber() {
             pointRadius: 0,
             pointHoverRadius: 2,
             pointBorderColor: "rgba(255,65,105,1)"
-          }
+          }*/
         ]
     });
     const [chartOptions,setchartOptions] = React.useState({
@@ -113,7 +114,6 @@ export default function CasesNumber() {
 
     useEffect(() => {
       loadData();
-      loadGraph();
     }, []);
 
     const [loading, setloading] = React.useState(false);
@@ -131,13 +131,45 @@ export default function CasesNumber() {
         setloading(false);
         let resultado = result.data;
         console.log(resultado)
+
+        let dataGra = []
+        resultado.map(element => {
+          dataGra.push(element.number);
+        });
+
+        setdataC(dataGra);
+        let dados = {
+          labels: [
+            '01/06/2020',
+            '02/06/2020',
+            '03/06/2020',
+            '04/06/2020'
+          ],
+          datasets: [
+            {
+              label: "Casos Positivos",
+              fill: "start",
+              data: dataGra,
+              backgroundColor: "rgba(0,123,255,0.1)",
+              borderColor: "rgba(0,123,255,1)",
+              pointBackgroundColor: "#ffffff",
+              pointHoverBackgroundColor: "rgb(0,123,255)",
+              borderWidth: 1.5,
+              pointRadius: 0,
+              pointHoverRadius: 3
+            }
+          ]
+      }
+        loadGraph(dados);
         
         return true;
       });
     };
 
-    const loadGraph = () =>{
+    const loadGraph = (chartData) =>{
       
+      console.log(chartData)
+      console.log(chartOptions)
       const BlogUsersOverview = new Chart(canvasRef.current, {
         type: "LineWithLine",
         data: chartData,
@@ -145,8 +177,8 @@ export default function CasesNumber() {
       });
   
       // They can still be triggered on hover.
-      const buoMeta = BlogUsersOverview.getDatasetMeta(0);
-      buoMeta.data[0]._model.radius = 0;
+      //const buoMeta = BlogUsersOverview.getDatasetMeta(0);
+      //buoMeta.data[0]._model.radius = 0;
       /*buoMeta.data[
         dataG.datasets[0].data.length - 1
       ]._model.radius = 0;*/
