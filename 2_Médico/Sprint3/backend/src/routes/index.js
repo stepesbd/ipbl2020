@@ -66,6 +66,9 @@ routes.group('/api', (router) => {
   router.put('/attendances/:attribute', AttendanceController.update);
   router.delete('/attendances/:attribute', AttendanceController.destroy);
 
+  //Login's routes
+  router.get('/login', PhysicianController.login);
+
   //Patients's routes
   //router.get('/attendances', AttendanceController.index);
   router.get('/patients/:id', PatientsController.show);
