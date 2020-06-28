@@ -32,6 +32,7 @@ exports.get = async (req, res, next) => {
             type_of_page = req.params.page.toUpperCase()
         // CASO ACESSADO PÁGINA DE ESTOQUE
         if(type_of_page == 'ESTOQUE'){
+            
             // LISTA DE ARRAYS PARA ARMAZENAR INFORMAÇÕES PASSADAS PARA FRONT-END
             const userAssets = [];
             const assetHistory = [];
@@ -71,42 +72,44 @@ exports.get = async (req, res, next) => {
                         await Promise.all(arrayOfQuantityAssets.map(async oneQuantity => {
                             quantidade = quantidade + oneQuantity
                         }));
-
                         // EXECUTAR OS PASSOS ABAIXO PARA CADA TRANSACTION DESTE ASSET
                         await Promise.all(allTranscactions.map(async transaction => {
                             // ENCONTRANDO O VENDEDOR
                             const pro = await Provider.findOne({where: { pro_publicKey: transaction.inputs[0].owners_before[0] }})
+
                             // TIPO DA TRANSACTION: CREATE OU TRANSFER
                             const operation = transaction.operation
                             // CASO TRANSACTION CRIATE, BLOCO GÊNESIS
-                            if(operation == 'CREATE'){
-                                var consumer = pro.pro_name
-                                var seller = ' --- '
-                                var date = moment(transaction.metadata.Create_date).format('L')
-                                var unit_price = transaction.metadata.Unit_price
-                                // PREENCHIMENTO DE ITENS DO HISTÓRICO DESTE ASSET
-                                var historyFields = { asset_id, seller, consumer, operation, date, unit_price}
-                                // EMPILHA O HISTÓRICO
-                                assetHistory.push(historyFields)
-                            }else{
-                                // CASO SEJA UMA TRANSACTION TRANSFER, VERIFICAR SE O HOSPITAL É UM DOS COMPRADORES DA TRANSACTION
-                                await Promise.all(transaction.outputs.map(async output => {
-                                    if(output.public_keys == hos.hos_publicKey){
-                                        if(pro){
-                                            var date = moment(transaction.metadata.Transaction_date).format('L')
-                                            var unit_price = transaction.metadata.Unit_price
-                                            var total_price = transaction.metadata.Total_price
-                                            var quantity =  transaction.metadata.Quantity_purchased
-                                            var consumer = hos.hos_name
-                                            var seller = pro.pro_name
-                                            // PREENCHIMENTO DE ITENS DO HISTÓRICO DESTE ASSET
-                                            var historyFields = { asset_id, seller, consumer, operation, date, unit_price, quantity, total_price}
-                                            // EMPILHA O HISTÓRICO
-                                            assetHistory.push(historyFields)
+                            if(pro != undefined){
+                                if(operation == 'CREATE'){
+                                    var consumer = pro.pro_name
+                                    var seller = ' --- '
+                                    var date = moment(transaction.metadata.Create_date).format('L')
+                                    var unit_price = transaction.metadata.Unit_price
+                                    // PREENCHIMENTO DE ITENS DO HISTÓRICO DESTE ASSET
+                                    var historyFields = { asset_id, seller, consumer, operation, date, unit_price}
+                                    // EMPILHA O HISTÓRICO
+                                    assetHistory.push(historyFields)
+                                }else{
+                                    // CASO SEJA UMA TRANSACTION TRANSFER, VERIFICAR SE O HOSPITAL É UM DOS COMPRADORES DA TRANSACTION
+                                    await Promise.all(transaction.outputs.map(async output => {
+                                        if(output.public_keys == hos.hos_publicKey){
+                                            if(pro){
+                                                var date = moment(transaction.metadata.Transaction_date).format('L')
+                                                var unit_price = transaction.metadata.Unit_price
+                                                var total_price = transaction.metadata.Total_price
+                                                var quantity =  transaction.metadata.Quantity_purchased
+                                                var consumer = hos.hos_name
+                                                var seller = pro.pro_name
+                                                // PREENCHIMENTO DE ITENS DO HISTÓRICO DESTE ASSET
+                                                var historyFields = { asset_id, seller, consumer, operation, date, unit_price, quantity, total_price}
+                                                // EMPILHA O HISTÓRICO
+                                                assetHistory.push(historyFields)
+                                            }
+                                            
                                         }
-                                        
-                                    }
-                                }));
+                                    }));
+                                }
                             }
                         }));
                     }).catch(err=>{console.log(err)});

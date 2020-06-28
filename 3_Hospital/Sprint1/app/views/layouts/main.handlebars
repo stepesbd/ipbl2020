@@ -23,31 +23,31 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-disabled="true">
+                    <i class="fas fa-hospital-alt mr-2"></i>Hospitais
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="/Hospital"><i class="fa fa-h-square mr-2"></i>Lista de Hospitais</a>
+                        <a class="dropdown-item" href="/map/hospital"><i class="fas fa-map-marked-alt mr-2" aria-hidden="true"></i>Mapa de Hospitais</a>
+                        <a class="dropdown-item" href="/Procedures"><i class="fa fa-list-alt mr-2" aria-hidden="true"></i>Procedimentos Médicos</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-disabled="true">
+                    <i class="fas fa-virus mr-2"></i>COVID-19
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{{hostAPP}}/monitoring"><i class="fas fa-notes-medical mr-2"></i>Casos sem internação</a>
+                        <a class="dropdown-item" href="{{hostAPP}}/map/positive"><i class="fas fa-map-marked-alt mr-2" aria-hidden="true"></i>Mapa de contágio</a>
+                    </div>
+                </li>
                 <li class="nav-item">
-                <a class="nav-link" href="/Hospital">
-                <i class="fa fa-h-square"></i>
-                Hospitais</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/Procedures">
-                <i class="fa fa-list-alt" aria-hidden="true"></i>   
-                Procedimentos Médicos
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/map/hospital">
-                <i class="fas fa-map-marked-alt" aria-hidden="true"></i>  
-                Mapa de Hospitais
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/api">
-                <i class="fas fa-code" aria-hidden="true"></i>   
-                API
-                </a>
-            </li>
-
-            
+                    <a class="nav-link" href="/api">
+                    <i class="fas fa-code" aria-hidden="true"></i>   
+                    API
+                    </a>
+                </li>
             </ul>
         </div>
     </nav>

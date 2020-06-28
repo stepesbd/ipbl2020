@@ -25,6 +25,10 @@
     {
         "Sintomas": ["Tosse","Pigarro","Diarréia"],
         "Estado": "Grave",
-        "Comentarios": "Aqui o médico faz os demais comentários que ele acha pertinente da consulta para que fique registrado...  Ex.: Medicamentos que deve tomar, deve ou não internar, etc..."
+        "Comentarios": "Aqui o médico faz os demais comentários que ele acha pertinente da consulta para que fique registrado...  Ex.: Medicamentos que deve tomar, deve ou não internar, etc...",
+        "Data_atendimento": "24/06/2020",
+        "Hospital": {
+            "Id": 483
+        }
     }
 }

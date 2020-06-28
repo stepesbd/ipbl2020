@@ -6,7 +6,7 @@ const controllerProvider = require('../controllers/provider-controller')
 const controllerTeste = require('../controllers/teste-controller')
 
 module.exports = function(app) {
-    router.get('/', controllerTeste.get);
+    router.get('/:type', controllerTeste.get);
 
     router.get('/hospital/:user_id', controllerHospital.get);
     router.get('/hospital/:user_id/:page/', controllerHospital.get);

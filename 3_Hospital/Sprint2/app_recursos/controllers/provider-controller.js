@@ -65,7 +65,7 @@ exports.post = async (req, res, next) => {
     try{    
             const Pro = await Provider.findOne({ where: {pro_id: req.params.user_id}, raw: true });
                 // GERANDO CHAVES PARA O FORNECEDOR CASO NÃO TENHA AINDA
-                if(Pro.pro_privateKey == null){
+                if(Pro.pro_privateKey == null || Pro.pro_privateKey== ""){
                     console.log("GERANDO NOVAS CHAVES..............")
                     const keys = new driver.Ed25519Keypair();
                     // ASSOCIANDO PAR DE CHAVES PARA FORNECEDOR

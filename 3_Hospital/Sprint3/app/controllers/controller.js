@@ -30,6 +30,8 @@ exports.get = async (req, res, next) => {
             type_of_page = req.params.step.toUpperCase()
             // STEP 1: ESCOLHA DO HOSPITAL
             if(type_of_page == 'STEP1'){
+                return res.render('erro-page', { title: 'Erro', erro: 'Esta página foi desabilitada para uso de integração completa.'} );
+
                 const add = await Address.findAll({ 
                     include: [{
                         model: Hospital,
@@ -47,59 +49,70 @@ exports.get = async (req, res, next) => {
 
             // STEP 2: DECISÃO SOBRE INTERNAÇÃO
             if(type_of_page == 'STEP2'){
-                // ADICIONANDO HOSPITAL NO ATENDIMENTO (ESCOLHA DO STEP 1)
-                attObj.Atendimento = { ...attObj.Atendimento,  
-                    // ADICIONANDO LEITO DE INTERNAÇÃO NO JSON ATENDIMENTO (ESCOLHA DO STEP 2)
-                // Data_atendimento: moment(new Date()).format('L'),
-                Data_atendimento: moment(new Date()).subtract(date_base, 'days').format('L'),
-                Hospital: {
-                    Id: req.body.inputHosID, 
-                    Nome: req.body.inputHosName
-                    } 
-                }
+                // TESTE DE ENVIO DOS DADOS
+                //        attObj.Atendimento = { ...attObj.Atendimento,  
+                //            // ADICIONANDO LEITO DE INTERNAÇÃO NO JSON ATENDIMENTO (ESCOLHA DO STEP 2)
+                //        // Data_atendimento: moment(new Date()).format('L'),
+                //        Data_atendimento: moment(new Date()).subtract(date_base, 'days').format('L'),
+                //        Hospital: {
+                //            Id: 488, 
+                //            } 
+                //        }
 
-            // IDENTIFICANDO O HOSPITAL NO BANCO RELACIONAL
-            const hos = await Hospital.findByPk(attObj.Atendimento.Hospital.Id);  
+                // CHECANDO OS DADOS DE CHEGADA NO ATTOBJ
+                if(attObj.Atendimento.Hospital != undefined){
+                    if(attObj.Atendimento.Hospital.Id){
+                        // IDENTIFICANDO O HOSPITAL NO BANCO RELACIONAL
+                        const hos = await Hospital.findByPk(attObj.Atendimento.Hospital.Id);
+                        // ADICIONANDO NOME DO HOSPITAL NO ATENDIMENTO
+                        attObj.Atendimento.Hospital = { ...attObj.Atendimento.Hospital,  
+                            Nome: hos.hos_name, 
+                        }
+                        console.log(attObj)
+                        // CONTABILIZANDO O NÚMERO DE UTI'S
+                        const UTI = await Bed.findAll({  
+                            attributes: [[sequelize.fn('COUNT', sequelize.col('bed_id')), 'qty']],
+                            raw: true,              
+                            include: [{
+                                model: Bed_sector,
+                                where: { id: 1 },
+                                attributes: [],
+                                required: true,                                             
+                            }],
+                            where: {
+                                hos_id: hos.hos_id, 
+                                bed_status: 0       // LEITO LIVRE
+                            }
+                        })
+                        const uti = UTI[0];
+                        // CONTABILIZANDO O NÚMERO DE AMBULARÓRIOS
+                        const AMBULATORIO = await Bed.findAll({  
+                            attributes: [[sequelize.fn('COUNT', sequelize.col('bed_id')), 'qty']],
+                            raw: true,              
+                            include: [{
+                                model: Bed_sector,
+                                where: { id: 2 },
+                                attributes: [],
+                                required: true,                                             
+                            }],
+                            where: {
+                                hos_id: hos.hos_id, 
+                                bed_status: 0       // LEITO LIVRE
+                            }
+                        })
+                        const ambulatorio = AMBULATORIO[0];
+                        // CONTABILIZANDO O NÚMERO TOTAL DE LEITOS
+                        const all = {qty: (uti.qty + ambulatorio.qty) }
+                        // ENCAPSULANDO TUDO EM UM OBJETO
+                        const beds = {uti, ambulatorio, all}
 
-            // CONTABILIZANDO O NÚMERO DE UTI'S
-            const UTI = await Bed.findAll({  
-                attributes: [[sequelize.fn('COUNT', sequelize.col('bed_id')), 'qty']],
-                raw: true,              
-                include: [{
-                    model: Bed_sector,
-                    where: { id: 1 },
-                    attributes: [],
-                    required: true,                                             
-                }],
-                where: {
-                    hos_id: hos.hos_id, 
-                    bed_status: 0       // LEITO LIVRE
-                }
-            })
-            const uti = UTI[0];
-            // CONTABILIZANDO O NÚMERO DE AMBULARÓRIOS
-            const AMBULATORIO = await Bed.findAll({  
-                attributes: [[sequelize.fn('COUNT', sequelize.col('bed_id')), 'qty']],
-                raw: true,              
-                include: [{
-                    model: Bed_sector,
-                    where: { id: 2 },
-                    attributes: [],
-                    required: true,                                             
-                }],
-                where: {
-                    hos_id: hos.hos_id, 
-                    bed_status: 0       // LEITO LIVRE
-                }
-            })
-            const ambulatorio = AMBULATORIO[0];
-            // CONTABILIZANDO O NÚMERO TOTAL DE LEITOS
-            const all = {qty: (uti.qty + ambulatorio.qty) }
-            // ENCAPSULANDO TUDO EM UM OBJETO
-            const beds = {uti, ambulatorio, all}
-
-            return res.render('step2', { title: 'Atendimento Presencial', att: attObj, beds: beds})
-        }
+                        return res.render('step2', { title: 'Atendimento Presencial', att: attObj, beds: beds})
+                    }else   
+                        return res.render('erro-page', { title: 'Erro', erro: 'Não foi recebido o ID do Hospital. Verifique os dados de envio do Atendimento.'} );
+                }else   
+                    return res.render('erro-page', { title: 'Erro', erro: 'Não foi recebido o Hospital. Verifique os dados de envio do Atendimento.'} );
+                
+            }
 
             // STEP 3: ESCOLHA DOS ITENS DESCARTÁVEIS
             if(type_of_page == 'STEP3'){
@@ -439,8 +452,10 @@ exports.get = async (req, res, next) => {
                 }).catch((err)=>{console.log(err); throw err})
             }
             
-            if(type_of_page == '')
+            if(type_of_page == ''){
                 return res.render('index', { title: 'Atendimento Presencial'})
+            }
+                
         }else{
             var erro ='Ocorreu um erro: Não foram recebidos dados do Atendimento.';
             return res.render('erro-page', { title: 'Erro', erro: erro} );
@@ -464,13 +479,17 @@ exports.get = async (req, res, next) => {
 
 exports.post = async (req, res, next) => {
 
+    
+
+    if(req.body.Atendimento){
+        attObj = req.body
+        return res.render('index', { title: 'Atendimento Presencial'})
+    }else
          request({
             url: "http://stepesbd.ddns.net:5000/simulation/api/attendance",
             method: "GET",
         }, function (error, response, body){
             if(error)throw error; 
-
-
             try {
                 attObj = JSON.parse(body)
                 return res.render('index', { title: 'Atendimento Presencial'})

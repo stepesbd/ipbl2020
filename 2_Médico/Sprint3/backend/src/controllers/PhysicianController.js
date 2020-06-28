@@ -64,4 +64,13 @@ module.exports = {
     }
     return response.json(physicians);
   },
+  async login(request, response) {
+    const { crm } = request.query;
+
+    const [physician] = await connection('physicians')
+      .where('crm', crm)
+      .select();
+
+    return response.status(200).json({ msg: physician });
+  },
 };
