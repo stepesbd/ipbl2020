@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Container,
@@ -18,6 +18,16 @@ import { UseGetApiParams } from '../../services/apiService';
 
 const Login = (props) => {
   const { register, handleSubmit, errors, setValue, setError } = useForm();
+
+  useEffect(() => {
+    const physician = sessionStorage.getItem('physician');
+    console.log(physician);
+    if (physician) {
+      props.history.push({
+        pathname: '/dashboard',
+      });
+    }
+  }, []);
 
   const [loading, setloading] = React.useState(false);
   const onSubmit = (data) => {

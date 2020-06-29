@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import moment from "moment";
-import { useForm } from "react-hook-form";
+import React, { useState, useEffect } from 'react';
+import moment from 'moment';
+import { useForm } from 'react-hook-form';
 import {
   Container,
   FormInput,
@@ -13,14 +13,14 @@ import {
   Col,
   Button,
   FormSelect,
-  array
-} from "shards-react";
-import ClipLoader from "react-spinners/ClipLoader";
-import SweetAlert from "react-bootstrap-sweetalert";
-import { UsePostApiURL } from "../../../services/apiService";
+  array,
+} from 'shards-react';
+import ClipLoader from 'react-spinners/ClipLoader';
+import SweetAlert from 'react-bootstrap-sweetalert';
+import { UsePostApiURL } from '../../../services/apiService';
 
-import "react-quill/dist/quill.snow.css";
-import "../../../assets/quill.css";
+import 'react-quill/dist/quill.snow.css';
+import '../../../assets/quill.css';
 
 function AttendanceForm(props) {
   const { register, handleSubmit, errors, setValue, setError } = useForm();
@@ -34,12 +34,12 @@ function AttendanceForm(props) {
     if (props.location.pasprops) {
       const dados = props.location.pasprops.item;
       setItem(dados);
-      setValue("patientName", dados.patient.name);
-      setValue("sintomas", dados.att_pre_symptoms);
-      setValue("description", dados.att_description);
+      setValue('patientName', dados.patient.name);
+      setValue('sintomas', dados.att_pre_symptoms);
+      setValue('description', dados.att_description);
     } else {
       props.history.push({
-        pathname: "/schedule"
+        pathname: '/schedule',
       });
     }
   };
@@ -47,7 +47,7 @@ function AttendanceForm(props) {
   const [loading, setloading] = React.useState(false);
 
   const handleBack = () => {
-    props.history.push("/schedule");
+    props.history.push('/schedule');
   };
 
   const [salert, setsalert] = React.useState();
@@ -57,11 +57,11 @@ function AttendanceForm(props) {
 
   const redrectAttendance = () => {
     setsalert(null);
-    window.location.replace("https://stepesbdmedrecords.herokuapp.com");
+    window.location.replace('https://stepesbdmedrecords.herokuapp.com');
   };
 
   function setData(data) {
-    let symptons = item.att_pre_symptoms.split(",").filter(symptom => {
+    let symptons = item.att_pre_symptoms.split(',').filter((symptom) => {
       if (symptom.length !== 0) {
         return symptom.toLowerCase();
       }
@@ -73,14 +73,14 @@ function AttendanceForm(props) {
         Sintomas: symptons,
         Data_atendimento: item.att_date,
         Hospital: {
-          Id: Number(item.hos_id)
-        }
+          Id: Number(item.hos_id),
+        },
       },
       Medico: {
         CRM: item.physician.crm,
         Nome: item.physician.name,
         PrivateKey: item.physician.privateKey,
-        PubicKey: item.physician.publicKey
+        PublicKey: item.physician.publicKey,
       },
       Paciente: {
         CPF: item.patient.per_cpf,
@@ -92,7 +92,7 @@ function AttendanceForm(props) {
           Longitude: item.patient.address.add_longitude,
           Numero: item.patient.address.add_number,
           Rua: item.patient.address.add_street,
-          UF: item.patient.address.add_state
+          UF: item.patient.address.add_state,
         },
         FatorRH: item.patient.pat_rh_factor,
         GrupoSanguineo: item.patient.pat_blood_group,
@@ -100,19 +100,19 @@ function AttendanceForm(props) {
         Nascimento: item.patient.per_birth,
         Nome: item.patient.name,
         PrivateKey: item.patient.per_private_key,
-        PublicKey: item.patient.per_public_key
-      }
+        PublicKey: item.patient.per_public_key,
+      },
     };
   }
 
-  const SubmitHandler = data => {
+  const SubmitHandler = (data) => {
     setloading(true);
     const endPoint =
-      "https://cors-anywhere.herokuapp.com/https://stepesbdmedrecords.herokuapp.com";
+      'https://cors-anywhere.herokuapp.com/https://stepesbdmedrecords.herokuapp.com';
     const attendanceData = setData(data);
     console.log(attendanceData);
 
-    UsePostApiURL(endPoint, attendanceData).then(result => {
+    UsePostApiURL(endPoint, attendanceData).then((result) => {
       console.log(result);
       if (result.status !== 200) {
         setsalert(
@@ -215,7 +215,7 @@ function AttendanceForm(props) {
                         type="button"
                         onClick={handleBack}
                         theme="default"
-                        style={{ float: "right" }}
+                        style={{ float: 'right' }}
                       >
                         Voltar
                       </Button>
@@ -226,7 +226,7 @@ function AttendanceForm(props) {
             </ListGroup>
             {loading && (
               <div className="loading">
-                <ClipLoader size={60} color={"#123abc"} loading={loading} />
+                <ClipLoader size={60} color={'#123abc'} loading={loading} />
               </div>
             )}
           </Card>
