@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Container,
@@ -18,6 +18,16 @@ import { UseGetApiParams } from '../../services/apiService';
 
 const Login = (props) => {
   const { register, handleSubmit, errors, setValue, setError } = useForm();
+
+  useEffect(() => {
+    const physician = sessionStorage.getItem('physician');
+    console.log(physician);
+    if (physician) {
+      props.history.push({
+        pathname: '/dashboard',
+      });
+    }
+  }, []);
 
   const [loading, setloading] = React.useState(false);
   const onSubmit = (data) => {
@@ -92,6 +102,18 @@ const Login = (props) => {
                             innerRef={register({ required: true })}
                           />
                           {errors.crm && <span class="obg">ObrigÃ¡torio</span>}
+                        </Col>
+                        <Col md="12" className="form-group">
+                          <label htmlFor="feFirstName">Senha</label>
+                          <FormInput
+                            name="senha"
+                            type="password"
+                            invalid={errors.password}
+                            innerRef={register({ required: true })}
+                          />
+                          {errors.password && (
+                            <span class="obg">ObrigÃ¡torio</span>
+                          )}
                         </Col>
                         {/* Last Name */}
                       </Row>

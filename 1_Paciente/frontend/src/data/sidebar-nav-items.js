@@ -31,7 +31,7 @@ export default function() {
       htmlAfter: '',
     },
     {
-      title: 'Especicalidades',
+      title: 'Especialidades',
       to: '/specialties',
       htmlBefore: '<i class="material-icons">folder_special</i>',
       htmlAfter: '',

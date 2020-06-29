@@ -22,6 +22,7 @@ import PatientForm from './views/Registration/PatientForm';
 import PhysicianList from './views/Physicians/PhysicianList';
 import PhysicianForm from './views/Physicians/PhysicianForm';
 import SpecialtyList from './views/Specialties/SpecialtyList';
+import SpecialtyForm from './views/Specialties/SpecialtyForm';
 
 //Scheduling
 import Schedule from './views/Scheduling/Schedule';
@@ -68,6 +69,11 @@ export default [
     path: '/specialties',
     layout: DefaultLayout,
     component: SpecialtyList,
+  },
+  {
+    path: '/specialties-form',
+    layout: DefaultLayout,
+    component: SpecialtyForm,
   },
   {
     path: '/dashboard',
