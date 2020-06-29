@@ -21,7 +21,6 @@ const Login = props => {
 
   useEffect(() => {
     const physician = sessionStorage.getItem("physician");
-    console.log(physician);
     if (physician) {
       props.history.push({
         pathname: "/schedule"
@@ -38,7 +37,6 @@ const Login = props => {
     setloading(true);
 
     UseGetApiParams("D", endPoint, obj).then(result => {
-      console.log(result);
       if (result.status !== 204 && result.status !== 200) {
         setsalert(
           <SweetAlert warning title={result.message} onConfirm={hideAlert} />
@@ -48,7 +46,7 @@ const Login = props => {
       }
 
       setloading(false);
-      if (result.data) {
+      if (result.data && data.password === "medico") {
         sessionStorage.setItem("physician", JSON.stringify(result.data.msg));
         props.history.push({
           pathname: "/schedule"
@@ -57,7 +55,7 @@ const Login = props => {
         setsalert(
           <SweetAlert
             warning
-            title="UsuÃ¡rio ou senha nÃ£o encontrado!"
+            title="Usuário ou senha não encontrado!"
             onConfirm={hideAlert}
           />
         );
@@ -106,7 +104,7 @@ const Login = props => {
                         <Col md="12" className="form-group">
                           <label htmlFor="feFirstName">Senha</label>
                           <FormInput
-                            name="senha"
+                            name="password"
                             type="password"
                             invalid={errors.password}
                             innerRef={register({ required: true })}

@@ -18,7 +18,8 @@ import {
 import {
   UsePutApi,
   UsePostApi,
-  UseGetApiCEP
+  UseGetApiCEP,
+  UseGetApi
 } from "../../../services/apiService";
 import ClipLoader from "react-spinners/ClipLoader";
 import SweetAlert from "react-bootstrap-sweetalert";
@@ -26,10 +27,20 @@ import SweetAlert from "react-bootstrap-sweetalert";
 export default function PhysicianForm(props) {
   const { register, handleSubmit, errors, setValue, setError } = useForm();
   const [item, setitem] = React.useState({});
+  const [specialties, setSpecialties] = useState([]);
 
   useEffect(() => {
     verifyItem();
+    loadSpecialties();
   }, []);
+
+  const loadSpecialties = () => {
+    let endPoint = "specialties/";
+
+    UseGetApi("D", endPoint).then(response => {
+      setSpecialties(response.data.msg);
+    });
+  };
 
   const verifyItem = () => {
     if (props.location.pasprops) {
@@ -354,20 +365,37 @@ export default function PhysicianForm(props) {
                         </Col>
                         <Col md="4" className="form-group">
                           <label htmlFor="feInputState">1º Especialidade</label>
-                          <FormInput
-                            name="pais"
-                            invalid={errors.pais}
+                          <FormSelect
+                            id="firstSpecialty"
+                            name="firstSpecialty"
+                            invalid={errors.firstSpecialty}
                             innerRef={register({ required: true })}
-                          />
-                          {errors.pais && <span class="obg">Obrigátorio</span>}
+                          >
+                            <option value="">Selecione...</option>
+                            {specialties.map(specialty => (
+                              <option key={specialty.id} value={specialty.id}>
+                                {specialty.name}
+                              </option>
+                            ))}
+                          </FormSelect>
+                          {errors.firstSpecialty && (
+                            <span class="obg">Obrigátorio</span>
+                          )}
                         </Col>
                         <Col md="4" className="form-group">
                           <label htmlFor="feInputState">2º Especialidade</label>
-                          <FormInput
-                            name="outro"
-                            invalid={errors.outro}
+                          <FormSelect
+                            id="SecondSpecialty"
+                            name="SecondSpecialty"
                             innerRef={register()}
-                          />
+                          >
+                            <option value="">Selecione...</option>
+                            {specialties.map(specialty => (
+                              <option key={specialty.id} value={specialty.id}>
+                                {specialty.name}
+                              </option>
+                            ))}
+                          </FormSelect>
                         </Col>
                       </Row>
                       <br />

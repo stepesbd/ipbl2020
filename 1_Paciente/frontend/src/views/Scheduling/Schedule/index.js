@@ -29,7 +29,6 @@ function Schedule(props) {
 
   useEffect(() => {
     const physician = sessionStorage.getItem("physician");
-    console.log(physician);
     if (!physician) {
       props.history.push({
         pathname: "/login"

@@ -46,7 +46,7 @@ function infectedPatients(props) {
     }
   }, []);
 
-  const loadData = async () => {
+  const loadData = () => {
     let positive, release, death;
     let urlPositive =
       "https://cors-anywhere.herokuapp.com/https://stepesbdmedrecords.herokuapp.com/api/positive/amount";
@@ -54,47 +54,32 @@ function infectedPatients(props) {
       "https://cors-anywhere.herokuapp.com/https://stepesbdmedrecords.herokuapp.com/api/release/amount";
     let urlDeath =
       "https://cors-anywhere.herokuapp.com/https://stepesbdmedrecords.herokuapp.com/api/death/amount";
-    await UseGetApiURL(urlPositive).then(result => {
-      if (result.status !== 200) {
-        return false;
-      }
-      positive = result.data;
-    });
-    await UseGetApiURL(urlRelease).then(result => {
-      if (result.status !== 200) {
-        return false;
-      }
-      release = result.data;
-    });
-    await UseGetApiURL(urlDeath).then(result => {
-      if (result.status !== 200) {
-        return false;
-      }
-      death = result.data;
-    });
 
-    console.log({ positive, release, death });
-    const actualPositive = positive - release - death;
-    const newData = {
-      datasets: [
-        {
-          hoverBorderColor: "#ffffff",
-          data: [actualPositive, release, death],
-          backgroundColor: [
-            "rgba(0,123,255,0.9)",
-            "rgba(0,123,255,0.5)",
-            "rgba(0,123,255,0.3)"
-          ]
-        }
-      ],
-      labels: ["Contaminados", "Recuperados", "Óbitos"]
-    };
-
-    //await loadGraph(newData);
-    return true;
+    UseGetApiURL(urlPositive).then(result => {
+      if (result.status !== 200) {
+        return false;
+      }
+      let newValue = result.data;
+      let newData = {
+        datasets: [
+          {
+            hoverBorderColor: "#ffffff",
+            data: [newValue, newValue, newValue],
+            backgroundColor: [
+              "rgba(0,123,255,0.9)",
+              "rgba(0,123,255,0.5)",
+              "rgba(0,123,255,0.3)"
+            ]
+          }
+        ],
+        labels: ["Contaminados", "Recuperados", "Óbitos"]
+      };
+      loadGraph(chartData);
+    });
   };
 
-  const loadGraph = async chartData => {
+  const loadGraph = chartData => {
+    console.log(chartData);
     const InfectedPatientsChart = new Chart(canvasRef.current, {
       type: "pie",
       data: chartData,
