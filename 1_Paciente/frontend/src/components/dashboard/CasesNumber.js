@@ -10,7 +10,7 @@ import Chart from "../../utils/chart";
 
 export default function CasesNumber() {
 
-    const canvasRef = React.createRef();
+    const canvasRef = React.useRef();
 
     const [title,settitle] = React.useState("Número de Casos");
     const [dataC, setdataC] = React.useState([
@@ -113,7 +113,10 @@ export default function CasesNumber() {
     });
 
     useEffect(() => {
-      loadData();
+      if (canvasRef.current!==null) {
+        //console.log(canvasRef.current)
+        loadData();
+      }
     }, []);
 
     const [loading, setloading] = React.useState(false);
@@ -132,24 +135,19 @@ export default function CasesNumber() {
         let resultado = result.data;
         console.log(resultado)
 
-        let dataGra = []
+        let dataQtd = []
+        let dataDate = []
         resultado.map(element => {
-          dataGra.push(element.number);
+          dataQtd.push(element.number);
+          dataDate.push(element._id.day+"/"+element._id.month+"/"+element._id.year);
         });
-
-        setdataC(dataGra);
         let dados = {
-          labels: [
-            '01/06/2020',
-            '02/06/2020',
-            '03/06/2020',
-            '04/06/2020'
-          ],
+          labels: dataDate,
           datasets: [
             {
               label: "Casos Positivos",
               fill: "start",
-              data: dataGra,
+              data: dataQtd,
               backgroundColor: "rgba(0,123,255,0.1)",
               borderColor: "rgba(0,123,255,1)",
               pointBackgroundColor: "#ffffff",
@@ -159,17 +157,18 @@ export default function CasesNumber() {
               pointHoverRadius: 3
             }
           ]
-      }
+        }
         loadGraph(dados);
         
         return true;
       });
+
+      
     };
 
     const loadGraph = (chartData) =>{
       
       console.log(chartData)
-      console.log(chartOptions)
       const BlogUsersOverview = new Chart(canvasRef.current, {
         type: "LineWithLine",
         data: chartData,

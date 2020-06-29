@@ -77,7 +77,7 @@ export default function Register (props){
         }
       };
 
-
+      console.log(obj)
       UsePostApi('P',endPoint,obj).then(result => {
         console.log(result)
         if (result.status !== 201) {
