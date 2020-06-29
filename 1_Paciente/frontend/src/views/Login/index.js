@@ -103,6 +103,18 @@ const Login = (props) => {
                           />
                           {errors.crm && <span class="obg">ObrigÃ¡torio</span>}
                         </Col>
+                        <Col md="12" className="form-group">
+                          <label htmlFor="feFirstName">Senha</label>
+                          <FormInput
+                            name="senha"
+                            type="password"
+                            invalid={errors.password}
+                            innerRef={register({ required: true })}
+                          />
+                          {errors.password && (
+                            <span class="obg">ObrigÃ¡torio</span>
+                          )}
+                        </Col>
                         {/* Last Name */}
                       </Row>
 
