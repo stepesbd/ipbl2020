@@ -1,37 +1,37 @@
-import axios from 'axios';
+import axios from "axios";
 
 const urlApiPaciente = process.env.REACT_APP_API_ENDPOINT_PATIENT;
 const urlApiMedico = process.env.REACT_APP_API_ENDPOINT_DOCTOR;
 
 const UseGetApi = (url, endpoint) => {
   try {
-    const urlComplete = (url == 'P' ? urlApiPaciente : urlApiMedico) + endpoint;
+    const urlComplete = (url == "P" ? urlApiPaciente : urlApiMedico) + endpoint;
     return axios
       .get(urlComplete)
-      .then((result) => {
+      .then(result => {
         var newResult = {
           status: result.status,
           data: result.data,
-          headers: result.headers,
+          headers: result.headers
         };
         return newResult;
       })
       .catch(function(error) {
         if (error.response) {
-          var message = '';
+          var message = "";
           if (error.response.data.message)
             message = error.response.data.message;
-          else message = 'Erro inesperado';
+          else message = "Erro inesperado";
 
           var newError = {
             status: error.response.data.status,
-            message: message,
+            message: message
           };
           return newError;
         } else {
           var result = {
             status: 500,
-            message: 'Erro ao conectar com api.',
+            message: "Erro ao conectar com api."
           };
           return result;
         }
@@ -39,7 +39,7 @@ const UseGetApi = (url, endpoint) => {
   } catch (error) {
     var result = {
       status: 500,
-      message: 'Erro.',
+      message: "Erro."
     };
     return result;
   }
@@ -47,35 +47,35 @@ const UseGetApi = (url, endpoint) => {
 
 const UsePostApi = (url, endpoint, obj) => {
   try {
-    const urlComplete = (url == 'P' ? urlApiPaciente : urlApiMedico) + endpoint;
-    const headers = { headers: { 'Content-Type': 'application/json' } };
+    const urlComplete = (url == "P" ? urlApiPaciente : urlApiMedico) + endpoint;
+    const headers = { headers: { "Content-Type": "application/json" } };
     return axios
       .post(urlComplete, obj, headers)
-      .then((result) => {
+      .then(result => {
         var newResult = {
           status: result.status,
-          message: 'Cadastro realizado com sucesso!',
+          message: "Cadastro realizado com sucesso!",
           data: result.data,
-          headers: result.headers,
+          headers: result.headers
         };
         return newResult;
       })
       .catch(function(error) {
         if (error.response) {
-          var message = '';
+          var message = "";
           if (error.response.data.message)
             message = error.response.data.message;
-          else message = 'Erro inesperado';
+          else message = "Erro inesperado";
 
           var newError = {
             status: error.response.data.status,
-            message: message,
+            message: message
           };
           return newError;
         } else {
           var result = {
             status: 500,
-            message: 'Erro ao conectar com api.',
+            message: "Erro ao conectar com api."
           };
           return result;
         }
@@ -83,7 +83,7 @@ const UsePostApi = (url, endpoint, obj) => {
   } catch (error) {
     var result = {
       status: 500,
-      message: 'Erro.',
+      message: "Erro."
     };
     return result;
   }
@@ -92,29 +92,29 @@ const UsePostApi = (url, endpoint, obj) => {
 const UsePutApi = (url, endpoint, id, obj) => {
   try {
     const urlComplete =
-      (url == 'P' ? urlApiPaciente : urlApiMedico) + endpoint + id;
-    const headers = { headers: { 'Content-Type': 'application/json' } };
+      (url == "P" ? urlApiPaciente : urlApiMedico) + endpoint + id;
+    const headers = { headers: { "Content-Type": "application/json" } };
     return axios
       .put(urlComplete, obj, headers)
-      .then((result) => {
+      .then(result => {
         if (result.data.status) {
           let newResult = {
             status: result.data.status,
-            message: result.data.message,
+            message: result.data.message
           };
           return newResult;
         } else {
           let newResult = {
             status: result.status,
-            message: 'Dados atualizados com sucesso!',
-            data: result.data,
+            message: "Dados atualizados com sucesso!",
+            data: result.data
           };
           return newResult;
         }
       })
       .catch(function(error) {
         if (error.response) {
-          var messageError = '';
+          var messageError = "";
           if (error.response.data.message)
             messageError = error.response.data.message;
           else if (error.response.data.title)
@@ -122,7 +122,7 @@ const UsePutApi = (url, endpoint, id, obj) => {
 
           var newError = {
             status: error.response.data.status,
-            message: messageError,
+            message: messageError
           };
           return newError;
         }
@@ -130,7 +130,7 @@ const UsePutApi = (url, endpoint, id, obj) => {
   } catch (error) {
     var result = {
       status: 500,
-      message: 'Erro.',
+      message: "Erro."
     };
     return result;
   }
@@ -139,15 +139,15 @@ const UsePutApi = (url, endpoint, id, obj) => {
 const UseDeleteApi = (url, endpoint, id) => {
   try {
     const urlComplete =
-      (url == 'P' ? urlApiPaciente : urlApiMedico) + endpoint + id;
-    const headers = { headers: { 'Content-Type': 'application/json' } };
+      (url == "P" ? urlApiPaciente : urlApiMedico) + endpoint + id;
+    const headers = { headers: { "Content-Type": "application/json" } };
     return axios
       .delete(urlComplete, headers)
-      .then((result) => {
+      .then(result => {
         var newResult = {
           status: result.status,
-          message: 'Registro removido com sucesso!',
-          data: result.data,
+          message: "Registro removido com sucesso!",
+          data: result.data
         };
         return newResult;
       })
@@ -155,7 +155,7 @@ const UseDeleteApi = (url, endpoint, id) => {
         if (error.response) {
           var newError = {
             status: error.response.data.status,
-            message: error.response.data.message,
+            message: error.response.data.message
           };
           return newError;
         }
@@ -163,48 +163,48 @@ const UseDeleteApi = (url, endpoint, id) => {
   } catch (error) {
     var result = {
       status: 500,
-      message: 'Erro.',
+      message: "Erro."
     };
     return result;
   }
 };
 
-const UseGetApiCEP = (cep) => {
+const UseGetApiCEP = cep => {
   try {
     const urlComplete =
-      'https://cors-anywhere.herokuapp.com/https://www.cepaberto.com/api/v3/cep?cep=' +
+      "https://cors-anywhere.herokuapp.com/https://www.cepaberto.com/api/v3/cep?cep=" +
       cep;
     //return axios.get(urlComplete)
     return axios
       .get(urlComplete, {
         headers: {
-          Authorization: `Token token=ed3c65f56f6e7ff359d039cd7118de57`,
-        },
+          Authorization: `Token token=ed3c65f56f6e7ff359d039cd7118de57`
+        }
       })
-      .then((result) => {
+      .then(result => {
         var newResult = {
           status: result.status,
           data: result.data,
-          headers: result.headers,
+          headers: result.headers
         };
         return newResult;
       })
       .catch(function(error) {
         if (error.response) {
-          var message = '';
+          var message = "";
           if (error.response.data.message)
             message = error.response.data.message;
-          else message = 'Erro inesperado';
+          else message = "Erro inesperado";
 
           var newError = {
             status: error.response.data.status,
-            message: message,
+            message: message
           };
           return newError;
         } else {
           var result = {
             status: 500,
-            message: 'Erro ao conectar com api.',
+            message: "Erro ao conectar com api."
           };
           return result;
         }
@@ -212,40 +212,40 @@ const UseGetApiCEP = (cep) => {
   } catch (error) {
     var result = {
       status: 500,
-      message: 'Erro.',
+      message: "Erro."
     };
     return result;
   }
 };
 
-const UseGetApiURL = (endpointComplete) => {
+const UseGetApiURL = endpointComplete => {
   try {
     return axios
       .get(endpointComplete)
-      .then((result) => {
+      .then(result => {
         var newResult = {
           status: result.status,
           data: result.data,
-          headers: result.headers,
+          headers: result.headers
         };
         return newResult;
       })
       .catch(function(error) {
         if (error.response) {
-          var message = '';
+          var message = "";
           if (error.response.data.message)
             message = error.response.data.message;
-          else message = 'Erro inesperado';
+          else message = "Erro inesperado";
 
           var newError = {
             status: error.response.data.status,
-            message: message,
+            message: message
           };
           return newError;
         } else {
           var result = {
             status: 500,
-            message: 'Erro ao conectar com api.',
+            message: "Erro ao conectar com api."
           };
           return result;
         }
@@ -253,7 +253,7 @@ const UseGetApiURL = (endpointComplete) => {
   } catch (error) {
     var result = {
       status: 500,
-      message: 'Erro.',
+      message: "Erro."
     };
     return result;
   }
@@ -262,36 +262,36 @@ const UseGetApiURL = (endpointComplete) => {
 const UsePostApiURL = (endpointComplete, obj) => {
   try {
     const headers = {
-      headers: { 'Content-Type': 'application/json', JSON: 'true' },
+      headers: { "Content-Type": "application/json", JSON: "true" }
     };
     console.log(headers);
     return axios
       .post(endpointComplete, obj, headers)
-      .then((result) => {
+      .then(result => {
         var newResult = {
           status: result.status,
-          message: 'Cadastro realizado com sucesso!',
+          message: "Cadastro realizado com sucesso!",
           data: result.data,
-          headers: result.headers,
+          headers: result.headers
         };
         return newResult;
       })
       .catch(function(error) {
         if (error.response) {
-          var message = '';
+          var message = "";
           if (error.response.data.message)
             message = error.response.data.message;
-          else message = 'Erro inesperado';
+          else message = "Erro inesperado";
 
           var newError = {
             status: error.response.data.status,
-            message: message,
+            message: message
           };
           return newError;
         } else {
           var result = {
             status: 500,
-            message: 'Erro ao conectar com api.',
+            message: "Erro ao conectar com api."
           };
           return result;
         }
@@ -299,7 +299,7 @@ const UsePostApiURL = (endpointComplete, obj) => {
   } catch (error) {
     var result = {
       status: 500,
-      message: 'Erro.',
+      message: "Erro."
     };
     return result;
   }
@@ -307,35 +307,35 @@ const UsePostApiURL = (endpointComplete, obj) => {
 
 const UseGetApiParams = (url, endpoint, params) => {
   try {
-    const urlComplete = (url == 'P' ? urlApiPaciente : urlApiMedico) + endpoint;
+    const urlComplete = (url == "P" ? urlApiPaciente : urlApiMedico) + endpoint;
     return axios
       .get(urlComplete, {
-        params,
+        params
       })
-      .then((result) => {
+      .then(result => {
         var newResult = {
           status: result.status,
           data: result.data,
-          headers: result.headers,
+          headers: result.headers
         };
         return newResult;
       })
       .catch(function(error) {
         if (error.response) {
-          var message = '';
+          var message = "";
           if (error.response.data.message)
             message = error.response.data.message;
-          else message = 'Erro inesperado';
+          else message = "Erro inesperado";
 
           var newError = {
             status: error.response.data.status,
-            message: message,
+            message: message
           };
           return newError;
         } else {
           var result = {
             status: 500,
-            message: 'Erro ao conectar com api.',
+            message: "Erro ao conectar com api."
           };
           return result;
         }
@@ -343,7 +343,7 @@ const UseGetApiParams = (url, endpoint, params) => {
   } catch (error) {
     var result = {
       status: 500,
-      message: 'Erro.',
+      message: "Erro."
     };
     return result;
   }
@@ -357,5 +357,5 @@ export {
   UseGetApiCEP,
   UseGetApiURL,
   UsePostApiURL,
-  UseGetApiParams,
+  UseGetApiParams
 };

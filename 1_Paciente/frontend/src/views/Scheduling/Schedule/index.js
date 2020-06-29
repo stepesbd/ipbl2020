@@ -28,7 +28,15 @@ function Schedule(props) {
   const [attendances, setAttendances] = useState([]);
 
   useEffect(() => {
-    loadAttendances();
+    const physician = sessionStorage.getItem("physician");
+    console.log(physician);
+    if (!physician) {
+      props.history.push({
+        pathname: "/login"
+      });
+    } else {
+      loadAttendances();
+    }
   }, []);
 
   const loadAttendances = () => {
