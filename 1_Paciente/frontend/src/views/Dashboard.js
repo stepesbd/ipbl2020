@@ -191,8 +191,6 @@ export default function Dashboard() {
     });
   };
 
-  
-
   const [salert, setsalert] = React.useState();
   const hideAlert = () => {
     setsalert(null);
@@ -232,7 +230,7 @@ export default function Dashboard() {
                   ? totalObitos
                   : idx === 4
                   ? leitosDisponiveis
-                  : stats.value                  
+                  : stats.value
               }
               percentage={stats.percentage}
               increase={stats.increase}
@@ -259,7 +257,7 @@ export default function Dashboard() {
 
       <Row>
         <Col className="col-lg mb-4">
-          {/*<Maps />*/}
+          <Maps />
         </Col>
       </Row>
     </Container>

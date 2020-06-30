@@ -54,7 +54,11 @@ export default function PatientForm(props) {
         }
         setloading(false);
         setsalert(
-          <SweetAlert success title={result.message} onConfirm={hideAlert} />
+          <SweetAlert
+            success
+            title={result.message}
+            onConfirm={successRedirect}
+          />
         );
         return true;
       });
@@ -65,7 +69,7 @@ export default function PatientForm(props) {
       };
 
       UsePostApi('D', endPoint, obj).then((result) => {
-        if (result.status !== 200) {
+        if (result.status !== 201) {
           setsalert(
             <SweetAlert warning title={result.message} onConfirm={hideAlert} />
           );
@@ -74,7 +78,11 @@ export default function PatientForm(props) {
         }
         setloading(false);
         setsalert(
-          <SweetAlert success title={result.message} onConfirm={hideAlert} />
+          <SweetAlert
+            success
+            title={result.message}
+            onConfirm={successRedirect}
+          />
         );
         return true;
       });
@@ -83,6 +91,13 @@ export default function PatientForm(props) {
   const [salert, setsalert] = React.useState();
   const hideAlert = () => {
     setsalert(null);
+  };
+
+  const successRedirect = () => {
+    setsalert(null);
+    props.history.push({
+      pathname: '/specialties',
+    });
   };
 
   return (
@@ -124,7 +139,7 @@ export default function PatientForm(props) {
 
                       <br />
                       <Button theme="accent">Salvar</Button>
-                      <NavLink to="/patient-list">
+                      <NavLink to="/specialties">
                         <Button theme="default" style={{ marginLeft: '10px' }}>
                           Voltar
                         </Button>

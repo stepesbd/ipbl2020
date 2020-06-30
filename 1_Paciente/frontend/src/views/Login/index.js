@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import React, { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import {
   Container,
   Card,
@@ -9,36 +9,34 @@ import {
   Row,
   Col,
   FormInput,
-  Button,
-} from 'shards-react';
-import ClipLoader from 'react-spinners/ClipLoader';
-import SweetAlert from 'react-bootstrap-sweetalert';
-import PageTitle from '../../components/common/PageTitle';
-import { UseGetApiParams } from '../../services/apiService';
+  Button
+} from "shards-react";
+import ClipLoader from "react-spinners/ClipLoader";
+import SweetAlert from "react-bootstrap-sweetalert";
+import PageTitle from "../../components/common/PageTitle";
+import { UseGetApiParams } from "../../services/apiService";
 
-const Login = (props) => {
+const Login = props => {
   const { register, handleSubmit, errors, setValue, setError } = useForm();
 
   useEffect(() => {
-    const physician = sessionStorage.getItem('physician');
-    console.log(physician);
+    const physician = sessionStorage.getItem("physician");
     if (physician) {
       props.history.push({
-        pathname: '/dashboard',
+        pathname: "/schedule"
       });
     }
   }, []);
 
   const [loading, setloading] = React.useState(false);
-  const onSubmit = (data) => {
+  const onSubmit = data => {
     let obj = {
-      crm: data.crm,
+      crm: data.crm.toUpperCase()
     };
-    let endPoint = 'login';
+    let endPoint = "login";
     setloading(true);
 
-    UseGetApiParams('D', endPoint, obj).then((result) => {
-      console.log(result);
+    UseGetApiParams("D", endPoint, obj).then(result => {
       if (result.status !== 204 && result.status !== 200) {
         setsalert(
           <SweetAlert warning title={result.message} onConfirm={hideAlert} />
@@ -48,16 +46,16 @@ const Login = (props) => {
       }
 
       setloading(false);
-      if (result.data) {
-        sessionStorage.setItem('physician', JSON.stringify(result.data.msg));
+      if (result.data && data.password === "medico") {
+        sessionStorage.setItem("physician", JSON.stringify(result.data.msg));
         props.history.push({
-          pathname: '/dashboard',
+          pathname: "/schedule"
         });
       } else {
         setsalert(
           <SweetAlert
             warning
-            title="UsuÃ¡rio ou senha nÃ£o encontrado!"
+            title="Usuário ou senha não encontrado!"
             onConfirm={hideAlert}
           />
         );
@@ -67,7 +65,7 @@ const Login = (props) => {
   };
 
   const hangleRegister = () => {
-    props.history.push('/register');
+    props.history.push("/dashboard");
   };
 
   const [salert, setsalert] = React.useState();
@@ -106,7 +104,7 @@ const Login = (props) => {
                         <Col md="12" className="form-group">
                           <label htmlFor="feFirstName">Senha</label>
                           <FormInput
-                            name="senha"
+                            name="password"
                             type="password"
                             invalid={errors.password}
                             innerRef={register({ required: true })}
@@ -123,15 +121,15 @@ const Login = (props) => {
                       <Button
                         type="submit"
                         theme="accent"
-                        style={{ float: 'center' }}
+                        style={{ float: "center" }}
                       >
                         Entrar
                       </Button>
                       <Button
                         type="button"
                         theme="default"
-                        onClick={(e) => hangleRegister(e)}
-                        style={{ float: 'right' }}
+                        onClick={e => hangleRegister(e)}
+                        style={{ float: "right" }}
                       >
                         Voltar
                       </Button>
@@ -143,7 +141,7 @@ const Login = (props) => {
 
             {loading && (
               <div className="loading">
-                <ClipLoader size={60} color={'#123abc'} loading={loading} />
+                <ClipLoader size={60} color={"#123abc"} loading={loading} />
               </div>
             )}
           </Card>

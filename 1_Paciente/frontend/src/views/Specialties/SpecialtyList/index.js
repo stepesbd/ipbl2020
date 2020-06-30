@@ -10,9 +10,10 @@ import {
   Button,
   Alert,
 } from 'shards-react';
-import { UseGetApi } from '../../../services/apiService';
+import { UseGetApi, UseDeleteApi } from '../../../services/apiService';
 import ClipLoader from 'react-spinners/ClipLoader';
 import PageTitle from '../../../components/common/PageTitle';
+import SweetAlert from 'react-bootstrap-sweetalert';
 
 function SpecialtyList() {
   const [loading, setloading] = useState(false);
@@ -45,6 +46,52 @@ function SpecialtyList() {
       setlist(result.data.msg);
       return true;
     });
+  };
+
+  const removerRegistro = (id) => {
+    let endPoint = 'specialties/';
+    UseDeleteApi('D', endPoint, id).then((result) => {
+      if (result.status !== 204) {
+        setsalert(
+          <SweetAlert warning title={result.message} onConfirm={hideAlert} />
+        );
+        setloading(false);
+        return false;
+      }
+
+      var listFiltered = list.filter((obj) => {
+        return obj.patId !== id;
+      });
+      setlist(listFiltered);
+      setloading(false);
+      setsalert(
+        <SweetAlert title="Deletado com sucesso!" onConfirm={hideAlert} />
+      );
+      loadList();
+      return true;
+    });
+    setsalert(null);
+  };
+
+  const hideAlert = () => {
+    setsalert(null);
+  };
+
+  const confirmDelete = (id) => {
+    setsalert(
+      <SweetAlert
+        danger
+        showCancel
+        confirmBtnText="Sim"
+        confirmBtnBsStyle="danger"
+        cancelBtnBsStyle="default"
+        title="Tem certeza que deseja remover o registro?"
+        onConfirm={() => removerRegistro(id)}
+        onCancel={hideAlert}
+      >
+        Essa ação não poderá ser desfeita!
+      </SweetAlert>
+    );
   };
 
   return (
@@ -124,7 +171,7 @@ function SpecialtyList() {
                             </Button>
                           </NavLink>
                           <Button
-                            //onClick={(e) => confirmDelete(item.patId)}
+                            onClick={(e) => confirmDelete(item.id)}
                             outline
                             size="sm"
                             theme="danger"

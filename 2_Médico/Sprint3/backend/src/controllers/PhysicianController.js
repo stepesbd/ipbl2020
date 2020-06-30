@@ -18,15 +18,25 @@ module.exports = {
     return response.status(200).json({ msg: physician });
   },
   async store(request, response) {
-    const { name, crm, cpf } = request.body;
+    const { name, crm, cpf, contact, address } = request.body;
 
+    return response.json({
+      name,
+      crm,
+      cpf,
+      contact,
+      address,
+    });
+
+    /*
+    return response.json(request.body);
     const [id] = await connection('physicians').insert({
       name,
       crm,
       cpf,
     });
 
-    return response.status(201).json({ msg: { id, name, crm, cpf } });
+    return response.status(201).json({ msg: { id, name, crm, cpf } });*/
   },
   async update(request, response) {
     const { id } = request.params;
