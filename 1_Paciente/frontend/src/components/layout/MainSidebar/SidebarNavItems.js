@@ -1,15 +1,16 @@
-import React from "react";
-import { Nav } from "shards-react";
+import React from 'react';
+import { Nav } from 'shards-react';
 
-import SidebarNavItem from "./SidebarNavItem";
-import { Store } from "../../../flux";
+import SidebarNavItem from './SidebarNavItem';
+import SidebarNavItemsLink from './SidebarNavItemsLink';
+import { Store } from '../../../flux';
 
 class SidebarNavItems extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
-      navItems: Store.getSidebarItems()
+      navItems: Store.getSidebarItems(),
     };
 
     this.onChange = this.onChange.bind(this);
@@ -26,7 +27,7 @@ class SidebarNavItems extends React.Component {
   onChange() {
     this.setState({
       ...this.state,
-      navItems: Store.getSidebarItems()
+      navItems: Store.getSidebarItems(),
     });
   }
 
@@ -38,9 +39,24 @@ class SidebarNavItems extends React.Component {
           {items.map((item, idx) => (
             <SidebarNavItem key={idx} item={item} />
           ))}
+
+          <SidebarNavItemsLink
+            item={{
+              title: 'Hospital',
+              to: 'https://stepesbdhospital.herokuapp.com/',
+              htmlBefore: '<i class="material-icons">local_hospital</i>',
+            }}
+          />
+          <SidebarNavItemsLink
+            item={{
+              title: 'Monitoramento',
+              to: 'https://stepesbdmedrecords.herokuapp.com/monitoring',
+              htmlBefore: '<i class="material-icons">add_to_queue</i>',
+            }}
+          />
         </Nav>
       </div>
-    )
+    );
   }
 }
 
