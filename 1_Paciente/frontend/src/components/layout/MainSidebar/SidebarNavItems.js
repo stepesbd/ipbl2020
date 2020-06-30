@@ -42,13 +42,6 @@ class SidebarNavItems extends React.Component {
 
           <SidebarNavItemsLink
             item={{
-              title: 'Hospital',
-              to: 'https://stepesbdhospital.herokuapp.com/',
-              htmlBefore: '<i class="material-icons">local_hospital</i>',
-            }}
-          />
-          <SidebarNavItemsLink
-            item={{
               title: 'Monitoramento',
               to: 'https://stepesbdmedrecords.herokuapp.com/monitoring',
               htmlBefore: '<i class="material-icons">add_to_queue</i>',
@@ -56,8 +49,15 @@ class SidebarNavItems extends React.Component {
           />
           <SidebarNavItemsLink
             item={{
+              title: 'Hospitais',
+              to: 'https://stepesbdhospital.herokuapp.com/',
+              htmlBefore: '<i class="material-icons">local_hospital</i>',
+            }}
+          />
+          <SidebarNavItemsLink
+            item={{
               title: 'Fornecedores',
-              to: 'https://juancanuto.pythonanywhere.com/',
+              to: 'http://juancanuto.pythonanywhere.com/',
               htmlBefore: '<i class="material-icons">add_shopping_cart</i>',
             }}
           />
