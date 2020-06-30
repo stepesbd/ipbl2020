@@ -54,6 +54,13 @@ class SidebarNavItems extends React.Component {
               htmlBefore: '<i class="material-icons">add_to_queue</i>',
             }}
           />
+          <SidebarNavItemsLink
+            item={{
+              title: 'Fornecedores',
+              to: 'https://juancanuto.pythonanywhere.com/',
+              htmlBefore: '<i class="material-icons">add_shopping_cart</i>',
+            }}
+          />
         </Nav>
       </div>
     );
