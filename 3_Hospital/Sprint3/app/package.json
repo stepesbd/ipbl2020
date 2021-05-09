@@ -33,7 +33,7 @@
     "sequelize-mysql-timestamp": "^1.4.0"
   },
   "devDependencies": {
-    "handlebars": "^4.5.0",
+    "handlebars": "^4.7.7",
     "jasmine": "^3.4.0",
     "jasmine-pretty-html-reporter": "^0.2.5"
   },
