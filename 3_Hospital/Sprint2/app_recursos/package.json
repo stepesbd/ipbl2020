@@ -21,7 +21,7 @@
     "express-session": "^1.17.1",
     "got": "^11.1.4",
     "http-errors": "~1.6.2",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "mongodb": "^3.5.7",
     "mongoose": "^5.9.10",
     "morgan": "~1.9.0",
