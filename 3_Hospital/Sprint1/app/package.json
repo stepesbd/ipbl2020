@@ -19,7 +19,7 @@
     "debug": "~2.6.9",
     "express": "~4.16.0",
     "express-handlebars": "^3.0.2",
-    "got": "^11.2.0",
+    "got": "^11.8.5",
     "http-errors": "~1.6.2",
     "moment": "^2.24.0",
     "mongodb": "^3.5.8",
